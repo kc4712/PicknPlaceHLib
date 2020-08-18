@@ -1,0 +1,658 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hdevelop file_version="1.2" halcon_version="18.11.2.0">
+<procedure name="main">
+<interface/>
+<body>
+<c></c>
+<c></c>
+<l>SubjectCoordX := 0</l>
+<l>SubjectCoordY := 0</l>
+<l>SubjectCoordZ := 0</l>
+<l>SubjectCoordRX := 0</l>
+<l>SubjectCoordRY := 0</l>
+<l>SubjectCoordRZ := 0</l>
+<c></c>
+<c>    </c>
+<c></c>
+<c></c>
+<c></c>
+<l>SurfMatch(SubjectCoordX,SubjectCoordY,SubjectCoordZ, SubjectCoordRX ,SubjectCoordRY,SubjectCoordRZ)</l>
+<c></c>
+</body>
+<docu id="main">
+<parameters/>
+</docu>
+</procedure>
+<procedure name="test">
+<interface/>
+<body>
+<l>return ()</l>
+</body>
+<docu id="test">
+<parameters/>
+</docu>
+</procedure>
+<procedure name="init_framegrab">
+<interface>
+<ic>
+<par name="AcqHandleIn" base_type="ctrl" dimension="0"/>
+<par name="FileName" base_type="ctrl" dimension="0"/>
+</ic>
+<oc>
+<par name="AcqHandleOut" base_type="ctrl" dimension="0"/>
+</oc>
+</interface>
+<body>
+<c>* Configuring 3D-settings</c>
+<l>set_framegrabber_param (AcqHandleIn, 'create_objectmodel3d', 'enable')</l>
+<l>set_framegrabber_param (AcqHandleIn, 'add_objectmodel3d_overlay_attrib', 'enable')</l>
+<c>* Seting the timeout for aborting a pending grab to infinity; useful for longer exposure times</c>
+<l>set_framegrabber_param (AcqHandleIn, 'grab_timeout', -1)</l>
+<c></c>
+<c>* Switching to the HDR mode</c>
+<l>set_framegrabber_param (AcqHandleIn, 'AcquisitionMode', 'MergedMultiFrame')</l>
+<l>* set_framegrabber_param (AcqHandle, 'AcquisitionMode', 'SingleFrame')</l>
+<c>* Reseting any previous HDR settings</c>
+<l>set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameReset', 1)</l>
+<l>* set_framegrabber_param (AcqHandle, 'SingleFrameReset', 1)</l>
+<c></c>
+<l>if (FileName = 'SignalTrans')</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameMode', 'HDR')</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameExposureTime', 16667)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameIris', 15)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameBrightness', 1.0)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameGain', 1.0)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameBidirectional', 0)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameContrastFilterEnabled', 1)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameContrastFilterThreshold', 1.0)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameGaussianFilterEnabled', 1)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameGaussianFilterSigma', 1.5)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameOutlierFilterEnabled', 1)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameOutlierFilterThreshold', 5.0)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameReflectionFilterEnabled', 1)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameSaturatedFilterEnabled', 1)</l>
+<c></c>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameAdd', '1')</l>
+<c></c>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameExposureTime', 16667)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameIris', 22)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameBrightness', 1.2)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameGain', 1.0)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameBidirectional', 0)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameContrastFilterEnabled', 1)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameContrastFilterThreshold', 1.0)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameGaussianFilterEnabled', 1)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameGaussianFilterSigma', 1.5)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameOutlierFilterEnabled', 1)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameOutlierFilterThreshold', 5.0)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameReflectionFilterEnabled', 1)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameSaturatedFilterEnabled', 1)</l>
+<c></c>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameAdd', '1')</l>
+<c></c>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameExposureTime', 16667)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameIris', 31)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameBrightness', 1.8)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameGain', 1.2)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameBidirectional', 0)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameContrastFilterEnabled', 1)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameContrastFilterThreshold', 1.0)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameGaussianFilterEnabled', 1)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameGaussianFilterSigma', 1.5)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameOutlierFilterEnabled', 1)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameOutlierFilterThreshold', 5.0)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameReflectionFilterEnabled', 1)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameSaturatedFilterEnabled', 1)</l>
+<c></c>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameAdd', '1')</l>
+<c></c>
+<c>    * 191218 SoyMilk</c>
+<l>elseif (FileName = '191218Soy')</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameMode', 'HDR')</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameExposureTime', 16667)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameIris', 11)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameBrightness', 1.8)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameGain', 1.0)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameBidirectional', 0)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameContrastFilterEnabled', 1)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameContrastFilterThreshold', 5.0)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameGaussianFilterEnabled', 1)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameGaussianFilterSigma', 1.5)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameOutlierFilterEnabled', 1)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameOutlierFilterThreshold', 5.0)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameReflectionFilterEnabled', 1)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameSaturatedFilterEnabled', 1)</l>
+<c></c>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameAdd', '1')</l>
+<c></c>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameExposureTime', 16667)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameIris', 17)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameBrightness', 1.8)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameGain', 1.0)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameBidirectional', 0)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameContrastFilterEnabled', 1)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameContrastFilterThreshold', 5.0)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameGaussianFilterEnabled', 1)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameGaussianFilterSigma', 1.5)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameOutlierFilterEnabled', 1)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameOutlierFilterThreshold', 5.0)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameReflectionFilterEnabled', 1)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameSaturatedFilterEnabled', 1)</l>
+<c></c>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameAdd', '1')</l>
+<c></c>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameExposureTime', 16667)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameIris', 25)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameBrightness', 1.8)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameGain', 1.0)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameBidirectional', 0)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameContrastFilterEnabled', 1)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameContrastFilterThreshold', 5.0)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameGaussianFilterEnabled', 1)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameGaussianFilterSigma', 1.5)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameOutlierFilterEnabled', 1)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameOutlierFilterThreshold', 5.0)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameReflectionFilterEnabled', 1)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameSaturatedFilterEnabled', 1)</l>
+<c></c>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameAdd', '1')</l>
+<c></c>
+<l>elseif (FileName = 'GlueStick')</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameMode', 'HDR')</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameExposureTime', 8333)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameIris', 15)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameBrightness', 1.79)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameGain', 1.0)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameBidirectional', 0)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameContrastFilterEnabled', 1)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameContrastFilterThreshold', 5.0)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameGaussianFilterEnabled', 1)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameGaussianFilterSigma', 1.5)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameOutlierFilterEnabled', 1)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameOutlierFilterThreshold', 5.0)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameReflectionFilterEnabled', 1)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameSaturatedFilterEnabled', 1)</l>
+<c></c>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameAdd', '1')</l>
+<c></c>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameExposureTime', 8333)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameIris', 21)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameBrightness', 1.8)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameGain', 1.08)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameBidirectional', 0)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameContrastFilterEnabled', 1)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameContrastFilterThreshold', 5.0)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameGaussianFilterEnabled', 1)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameGaussianFilterSigma', 1.5)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameOutlierFilterEnabled', 1)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameOutlierFilterThreshold', 5.0)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameReflectionFilterEnabled', 1)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameSaturatedFilterEnabled', 1)</l>
+<c></c>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameAdd', '1')</l>
+<c></c>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameExposureTime', 8333)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameIris', 26)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameBrightness', 1.8)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameGain', 1.73)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameBidirectional', 0)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameContrastFilterEnabled', 1)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameContrastFilterThreshold', 5.0)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameGaussianFilterEnabled', 1)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameGaussianFilterSigma', 1.5)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameOutlierFilterEnabled', 1)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameOutlierFilterThreshold', 5.0)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameReflectionFilterEnabled', 1)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameSaturatedFilterEnabled', 1)</l>
+<c></c>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameAdd', '1')</l>
+<l>else</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameMode', 'HDR')</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameExposureTime', 8333)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameIris', 10)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameBrightness', 1.0)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameGain', 1.0)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameBidirectional', 0)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameContrastFilterEnabled', 1)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameContrastFilterThreshold', 3.0)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameGaussianFilterEnabled', 1)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameGaussianFilterSigma', 1.5)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameOutlierFilterEnabled', 1)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameOutlierFilterThreshold', 5.0)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameReflectionFilterEnabled', 1)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameSaturatedFilterEnabled', 1)</l>
+<c></c>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameAdd', '1')</l>
+<c></c>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameExposureTime', 8333)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameIris', 13)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameBrightness', 1.0)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameGain', 1.0)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameBidirectional', 0)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameContrastFilterEnabled', 1)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameContrastFilterThreshold', 3.0)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameGaussianFilterEnabled', 1)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameGaussianFilterSigma', 1.5)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameOutlierFilterEnabled', 1)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameOutlierFilterThreshold', 5.0)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameReflectionFilterEnabled', 1)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameSaturatedFilterEnabled', 1)</l>
+<c></c>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameAdd', '1')</l>
+<c></c>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameExposureTime', 8333)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameIris', 17)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameBrightness', 1.0)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameGain', 1.0)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameBidirectional', 0)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameContrastFilterEnabled', 1)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameContrastFilterThreshold', 3.0)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameGaussianFilterEnabled', 1)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameGaussianFilterSigma', 1.5)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameOutlierFilterEnabled', 1)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameOutlierFilterThreshold', 5.0)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameReflectionFilterEnabled', 1)</l>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameSaturatedFilterEnabled', 1)</l>
+<c></c>
+<l>    set_framegrabber_param (AcqHandleIn, 'MergedMultiFrameAdd', '1')</l>
+<l>endif</l>
+<c></c>
+<l>AcqHandleOut := AcqHandleIn</l>
+<l>return ()</l>
+</body>
+<docu id="init_framegrab">
+<parameters>
+<parameter id="AcqHandleIn"/>
+<parameter id="AcqHandleOut"/>
+<parameter id="FileName"/>
+</parameters>
+</docu>
+</procedure>
+<procedure name="SurfMatch">
+<interface>
+<oc>
+<par name="SubjectCoordX" base_type="ctrl" dimension="0"/>
+<par name="SubjectCoordY" base_type="ctrl" dimension="0"/>
+<par name="SubjectCoordZ" base_type="ctrl" dimension="0"/>
+<par name="SubjectCoordRX" base_type="ctrl" dimension="0"/>
+<par name="SubjectCoordRY" base_type="ctrl" dimension="0"/>
+<par name="SubjectCoordRZ" base_type="ctrl" dimension="0"/>
+</oc>
+</interface>
+<body>
+<c></c>
+<l>dev_update_off()</l>
+<c></c>
+<c></c>
+<c></c>
+<l>*Filename := 'FABOX'</l>
+<l>*FileName := '191218Soy'</l>
+<l>FileName := 'SignalTrans'</l>
+<l>FileName := 'SignalTrans0310'</l>
+<l>FileName := 'SurfModel0319'</l>
+<c></c>
+<l>*FileName := 'Test20021900'</l>
+<c>* Connecting to the Zivid camera</c>
+<l>* open_framegrabber ('GenICamTL',1, 1, 0, 0, 0, 0, 'progressive', -1, 'default', -1, 'false', 'default', 'default', 0, 0, AcqHandle)</l>
+<c></c>
+<l>* set_framegrabber_param (AcqHandle, 'create_objectmodel3d', 'enable')</l>
+<l>* set_framegrabber_param (AcqHandle, 'add_objectmodel3d_overlay_attrib', 'enable')</l>
+<c>* Seting the timeout for aborting a pending grab to infinity; useful for longer exposure times</c>
+<l>* set_framegrabber_param (AcqHandle, 'grab_timeout', -1)</l>
+<c></c>
+<c>* Switching to the HDR mode</c>
+<l>* set_framegrabber_param (AcqHandle, 'AcquisitionMode', 'MergedMultiFrame')</l>
+<l>* set_framegrabber_param (AcqHandle, 'AcquisitionMode', 'SingleFrame')</l>
+<c>* Reseting any previous HDR settings</c>
+<l>* set_framegrabber_param (AcqHandle, 'MergedMultiFrameReset', 1)</l>
+<l>* set_framegrabber_param (AcqHandle, 'SingleFrameReset', 1)</l>
+<c></c>
+<l>* if (FileName = 'SignalTrans')</l>
+<l>*     set_framegrabber_param (AcqHandle, 'MergedMultiFrameMode', 'HDR')</l>
+<l>*     set_framegrabber_param (AcqHandle, 'MergedMultiFrameExposureTime', 16667)</l>
+<l>*     set_framegrabber_param (AcqHandle, 'MergedMultiFrameIris', 15)</l>
+<l>*     set_framegrabber_param (AcqHandle, 'MergedMultiFrameBrightness', 1.0)</l>
+<l>*     set_framegrabber_param (AcqHandle, 'MergedMultiFrameGain', 1.0)</l>
+<l>*     set_framegrabber_param (AcqHandle, 'MergedMultiFrameBidirectional', 0)</l>
+<l>*     set_framegrabber_param (AcqHandle, 'MergedMultiFrameContrastFilterEnabled', 1)</l>
+<l>*     set_framegrabber_param (AcqHandle, 'MergedMultiFrameContrastFilterThreshold', 1.0)</l>
+<l>*     set_framegrabber_param (AcqHandle, 'MergedMultiFrameGaussianFilterEnabled', 1)</l>
+<l>*     set_framegrabber_param (AcqHandle, 'MergedMultiFrameGaussianFilterSigma', 1.5)</l>
+<l>*     set_framegrabber_param (AcqHandle, 'MergedMultiFrameOutlierFilterEnabled', 1)</l>
+<l>*     set_framegrabber_param (AcqHandle, 'MergedMultiFrameOutlierFilterThreshold', 5.0)</l>
+<l>*     set_framegrabber_param (AcqHandle, 'MergedMultiFrameReflectionFilterEnabled', 1)</l>
+<l>*     set_framegrabber_param (AcqHandle, 'MergedMultiFrameSaturatedFilterEnabled', 1)</l>
+<c></c>
+<l>*     set_framegrabber_param (AcqHandle, 'MergedMultiFrameAdd', '1')</l>
+<c></c>
+<l>*     set_framegrabber_param (AcqHandle, 'MergedMultiFrameExposureTime', 16667)</l>
+<l>*     set_framegrabber_param (AcqHandle, 'MergedMultiFrameIris', 22)</l>
+<l>*     set_framegrabber_param (AcqHandle, 'MergedMultiFrameBrightness', 1.2)</l>
+<l>*     set_framegrabber_param (AcqHandle, 'MergedMultiFrameGain', 1.0)</l>
+<l>*     set_framegrabber_param (AcqHandle, 'MergedMultiFrameBidirectional', 0)</l>
+<l>*     set_framegrabber_param (AcqHandle, 'MergedMultiFrameContrastFilterEnabled', 1)</l>
+<l>*     set_framegrabber_param (AcqHandle, 'MergedMultiFrameContrastFilterThreshold', 1.0)</l>
+<l>*     set_framegrabber_param (AcqHandle, 'MergedMultiFrameGaussianFilterEnabled', 1)</l>
+<l>*     set_framegrabber_param (AcqHandle, 'MergedMultiFrameGaussianFilterSigma', 1.5)</l>
+<l>*     set_framegrabber_param (AcqHandle, 'MergedMultiFrameOutlierFilterEnabled', 1)</l>
+<l>*     set_framegrabber_param (AcqHandle, 'MergedMultiFrameOutlierFilterThreshold', 5.0)</l>
+<l>*     set_framegrabber_param (AcqHandle, 'MergedMultiFrameReflectionFilterEnabled', 1)</l>
+<l>*     set_framegrabber_param (AcqHandle, 'MergedMultiFrameSaturatedFilterEnabled', 1)</l>
+<c></c>
+<l>*     set_framegrabber_param (AcqHandle, 'MergedMultiFrameAdd', '1')</l>
+<c></c>
+<l>*     set_framegrabber_param (AcqHandle, 'MergedMultiFrameExposureTime', 16667)</l>
+<l>*     set_framegrabber_param (AcqHandle, 'MergedMultiFrameIris', 31)</l>
+<l>*     set_framegrabber_param (AcqHandle, 'MergedMultiFrameBrightness', 1.8)</l>
+<l>*     set_framegrabber_param (AcqHandle, 'MergedMultiFrameGain', 1.2)</l>
+<l>*     set_framegrabber_param (AcqHandle, 'MergedMultiFrameBidirectional', 0)</l>
+<l>*     set_framegrabber_param (AcqHandle, 'MergedMultiFrameContrastFilterEnabled', 1)</l>
+<l>*     set_framegrabber_param (AcqHandle, 'MergedMultiFrameContrastFilterThreshold', 1.0)</l>
+<l>*     set_framegrabber_param (AcqHandle, 'MergedMultiFrameGaussianFilterEnabled', 1)</l>
+<l>*     set_framegrabber_param (AcqHandle, 'MergedMultiFrameGaussianFilterSigma', 1.5)</l>
+<l>*     set_framegrabber_param (AcqHandle, 'MergedMultiFrameOutlierFilterEnabled', 1)</l>
+<l>*     set_framegrabber_param (AcqHandle, 'MergedMultiFrameOutlierFilterThreshold', 5.0)</l>
+<l>*     set_framegrabber_param (AcqHandle, 'MergedMultiFrameReflectionFilterEnabled', 1)</l>
+<l>*     set_framegrabber_param (AcqHandle, 'MergedMultiFrameSaturatedFilterEnabled', 1)</l>
+<c></c>
+<l>*     set_framegrabber_param (AcqHandle, 'MergedMultiFrameAdd', '1')</l>
+<l>* else</l>
+<l>*     set_framegrabber_param (AcqHandle, 'MergedMultiFrameMode', 'HDR')</l>
+<l>*     set_framegrabber_param (AcqHandle, 'MergedMultiFrameExposureTime', 8333)</l>
+<l>*     set_framegrabber_param (AcqHandle, 'MergedMultiFrameIris', 10)</l>
+<l>*     set_framegrabber_param (AcqHandle, 'MergedMultiFrameBrightness', 1.0)</l>
+<l>*     set_framegrabber_param (AcqHandle, 'MergedMultiFrameGain', 1.0)</l>
+<l>*     set_framegrabber_param (AcqHandle, 'MergedMultiFrameBidirectional', 0)</l>
+<l>*     set_framegrabber_param (AcqHandle, 'MergedMultiFrameContrastFilterEnabled', 1)</l>
+<l>*     set_framegrabber_param (AcqHandle, 'MergedMultiFrameContrastFilterThreshold', 3.0)</l>
+<l>*     set_framegrabber_param (AcqHandle, 'MergedMultiFrameGaussianFilterEnabled', 1)</l>
+<l>*     set_framegrabber_param (AcqHandle, 'MergedMultiFrameGaussianFilterSigma', 1.5)</l>
+<l>*     set_framegrabber_param (AcqHandle, 'MergedMultiFrameOutlierFilterEnabled', 1)</l>
+<l>*     set_framegrabber_param (AcqHandle, 'MergedMultiFrameOutlierFilterThreshold', 5.0)</l>
+<l>*     set_framegrabber_param (AcqHandle, 'MergedMultiFrameReflectionFilterEnabled', 1)</l>
+<l>*     set_framegrabber_param (AcqHandle, 'MergedMultiFrameSaturatedFilterEnabled', 1)</l>
+<c></c>
+<l>*     set_framegrabber_param (AcqHandle, 'MergedMultiFrameAdd', '1')</l>
+<c></c>
+<l>*     set_framegrabber_param (AcqHandle, 'MergedMultiFrameExposureTime', 8333)</l>
+<l>*     set_framegrabber_param (AcqHandle, 'MergedMultiFrameIris', 13)</l>
+<l>*     set_framegrabber_param (AcqHandle, 'MergedMultiFrameBrightness', 1.0)</l>
+<l>*     set_framegrabber_param (AcqHandle, 'MergedMultiFrameGain', 1.0)</l>
+<l>*     set_framegrabber_param (AcqHandle, 'MergedMultiFrameBidirectional', 0)</l>
+<l>*     set_framegrabber_param (AcqHandle, 'MergedMultiFrameContrastFilterEnabled', 1)</l>
+<l>*     set_framegrabber_param (AcqHandle, 'MergedMultiFrameContrastFilterThreshold', 3.0)</l>
+<l>*     set_framegrabber_param (AcqHandle, 'MergedMultiFrameGaussianFilterEnabled', 1)</l>
+<l>*     set_framegrabber_param (AcqHandle, 'MergedMultiFrameGaussianFilterSigma', 1.5)</l>
+<l>*     set_framegrabber_param (AcqHandle, 'MergedMultiFrameOutlierFilterEnabled', 1)</l>
+<l>*     set_framegrabber_param (AcqHandle, 'MergedMultiFrameOutlierFilterThreshold', 5.0)</l>
+<l>*     set_framegrabber_param (AcqHandle, 'MergedMultiFrameReflectionFilterEnabled', 1)</l>
+<l>*     set_framegrabber_param (AcqHandle, 'MergedMultiFrameSaturatedFilterEnabled', 1)</l>
+<c></c>
+<l>*     set_framegrabber_param (AcqHandle, 'MergedMultiFrameAdd', '1')</l>
+<c></c>
+<l>*     set_framegrabber_param (AcqHandle, 'MergedMultiFrameExposureTime', 8333)</l>
+<l>*     set_framegrabber_param (AcqHandle, 'MergedMultiFrameIris', 17)</l>
+<l>*     set_framegrabber_param (AcqHandle, 'MergedMultiFrameBrightness', 1.0)</l>
+<l>*     set_framegrabber_param (AcqHandle, 'MergedMultiFrameGain', 1.0)</l>
+<l>*     set_framegrabber_param (AcqHandle, 'MergedMultiFrameBidirectional', 0)</l>
+<l>*     set_framegrabber_param (AcqHandle, 'MergedMultiFrameContrastFilterEnabled', 1)</l>
+<l>*     set_framegrabber_param (AcqHandle, 'MergedMultiFrameContrastFilterThreshold', 3.0)</l>
+<l>*     set_framegrabber_param (AcqHandle, 'MergedMultiFrameGaussianFilterEnabled', 1)</l>
+<l>*     set_framegrabber_param (AcqHandle, 'MergedMultiFrameGaussianFilterSigma', 1.5)</l>
+<l>*     set_framegrabber_param (AcqHandle, 'MergedMultiFrameOutlierFilterEnabled', 1)</l>
+<l>*     set_framegrabber_param (AcqHandle, 'MergedMultiFrameOutlierFilterThreshold', 5.0)</l>
+<l>*     set_framegrabber_param (AcqHandle, 'MergedMultiFrameReflectionFilterEnabled', 1)</l>
+<l>*     set_framegrabber_param (AcqHandle, 'MergedMultiFrameSaturatedFilterEnabled', 1)</l>
+<c></c>
+<l>*     set_framegrabber_param (AcqHandle, 'MergedMultiFrameAdd', '1')</l>
+<l>* endif</l>
+<c></c>
+<c></c>
+<l>*init_framegrab(AcqHandle, FileName, AcqHandle)</l>
+<l>* set_framegrabber_param (AcqHandle, 'create_objectmodel3d', 'enable')</l>
+<l>*     set_framegrabber_param (AcqHandle, 'add_objectmodel3d_overlay_attrib', 'enable')</l>
+<c>    * Seting the timeout for aborting a pending grab to infinity; useful for longer exposure times</c>
+<l>*     set_framegrabber_param (AcqHandle, 'grab_timeout', -1)</l>
+<c>    </c>
+<c>    * Switching to the SingleShot mode</c>
+<l>*     set_framegrabber_param (AcqHandle, 'AcquisitionMode', 'SingleFrame')</l>
+<l>*     set_framegrabber_param (AcqHandle, 'ExposureTime', 16667)</l>
+<l>*     set_framegrabber_param (AcqHandle, 'Iris', 18)</l>
+<l>*     set_framegrabber_param (AcqHandle, 'Brightness', 1.0)</l>
+<l>*     set_framegrabber_param (AcqHandle, 'Gain', 1.05)</l>
+<l>*     set_framegrabber_param (AcqHandle, 'Bidirectional', 0)</l>
+<l>*     set_framegrabber_param (AcqHandle, 'ContrastFilterEnabled', 1)</l>
+<l>*     set_framegrabber_param (AcqHandle, 'ContrastFilterThreshold', 5.0)</l>
+<l>*     set_framegrabber_param (AcqHandle, 'GaussianFilterEnabled', 1)</l>
+<l>*     set_framegrabber_param (AcqHandle, 'GaussianFilterSigma', 1.5)</l>
+<l>*     set_framegrabber_param (AcqHandle, 'OutlierFilterEnabled', 1)</l>
+<l>*     set_framegrabber_param (AcqHandle, 'OutlierFilterThreshold', 5.0)</l>
+<l>*     set_framegrabber_param (AcqHandle, 'ReflectionFilterEnabled', 1)</l>
+<l>*     set_framegrabber_param (AcqHandle, 'SaturatedFilterEnabled', 1)</l>
+<c></c>
+<c>* Loading the HALCON model for surface-based 3D matching</c>
+<l>tuple_add(FileName,'', SFMFilename)</l>
+<l>read_surface_model (SFMFilename, SFM)</l>
+<c></c>
+<c>* Loading the HALCON 3D object model (used for visualization purpose)</c>
+<l>tuple_add(FileName,'', ObjectModel3DFilename)</l>
+<l>read_object_model_3d (ObjectModel3DFilename, 'm', [], [], ObjectModel3D, Status)</l>
+<c></c>
+<l>*smooth_object_model_3d (ObjectModel3D, 'mls', 'mls_force_inwards', 'true', ObjectModel3D)</l>
+<c></c>
+<l>* get_object_model_3d_params (ObjectModel3D, 'center', Center)</l>
+<l>* get_object_model_3d_params (ObjectModel3D, 'bounding_box1', BoundingBox)</l>
+<l>* hom_mat3d_identity (HomMat3DTrans)</l>
+<l>* hom_mat3d_translate_local (HomMat3DTrans, -Center[0], -Center[1], -BoundingBox[2], HomMat3DTranslate)</l>
+<l>* affine_trans_object_model_3d (ObjectModel3D, HomMat3DTranslate, SampleExactTrans)</l>
+<l>* smooth_object_model_3d (SampleExactTrans, 'mls', 'mls_force_inwards', 'true', SmoothObject3DTrans)</l>
+<l>* hom_mat3d_invert (HomMat3DTranslate, HomMat3DInvert)</l>
+<l>* affine_trans_object_model_3d (SmoothObject3DTrans, HomMat3DInvert, ObjectModel3D)</l>
+<c></c>
+<c>* Preparing the graphics window</c>
+<l>dev_close_window ()</l>
+<l>WinWidth := 1920 / 2 </l>
+<l>WinHeight := 1200 / 2</l>
+<l>dev_open_window (0, 0, WinWidth, WinHeight, 'black', Window3D) </l>
+<c></c>
+<c></c>
+<l>*read_cam_par ('19418B24(Zivid Param).dat', CameraParameters)</l>
+<l>*read_cam_par (DirectoryName + CalCamParamName, CameraParameters)</l>
+<l>*read_pose (DirectoryName + CalCamBasePoseName, BaseInCamPose)</l>
+<l>*read_pose (DirectoryName + CalToolPoseName, ObjInToolPose)</l>
+<l>*read_pose ('final_pose_obj_base.dat', PlaneInCamPose)</l>
+<l>    dev_set_window (Window3D)</l>
+<l>*for Index := 1 to 100 by 1</l>
+<c></c>
+<c>    * Grabing the HDR image</c>
+<l>    *grab_data (Image, Region, Contours, AcqHandle, ObjectModel3D_Scene_Raw)</l>
+<l>     SceneFilename := '../Test'</l>
+<c></c>
+<l>     tuple_add(SceneFilename,'.ply', SceneFilename)</l>
+<l>     read_object_model_3d (SceneFilename, 'm', ['xyz_map_width'], [1920], ObjectModel3D_Scene, Status)</l>
+<l>             *visualize_object_model_3d (Window3D, [ObjectModel3D_Scene], [], [], [], [], [], [], [], PoseOut)</l>
+<l>             stop()</l>
+<l>    get_object_model_3d_params (ObjectModel3D_Scene, 'red', red)</l>
+<l>    get_object_model_3d_params (ObjectModel3D_Scene, 'green', green)</l>
+<l>    get_object_model_3d_params (ObjectModel3D_Scene, 'blue', blue)</l>
+<l>    set_object_model_3d_attrib (ObjectModel3D_Scene, '&amp;red', 'points', red, ObjectModel3D_Scene)</l>
+<l>    set_object_model_3d_attrib (ObjectModel3D_Scene, '&amp;green', 'points', green, ObjectModel3D_Scene)</l>
+<l>    set_object_model_3d_attrib (ObjectModel3D_Scene, '&amp;blue', 'points', blue, ObjectModel3D_Scene)</l>
+<c></c>
+<l>    object_model_3d_to_xyz( X, Y, Z, ObjectModel3D_Scene, 'from_xyz_map', [], [])  </l>
+<l>    get_image_size (X, Width, Height)</l>
+<l>    gen_image_const (R, 'real', Width, Height)</l>
+<l>    gen_image_const (G, 'real', Width, Height)</l>
+<l>    gen_image_const (B, 'real', Width, Height)</l>
+<l>    get_domain (R, Domain)</l>
+<l>    get_region_points (Domain, Rows, Columns)</l>
+<l>    set_grayval (R, Rows, Columns, red)</l>
+<l>    set_grayval (G, Rows, Columns, green)</l>
+<l>    set_grayval (B, Rows, Columns, blue)</l>
+<l>    compose3(R,G,B,RGBA)</l>
+<c>    </c>
+<c>    * Extracting the following images: X, Y, Z, Contrast, and RGB</c>
+<l>    *select_obj (Image, X, 1)</l>
+<l>    *select_obj (Image, Y, 2)</l>
+<l>    *select_obj (Image, Z, 3)</l>
+<l>    *select_obj (Image, Confidence, 4)</l>
+<l>    *select_obj (Image, RGBA, 5)</l>
+<c>    </c>
+<l>    *write_image(RGBA, 'png', 0, 'Find_' + FileName + '.png')</l>
+<c>    * Converting the point cloud into the HALCON 3D object model</c>
+<l>    xyz_to_object_model_3d (X, Y, Z, ObjectModel3D_Scene)</l>
+<c>    </c>
+<c>    * Computing 3D object model normals, which is necessary for surface-based 3D matching</c>
+<l>    count_seconds (T0)</l>
+<l>    sample_object_model_3d (ObjectModel3D_Scene,'fast_compute_normals', 1, [], [], ObjectModel3D_Scene)</l>
+<l>    smooth_object_model_3d (ObjectModel3D_Scene, 'mls', 'mls_force_inwards', 'true', ObjectModel3D_Scene)</l>
+<c></c>
+<l>    count_seconds (T1)</l>
+<l>    TimeForSampling := (T1 - T0)     </l>
+<c>    </c>
+<c>    * Object detection and pose estimation based on surface-based 3D matching</c>
+<l>    count_seconds (T0)</l>
+<c>    * RelSamplingDistance - point cloud downsampling (0 = no downsampling)</c>
+<c>    * Twinings tea box</c>
+<l>    if (FileName = 'Twinings tea box')</l>
+<l>        RelSamplingDistance := 0.01</l>
+<l>    endif</l>
+<c>    * Pringles can</c>
+<l>    if (FileName = 'Pringles can')</l>
+<l>        RelSamplingDistance := 0.03</l>
+<l>    endif</l>
+<c>    * Coca-Cola bottle</c>
+<l>    if (FileName = 'Coca-Cola bottle')</l>
+<l>        RelSamplingDistance := 0.003</l>
+<l>    endif</l>
+<c>    * Your own model created with the SurfaceMatchingCreateModel.hdev</c>
+<l>    if (FileName = 'PICAMBOX')</l>
+<l>        RelSamplingDistance := 0.01</l>
+<l>    endif</l>
+<l>    if (FileName = 'CAMCOVER')</l>
+<l>        RelSamplingDistance := 0.003</l>
+<l>    endif</l>
+<l>    RelSamplingDistance := 0.03</l>
+<c>    * KeyPointFraction - additional downsampling for the detection (1 = all points used)</c>
+<l>    KeyPointFraction := 0.15</l>
+<c>    * MinScore - minimum score for the detection</c>
+<l>    MinScore := 0.35</l>
+<c>    </c>
+<c>    * 하기 오퍼레이터 ROI 4영역 병렬 프로세싱</c>
+<c>      </c>
+<c>    *  [x1, y1, z] [x2, y2, z] [x3, y3, z] [x4, y4, z]</c>
+<c>    *       ㅣ          ㅣ          ㅣ          ㅣ</c>
+<c>    *       -------------------------------------</c>
+<c>    *                      매칭 시작</c>
+<c>    *       -------------------------------------</c>
+<c>    *       ㅣ          ㅣ          ㅣ          ㅣ</c>
+<c>    *       결과1      결과2        결과3      결과4                    </c>
+<c>    *       -------------------------------------</c>
+<c>    *           완료 트리거 재료 미정(단순:시간?, 오퍼레이터 콜백?, STATUS?)</c>
+<c>    *       -------------------------------------</c>
+<c>    *                     매칭 리포트 </c>
+<c>    *       -------------------------------------</c>
+<c>    </c>
+<l>    find_surface_model (SFM, ObjectModel3D_Scene, RelSamplingDistance, KeyPointFraction, MinScore, 'true', ['num_matches', 'scene_normal_computation'], [5, 'mls'], Pose,  Score, SurfaceMatchingResultID)</l>
+<l>    *refine_surface_model_pose (SFM, ObjectModel3D_Scene, Pose, 0, 'false', [], [], Pose, Score, SurfaceMatchingResultID1)</l>
+<l>    *find_surface_model (SFM, ObjectModel3D, 0.05, 0.2, 0.4, 'true', ['num_matches'], [10], Pose, Score, SurfaceMatchingResultID)</l>
+<l>    *find_surface_model (SFM, ObjectModel3D_Scene, RelSamplingDistance, KeyPointFraction, MinScore, 'true', ['num_matches', 'scene_normal_computation'], [5, 'fast'], Pose,  Score, SurfaceMatchingResultID)</l>
+<l>    *find_surface_model (SFM, ObjectModel3D_Scene, RelSamplingDistance, KeyPointFraction, MinScore, 'true', ['num_matches', 'max_overlap_dist_rel'], [10, 'mls'], Pose,  Score, SurfaceMatchingResultID)</l>
+<l>*    find_surface_model (SFM, ObjectModel3D_Scene, 0.02, 0.7, 0.2, 'false', ['num_matches','max_overlap_dist_rel'], [3,0.4], Pose, Score, SurfaceMatchingResultID)</l>
+<l>    *debug_find_surface_model (SFM, ObjectModel3D, ObjectModel3D_Scene, SurfaceMatchingResultID, CreateNames, CreateValues, FindNames, FindValues)</l>
+<l>    count_seconds (T1)</l>
+<l>    TimeForMatching := (T1 - T0)</l>
+<c>    </c>
+<c></c>
+<l>    if (Score!=[])</l>
+<c></c>
+<c>        * Preparing the result(s)</c>
+<l>        if (Score[0] &lt; MinScore)</l>
+<l>            return()</l>
+<l>        endif    </l>
+<l>        CPose := Pose[0:6]</l>
+<l>        *CPose := Pose</l>
+<l>        rigid_trans_object_model_3d (ObjectModel3D, CPose, ObjectModel3D_Result)</l>
+<l>        pose_to_hom_mat3d (CPose, CHomMat3D)</l>
+<l>        affine_trans_object_model_3d (ObjectModel3D, CHomMat3D, ObjectModel3DAffineTrans)</l>
+<l>        get_object_model_3d_params (ObjectModel3D_Result, 'center', VisRotationCenter)</l>
+<l>        get_object_model_3d_params (ObjectModel3D, 'center', VisRotationCenter1)</l>
+<c></c>
+<l>        ParFitting := ['primitive_type','fitting_algorithm','output_point_coord']</l>
+<l>        ValFitting := ['all','least_squares_huber','true']</l>
+<c>        * Apply the fitting</c>
+<l>        fit_primitives_object_model_3d (ObjectModel3D_Result, ParFitting, ValFitting, ObjectModel3DOutID)</l>
+<l>        get_object_model_3d_params (ObjectModel3DOutID, 'primitive_pose', PosePlanes)</l>
+<c>        *Cam 2D RGB와 3D PCL의 시작 위치 차이</c>
+<c>        *X: 38.784mm, Y: 0.0mm Z:259.511mm , 1.5 deg</c>
+<l>        get_object_model_3d_params(ObjectModel3D_Scene, 'center', CenterParam)</l>
+<c></c>
+<c>        * Visualizing matching scene and key points</c>
+<l>        Message := 'Original scene points (white)'</l>
+<l>        Message[1] := 'Sampled scene points (cyan)'</l>
+<l>        Message[2] := 'Key points (yellow)'</l>
+<l>        SampledScene := []</l>
+<l>        KeyPoints := []</l>
+<l>        get_surface_matching_result (SurfaceMatchingResultID, 'sampled_scene', 1, SampledScene)</l>
+<l>        get_surface_matching_result (SurfaceMatchingResultID, 'key_points', [], KeyPoints)</l>
+<c>        * Visualizing result(s)</c>
+<l>        Message1 := 'Scene: ' + 1</l>
+<l>        Message1[1] := 'Found ' + |ObjectModel3D_Result| + ' object(s) in ' + TimeForMatching$'.3' + ' ms'</l>
+<l>        ScoreString := sum(Score$'.2f' + ' / ')</l>
+<l>        Message1[2] := 'Score(s): ' + ScoreString{0:strlen(ScoreString) - 4}</l>
+<l>        NumResult := |ObjectModel3D_Result|</l>
+<l>        tuple_gen_const (NumResult, 'green', Colors)</l>
+<l>        tuple_gen_const (NumResult, 'circle', Shapes)</l>
+<l>        tuple_gen_const (NumResult, 3, Radii)</l>
+<l>        Indices := [1:NumResult]</l>
+<l>        dev_clear_window ()</l>
+<l>        Instructions[0] := 'Rotate: Left button'</l>
+<l>        Instructions[1] := 'Zoom:   Shift + left button'</l>
+<l>        Instructions[2] := 'Move:   Ctrl  + left button'</l>
+<l>        *visualize_object_model_3d (Window3D, [ObjectModel3D_Scene,ObjectModel3D_Result], [], [], ['color_' + [0,Indices],'point_size_0'], ['gray',Colors,1.0], Message1, [], Instructions, PoseOut)</l>
+<c>        * Clear: Free result(s)</c>
+<l>        clear_object_model_3d (ObjectModel3D_Scene)</l>
+<l>        clear_object_model_3d (ObjectModel3D_Result)</l>
+<l>        clear_object_model_3d (SampledScene)</l>
+<l>        clear_object_model_3d (KeyPoints)</l>
+<l>        clear_surface_matching_result (SurfaceMatchingResultID)</l>
+<l>        stop()</l>
+<l>    endif</l>
+<c></c>
+<l>*endfor</l>
+<c></c>
+<l>*clear_object_model_3d (ObjectModel3D)</l>
+<c>* Disconnecting from the Zivid Camera</c>
+<l>*close_framegrabber (AcqHandle)</l>
+<c></c>
+<c>* Closing the graphics window</c>
+<l>dev_set_window (Window3D)</l>
+<l>Pose := [VisRotationCenter[0], VisRotationCenter[1], VisRotationCenter[2], Pose[3], Pose[4], Pose[5], 0]</l>
+<l>convert_pose_type (Pose, 'Rp+T', 'rodriguez', 'point', PoseRodriguez)</l>
+<l> RodLeng := sqrt(sum(PoseRodriguez[3:5]*PoseRodriguez[3:5]))</l>
+<l> AngleInRad := 2*atan(RodLeng)</l>
+<l> UnitAxisOfRotation := PoseRodriguez[3:5]/RodLeng</l>
+<l> OrientationVector := UnitAxisOfRotation*AngleInRad</l>
+<l> PoseUR := [PoseRodriguez[0:2], OrientationVector]</l>
+<c></c>
+<c></c>
+<l>SubjectCoordX := PoseUR[0]</l>
+<l>SubjectCoordY := PoseUR[1]</l>
+<l>SubjectCoordZ := PoseUR[2]</l>
+<l>SubjectCoordRX := PoseUR[3]</l>
+<l>SubjectCoordRY := PoseUR[4]</l>
+<l>SubjectCoordRZ := PoseUR[5]</l>
+<l>*dev_close_window ()</l>
+</body>
+<docu id="SurfMatch">
+<parameters>
+<parameter id="SubjectCoordRX"/>
+<parameter id="SubjectCoordRY"/>
+<parameter id="SubjectCoordRZ"/>
+<parameter id="SubjectCoordX"/>
+<parameter id="SubjectCoordY"/>
+<parameter id="SubjectCoordZ"/>
+</parameters>
+</docu>
+</procedure>
+</hdevelop>

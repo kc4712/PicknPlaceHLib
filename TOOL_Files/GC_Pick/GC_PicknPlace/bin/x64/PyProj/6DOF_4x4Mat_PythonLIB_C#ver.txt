@@ -1,0 +1,206 @@
+/* 
+ #robot_pose = np.array(elements)
+    robot_pose = np.asarray(elements, dtype='float64')
+
+    translation = robot_pose[:3]
+    rotation_vector = robot_pose[3:]
+    rotation = Rotation.from_rotvec(rotation_vector)
+    transform = np.eye(4)
+    transform[:3, :3] = rotation.as_matrix()
+    transform[:3, 3] = translation.T
+*/
+
+
+/*
+Python... lib 구성 소스 풀어 해친것...
+elements = [-197.95, 301.79 ,-40.22 ,3.173 ,-0.128 ,-0.046]
+robot_pose =  np.asarray(elements, dtype='float64')
+print("기입한 로봇 자세:2" + str(robot_pose))
+translation = robot_pose[:3]
+print("translation" + str(translation))
+rotation_vector = robot_pose[3:]
+print("rotation_vector" + str(rotation_vector))
+#rotation = scipy.spatial.transform.Rotation.from_rotvec(rotation_vector)
+is_single = False
+rotvec = np.asarray(rotation_vector, dtype=float)
+
+if rotvec.ndim not in [1, 2] or rotvec.shape[-1] != 3:
+    raise ValueError("Expected `rot_vec` to have shape (3,) "
+                     "or (N, 3), got {}".format(rotvec.shape))
+
+# If a single vector is given, convert it to a 2D 1 x 3 matrix but
+# set self._single to True so that we can return appropriate objects
+# in the `as_...` methods
+if rotvec.shape == (3,):
+    rotvec = rotvec[None, :]
+    is_single = True
+
+num_rotations = rotvec.shape[0]
+
+norms = np.linalg.norm(rotvec, axis=1)
+print("translation" + str(norms))
+small_angle = (norms <= 1e-3)
+large_angle = ~small_angle
+
+scale = np.empty(num_rotations)
+scale[small_angle] = (0.5 - norms[small_angle] ** 2 / 48 +
+                      norms[small_angle] ** 4 / 3840)
+print("translation" + str(scale[small_angle]))
+print("translation" + str(norms[small_angle]))
+scale[large_angle] = (np.sin(norms[large_angle] / 2) /
+                      norms[large_angle])
+print("translation " + str(scale[large_angle]))
+print("translation " + str(norms[large_angle]))
+quat = np.empty((num_rotations, 4))
+print("translation  " + str(num_rotations))
+print("quat1  " + str(np.empty((num_rotations, 4))))
+print("quat2  " + str(quat))
+quat[:, :3] = scale[:, None] * rotvec
+print("1" + str(quat[:, :3] ))
+print("1" + str(scale[:, None]))
+print("1" + str(rotvec ))
+quat[:, 3] = np.cos(norms / 2)
+print("translation" + str(quat[:, 3]))
+print("translation" + str(np.cos(norms / 2)))
+print("quat" + str(quat))
+
+#if is_single:
+    #return cls(quat[0], normalize=False, copy=False)
+#else:
+#    return cls(quat, normalize=False, copy=False)
+_quat = quat
+x = _quat[:, 0]
+y = _quat[:, 1]
+z = _quat[:, 2]
+w = _quat[:, 3]
+
+x2 = x * x
+y2 = y * y
+z2 = z * z
+w2 = w * w
+
+xy = x * y
+zw = z * w
+xz = x * z
+yw = y * w
+yz = y * z
+xw = x * w
+
+num_rotations = len(_quat)
+print("len(_quat)"+ str(len(_quat)))
+matrix = np.empty((num_rotations, 3, 3))
+print("matrix"+ str(matrix))
+matrix[:, 0, 0] = x2 - y2 - z2 + w2
+matrix[:, 1, 0] = 2 * (xy + zw)
+matrix[:, 2, 0] = 2 * (xz - yw)
+
+matrix[:, 0, 1] = 2 * (xy - zw)
+matrix[:, 1, 1] = -x2 + y2 - z2 + w2
+matrix[:, 2, 1] = 2 * (yz + xw)
+
+matrix[:, 0, 2] = 2 * (xz + yw)
+matrix[:, 1, 2] = 2 * (yz - xw)
+matrix[:, 2, 2] = -x2 - y2 + z2 + w2
+
+#if self._single:
+#    return matrix[0]
+#else:
+#    return matrix
+
+
+zz = matrix
+#print("기입한 로봇 자세:3" + str(rotation))
+transform = np.eye(4)
+print("기입한 로봇 자세:4" + str(transform))
+transform[:3, :3] = zz#rotation.as_matrix()
+print("기입한 로봇 자세:5" + str(zz))
+transform[:3, 3] = translation.T
+print("기입한 로봇 자세:6" + str(translation.T))
+print("기입한 로봇 자세:7 \n" + str(transform))
+
+*/	
+
+
+	double[] mat = new double[] { 100, 100, 100, 3.14, 2.1, 0.1 };
+            double[] rotvec = new double[3] {mat[3],mat[4],mat[5]}; 
+            var num_rotations = 1;
+            double norms = Math.Sqrt(rotvec[0] * rotvec[0] + rotvec[1] * rotvec[1] + rotvec[2] * rotvec[2]);
+            Console.WriteLine(norms);
+
+            bool small_angle = norms <= 1e-3;
+            bool large_angle = !small_angle;
+            
+            Console.WriteLine(small_angle);
+            Console.WriteLine(large_angle);
+
+            //scale = np.empty(num_rotations)
+
+            double scale = 0;
+
+            if (norms <= 1e-3)
+            {
+                scale = (0.5 - Math.Pow(norms, 2) / 48 + Math.Pow(norms, 4) / 3840);
+            }
+            else
+            {
+                scale = (Math.Sin(norms / 2) / norms);
+            }
+            Console.WriteLine(scale);
+            Random r = new Random();
+            double[] k = new double[4] { r.NextDouble(), r.NextDouble(), r.NextDouble(), r.NextDouble() };
+            foreach (double l in k) {
+                Console.WriteLine(l);
+            }
+            Console.WriteLine("");
+            Console.WriteLine(rotvec[0] * scale);
+            Console.WriteLine(rotvec[1] * scale);
+            Console.WriteLine(rotvec[2] * scale);
+            double[] quat = new double[4] { rotvec[0] * scale, rotvec[1] * scale, rotvec[2] * scale, Math.Cos(norms / 2) };
+            //Quaternion z = new Quaternion(new Vector3(1), 4);
+            Console.WriteLine("");
+            Console.WriteLine("");
+            Console.WriteLine("");
+            foreach (double l in quat)
+            {
+                Console.WriteLine(l);
+            }
+            //quat 항상1
+            double x = quat[0];
+            double y = quat[1];
+            double z = quat[2];
+            double w = quat[3];
+
+            double x2 = x * x;
+            double y2 = y * y;
+            double z2 = z * z;
+            double w2 = w * w;
+
+            double xy = x * y;
+            double zw = z * w;
+            double xz = x * z;
+            double yw = y * w;
+            double yz = y * z;
+            double xw = x * w;
+
+            //num_rotations = len(self) 로봇 좌표 변환에서는 항상1...
+            //matrix = np.empty((num_rotations, 3, 3)) 파이선에서는 빈배열 만드는 것보다 난수로 채워서 배열 생성하는게 빠르댄다... 3x3 1층 (3차원 배열... 근데 그냥 2차원 3x3)
+	//행렬과 배열은 열과 행이 다르다...
+            //단위 행렬은 수기로 만들어도 상관없을듯 그럼 그냥 4x4 좌표 변환을 바로 해도 될거 같다.
+            double[,] matrix = new double[4, 4] { { x2 - y2 - z2 + w2, 2 * (xy - zw)       , 2 * (xz + yw)       , mat[0]}, 
+                                                  { 2 * (xy + zw)    , (-x2) + y2 - z2 + w2, 2 * (yz - xw)       , mat[1]}, 
+                                                  { 2 * (xz - yw)    , 2 * (yz + xw)       , -x2 - y2 + z2 + w2  , mat[2]},
+                                                  { 0                , 0                   , 0                   , 1}};
+            int beforei = 0;
+            Console.WriteLine("");
+            for (int i = 0; i < 4; i++)
+            {
+                if (beforei != i)
+                {
+                    Console.WriteLine("");
+                }
+                beforei = i;
+                for (int j = 0; j< 4; j++)
+                {
+                    Console.Write(matrix[i, j] + " ");// + i + " " +j);
+                }
+            }

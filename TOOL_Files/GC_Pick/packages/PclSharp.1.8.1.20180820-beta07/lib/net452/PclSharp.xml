@@ -1,0 +1,67 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>PclSharp</name>
+    </assembly>
+    <members>
+        <member name="M:PclSharp.Eigen.Matrix4f.#ctor(System.Numerics.Matrix4x4)">
+            <summary>
+            Copy from an existing Matrix4x4
+            </summary>
+            <param name="m">matrix to copy</param>
+        </member>
+        <member name="M:PclSharp.Std.VectorOfByte.#ctor(System.Collections.Generic.List{System.Byte})">
+            <summary>
+            construct as a copy of the list
+            </summary>
+            <param name="list"></param>
+        </member>
+        <member name="M:PclSharp.Std.VectorOfFloat.#ctor(System.Collections.Generic.List{System.Single})">
+            <summary>
+            construct as a copy of the list
+            </summary>
+            <param name="list"></param>
+        </member>
+        <member name="M:PclSharp.Std.VectorOfInt.#ctor(System.Collections.Generic.List{System.Int32})">
+            <summary>
+            construct as a copy of the list
+            </summary>
+            <param name="list"></param>
+        </member>
+        <member name="M:PclSharp.Std.VectorOfNormal.#ctor(System.Collections.Generic.List{PclSharp.Struct.Normal})">
+            <summary>
+            construct as a copy of the list
+            </summary>
+            <param name="list"></param>
+        </member>
+        <member name="M:PclSharp.Std.VectorOfUInt.#ctor(System.Collections.Generic.List{System.UInt32})">
+            <summary>
+            construct as a copy of the list
+            </summary>
+            <param name="list"></param>
+        </member>
+        <member name="M:PclSharp.Std.VectorOfXYZ.#ctor(System.Collections.Generic.List{PclSharp.Struct.PointXYZ})">
+            <summary>
+            construct as a copy of the list
+            </summary>
+            <param name="list"></param>
+        </member>
+        <member name="M:PclSharp.Std.VectorOfXYZL.#ctor(System.Collections.Generic.List{PclSharp.Struct.PointXYZL})">
+            <summary>
+            construct as a copy of the list
+            </summary>
+            <param name="list"></param>
+        </member>
+        <member name="M:PclSharp.Std.VectorOfXYZRGBA.#ctor(System.Collections.Generic.List{PclSharp.Struct.PointXYZRGBA})">
+            <summary>
+            construct as a copy of the list
+            </summary>
+            <param name="list"></param>
+        </member>
+        <member name="M:PclSharp.Utils.PointSizes.Init">
+            <summary>
+            do nothing, but the .cctor will throw an exception if we have bad sizes.
+            </summary>
+        </member>
+    </members>
+</doc>
