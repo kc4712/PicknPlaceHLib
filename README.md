@@ -8,7 +8,7 @@ Halcon 3D Surface Based Matching을 수행하는 C# Project.
 이 6축좌표는 는 ZIVID SDK의 3D Calibration후 생성되는 동질 회전 매트릭스를 이용해 로봇좌표로 변환된다.
 
 
-산출물: HDevelope Project를 수행하는 C# Dll (빌드하여 생성된 DLL은 Halcon DLL ILMerge로 다시금 합쳐 배포)
+산출물: HDevelope Project를 수행하는 C# Dll (빌드하여 생성된 DLL은 Halcon DLL과 함께 ILMerge로 다시금 합쳐 배포)
 
 API Reference, UML ./Docu 디렉토리 참조.
 초기 개인 테스트 프로젝트는 ./GC_Pick 디렉토리 참조.
