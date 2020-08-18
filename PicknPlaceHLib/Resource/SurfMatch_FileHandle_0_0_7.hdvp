@@ -1,0 +1,756 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hdevelop file_version="1.2" halcon_version="18.11.2.0">
+<procedure name="SurfMatch_FileHandle_0_0_7">
+<interface>
+<oo>
+<par name="RGB_Scene" base_type="iconic" dimension="0"/>
+</oo>
+<ic>
+<par name="plyFilename" base_type="ctrl" dimension="0"/>
+<par name="sfmFileName" base_type="ctrl" dimension="0"/>
+<par name="om3FileName" base_type="ctrl" dimension="0"/>
+<par name="RoiForm" base_type="ctrl" dimension="0"/>
+<par name="MatchForm" base_type="ctrl" dimension="0"/>
+<par name="ScanXArea" base_type="ctrl" dimension="0"/>
+<par name="ScanXOverwrap" base_type="ctrl" dimension="0"/>
+<par name="ROIXAreaMin" base_type="ctrl" dimension="0"/>
+<par name="ROIXAreaMax" base_type="ctrl" dimension="0"/>
+<par name="ROIYAreaMin" base_type="ctrl" dimension="0"/>
+<par name="ROIYAreaMax" base_type="ctrl" dimension="0"/>
+<par name="ROIZPlaneMinDepth" base_type="ctrl" dimension="0"/>
+<par name="ROIZPlaneMaxDepth" base_type="ctrl" dimension="0"/>
+<par name="sampling_method" base_type="ctrl" dimension="0"/>
+<par name="sampling_distance" base_type="ctrl" dimension="0"/>
+<par name="find_sfm_RelSamplingDistance" base_type="ctrl" dimension="0"/>
+<par name="find_sfm_KeyPointFraction" base_type="ctrl" dimension="0"/>
+<par name="find_sfm_MinScore" base_type="ctrl" dimension="0"/>
+<par name="find_sfm_NumMatch" base_type="ctrl" dimension="0"/>
+<par name="find_sfm_FindMethod" base_type="ctrl" dimension="0"/>
+<par name="find_sfm_ScoreType" base_type="ctrl" dimension="0"/>
+<par name="find_sfm_max_overlap_dist_rel_value" base_type="ctrl" dimension="0"/>
+<par name="AxisAlign" base_type="ctrl" dimension="0"/>
+</ic>
+<oc>
+<par name="MatchResult" base_type="ctrl" dimension="0"/>
+<par name="ObjectModel_Scene" base_type="ctrl" dimension="0"/>
+<par name="ObjectModel3D_Result" base_type="ctrl" dimension="0"/>
+<par name="ObjectModel3D_ResultArrow" base_type="ctrl" dimension="0"/>
+<par name="ObjectModel3D_ResultRoI" base_type="ctrl" dimension="0"/>
+</oc>
+</interface>
+<body>
+<c></c>
+<l>dev_update_off ()</l>
+<c></c>
+<l>ArrowLength := 80</l>
+<l>ArrowThickness := 3</l>
+<c></c>
+<c></c>
+<l>*dev_clear_window()</l>
+<l>*WinWidth := 1920 / 2 </l>
+<l>*WinHeight := 1200 / 2</l>
+<l>*dev_open_window(0, 0, WinWidth, WinHeight, 'black', Window3D)</l>
+<c></c>
+<l>tuple_add (sfmFileName, '', SFMFilename)</l>
+<l>read_surface_model (SFMFilename, SFM)</l>
+<c></c>
+<c>* Loading the HALCON 3D object model (used for visualization purpose)</c>
+<l>tuple_add (om3FileName, '', ObjectModel3DFilename)</l>
+<l>read_object_model_3d (ObjectModel3DFilename, 'm', [], [], ObjectModel3D, Status)</l>
+<c></c>
+<c></c>
+<c>* Computing 3D object model normals, which is necessary for surface-based 3D matching</c>
+<l>count_seconds (T0)</l>
+<l>tuple_add(plyFilename,'', SceneFilename)</l>
+<l>read_object_model_3d (SceneFilename, 'm', ['xyz_map_width'], [1920], ObjectModel_Scene, Status)</l>
+<l>*visualize_object_model_3d (Window3D, [ObjectModel3D_Scene], [], [], [], [], [], [], [], PoseOut)</l>
+<l>*stop()</l>
+<l>get_object_model_3d_params (ObjectModel_Scene, 'red', red)</l>
+<l>get_object_model_3d_params (ObjectModel_Scene, 'green', green)</l>
+<l>get_object_model_3d_params (ObjectModel_Scene, 'blue', blue)</l>
+<l>set_object_model_3d_attrib (ObjectModel_Scene, '&amp;red', 'points', red, ObjectModel_Scene)</l>
+<l>set_object_model_3d_attrib (ObjectModel_Scene, '&amp;green', 'points', green, ObjectModel_Scene)</l>
+<l>set_object_model_3d_attrib (ObjectModel_Scene, '&amp;blue', 'points', blue, ObjectModel_Scene)</l>
+<c></c>
+<l>object_model_3d_to_xyz( X, Y, Z, ObjectModel_Scene, 'from_xyz_map', [], [])  </l>
+<l>get_image_size (X, Width, Height)</l>
+<l>gen_image_const (R, 'real', Width, Height)</l>
+<l>gen_image_const (G, 'real', Width, Height)</l>
+<l>gen_image_const (B, 'real', Width, Height)</l>
+<l>get_domain (R, Domain)</l>
+<l>get_region_points (Domain, Rows, Columns)</l>
+<l>set_grayval (R, Rows, Columns, red)</l>
+<l>set_grayval (G, Rows, Columns, green)</l>
+<l>set_grayval (B, Rows, Columns, blue)</l>
+<l>compose3 (R, G, B, RGBA)</l>
+<l>xyz_to_object_model_3d (X, Y, Z, ObjectModel_Scene)</l>
+<c></c>
+<l>if (RoiForm == 1)</l>
+<l>    for Index1 := ROIXAreaMin to ROIXAreaMax by ScanXOverwrap</l>
+<l>        if(Index1+ScanXArea &gt; ROIXAreaMax )</l>
+<l>            RGB_Scene := RGBA</l>
+<l>            ObjectModel_Scene := ObjectModel_Scene</l>
+<l>            ObjectModel3D_Result := ObjectModel_Scene</l>
+<l>            ObjectModel3D_ResultArrow := ObjectModel_Scene</l>
+<l>            ObjectModel3D_ResultRoI := ObjectModel_Scene</l>
+<l>            MatchResult := 'Failed'</l>
+<l>            break</l>
+<l>        endif</l>
+<c>        </c>
+<l>        if (MatchForm == 1)</l>
+<l>            xyz_to_object_model_3d (X, Y, Z, ObjectModel_Scene)</l>
+<l>            sample_object_model_3d (ObjectModel_Scene, sampling_method, sampling_distance, [], [], ObjectModel_Scene)</l>
+<l>            select_points_object_model_3d (ObjectModel_Scene, 'point_coord_x', Index1, Index1+ScanXArea, ObjectModel_SceneSampled)</l>
+<c>            </c>
+<c>        </c>
+<l>*            smooth_object_model_3d (ObjectModel_Scene, 'mls', ['mls_kNN','mls_force_inwards'], [60,'true'], ObjectModel_Scene)</l>
+<l>            triangulate_object_model_3d (ObjectModel_SceneSampled, 'xyz_mapping', [], [], TriangulatedObjectModel3D1, Information)</l>
+<l>            fit_primitives_object_model_3d (TriangulatedObjectModel3D1, 'primitive_type', 'plane', ObjectModel3DOut)</l>
+<c>            </c>
+<l>            get_object_model_3d_params (ObjectModel3DOut, 'primitive_parameter_pose', Pose_primitive_plane)</l>
+<c>            </c>
+<l>            pose_invert (Pose_primitive_plane, PoseInvert_primitive_plane)</l>
+<l>            SampleSceneCenterZ := PoseInvert_primitive_plane</l>
+<l>            pose_to_hom_mat3d (PoseInvert_primitive_plane, HomMat3D_invert)</l>
+<l>            affine_trans_object_model_3d (ObjectModel_SceneSampled, HomMat3D_invert, Triangulated_ObjectModel3DAffineTrans)</l>
+<c>            </c>
+<l>            *select_points_object_model_3d (Triangulated_ObjectModel3DAffineTrans, 'point_coord_z', 1, 5, ObjectModel3DThresholded2)</l>
+<l>            *select_points_object_model_3d (Triangulated_ObjectModel3DAffineTrans, 'point_coord_z', 5, 50, ObjectModel3DThresholded2)</l>
+<l>            select_points_object_model_3d (Triangulated_ObjectModel3DAffineTrans, 'point_coord_z', ROIZPlaneMinDepth, ROIZPlaneMaxDepth, ObjectModel3DThresholded2)</l>
+<l>            pose_to_hom_mat3d (Pose_primitive_plane, HomMat3D)</l>
+<l>            affine_trans_object_model_3d (ObjectModel3DThresholded2, HomMat3D, ObjectModel3DAffineTrans)</l>
+<l>            ObjectModel_SceneSampled := ObjectModel3DAffineTrans</l>
+<l>        elseif (MatchForm == 2)</l>
+<l>            xyz_to_object_model_3d (X, Y, Z, ObjectModel_Scene)</l>
+<l>            sample_object_model_3d (ObjectModel_Scene, sampling_method, sampling_distance, [], [], ObjectModel_Scene)</l>
+<l>            select_points_object_model_3d (ObjectModel_Scene, 'point_coord_x', Index1, Index1+ScanXArea, ObjectModel_SceneSampled)</l>
+<c>            </c>
+<c>        </c>
+<l>*            smooth_object_model_3d (ObjectModel_Scene, 'mls', ['mls_kNN','mls_force_inwards'], [60,'true'], ObjectModel_Scene)</l>
+<l>            *triangulate_object_model_3d (ObjectModel_Scene, 'xyz_mapping', [], [], TriangulatedObjectModel3D1, Information)</l>
+<l>            fit_primitives_object_model_3d (ObjectModel_SceneSampled, 'primitive_type', 'plane', ObjectModel3DOut)</l>
+<c>            </c>
+<l>            get_object_model_3d_params (ObjectModel3DOut, 'primitive_parameter_pose', Pose_primitive_plane)</l>
+<c>            </c>
+<l>            pose_invert (Pose_primitive_plane, PoseInvert_primitive_plane)</l>
+<l>            SampleSceneCenterZ := PoseInvert_primitive_plane</l>
+<l>            pose_to_hom_mat3d (PoseInvert_primitive_plane, HomMat3D_invert)</l>
+<l>            affine_trans_object_model_3d (ObjectModel_SceneSampled, HomMat3D_invert, Triangulated_ObjectModel3DAffineTrans)</l>
+<c>            </c>
+<l>            *select_points_object_model_3d (Triangulated_ObjectModel3DAffineTrans, 'point_coord_z', 1, 5, ObjectModel3DThresholded2)</l>
+<l>            *select_points_object_model_3d (Triangulated_ObjectModel3DAffineTrans, 'point_coord_z', 5, 50, ObjectModel3DThresholded2)</l>
+<l>            select_points_object_model_3d (Triangulated_ObjectModel3DAffineTrans, 'point_coord_z', ROIZPlaneMinDepth, ROIZPlaneMaxDepth, ObjectModel3DThresholded2)</l>
+<l>            get_object_model_3d_params (ObjectModel3DThresholded2, 'num_points', ObjectModel3DThresholded2_PointNum)</l>
+<l>            if(ObjectModel3DThresholded2_PointNum &lt; 1)</l>
+<l>                continue</l>
+<l>            endif</l>
+<l>            pose_to_hom_mat3d (Pose_primitive_plane, HomMat3D)</l>
+<l>            affine_trans_object_model_3d (ObjectModel3DThresholded2, HomMat3D, ObjectModel3DAffineTrans)</l>
+<l>            triangulate_object_model_3d (ObjectModel3DAffineTrans, 'greedy', [], [], TriangulatedObjectModel3D1, Information)</l>
+<l>            ObjectModel_SceneSampled := TriangulatedObjectModel3D1</l>
+<l>        else</l>
+<l>            xyz_to_object_model_3d (X, Y, Z, ObjectModel_Scene)</l>
+<l>            sample_object_model_3d (ObjectModel_Scene, sampling_method, sampling_distance, [], [], ObjectModel_Scene)</l>
+<l>            select_points_object_model_3d (ObjectModel_Scene, 'point_coord_x', Index1, Index1+ScanXArea, ObjectModel_SceneSampled)</l>
+<c>            </c>
+<l>*            smooth_object_model_3d (ObjectModel_Scene, 'mls', ['mls_kNN','mls_force_inwards'], [60,'true'], ObjectModel_Scene)</l>
+<l>            *triangulate_object_model_3d (ObjectModel_Scene, 'xyz_mapping', [], [], TriangulatedObjectModel3D1, Information)</l>
+<l>            fit_primitives_object_model_3d (ObjectModel_SceneSampled, 'primitive_type', 'plane', ObjectModel3DOut)</l>
+<c>            </c>
+<l>            get_object_model_3d_params (ObjectModel3DOut, 'primitive_parameter_pose', Pose_primitive_plane)</l>
+<c>            </c>
+<l>            pose_invert (Pose_primitive_plane, PoseInvert_primitive_plane)</l>
+<l>            SampleSceneCenterZ := PoseInvert_primitive_plane</l>
+<l>            pose_to_hom_mat3d (PoseInvert_primitive_plane, HomMat3D_invert)</l>
+<l>            affine_trans_object_model_3d (ObjectModel_SceneSampled, HomMat3D_invert, ObjectModel3DAffineTrans)</l>
+<c>            </c>
+<l>            *select_points_object_model_3d (Triangulated_ObjectModel3DAffineTrans, 'point_coord_z', 1, 5, ObjectModel3DThresholded2)</l>
+<l>            *select_points_object_model_3d (Triangulated_ObjectModel3DAffineTrans, 'point_coord_z', 5, 50, ObjectModel3DThresholded2)</l>
+<l>            select_points_object_model_3d (ObjectModel3DAffineTrans, 'point_coord_z', ROIZPlaneMinDepth, ROIZPlaneMaxDepth, ObjectModel3DThresholded2)</l>
+<l>            pose_to_hom_mat3d (Pose_primitive_plane, HomMat3D)</l>
+<l>            affine_trans_object_model_3d (ObjectModel3DThresholded2, HomMat3D, ObjectModel3DAffineTrans)</l>
+<l>            ObjectModel_SceneSampled := ObjectModel3DAffineTrans</l>
+<l>        endif</l>
+<c>        </c>
+<l>*        set_surface_model_param (SFM, 'symmetry_poses', [0,0,0,0,0,0,0])</l>
+<l>        get_object_model_3d_params (ObjectModel_SceneSampled, 'num_points', Scene_PointNum)</l>
+<c>        </c>
+<l>        if(Scene_PointNum &lt;= 0)</l>
+<l>            continue</l>
+<l>        endif</l>
+<l>* find_surface_model_image (img2D, SFM, ObjectModel_Scene, find_sfm_RelSamplingDistance, find_sfm_KeyPointFraction, find_sfm_MinScore, 'true', ['num_matches', 'scene_normal_computation'], [find_sfm_NumMatch, 'mls'], Pose, Score, SurfaceMatchingResultID)</l>
+<l>        find_surface_model (SFM, ObjectModel_SceneSampled, find_sfm_RelSamplingDistance, find_sfm_KeyPointFraction, find_sfm_MinScore, 'true', ['num_matches', 'scene_normal_computation', 'score_type', 'max_overlap_dist_rel'], [find_sfm_NumMatch, find_sfm_FindMethod, find_sfm_ScoreType, find_sfm_max_overlap_dist_rel_value], Pose, Score, SurfaceMatchingResultID)</l>
+<c></c>
+<c>    </c>
+<l>        if (Score!=[])</l>
+<c>            * Preparing the result(s)</c>
+<l>            if (Score[0] &lt; find_sfm_MinScore)</l>
+<l>                RGB_Scene := RGBA</l>
+<l>                ObjectModel_Scene := ObjectModel_Scene</l>
+<l>                ObjectModel3D_Result := ObjectModel_Scene</l>
+<l>                ObjectModel3D_ResultArrow := ObjectModel_Scene</l>
+<l>                ObjectModel3D_ResultRoI := ObjectModel_Scene</l>
+<l>                MatchResult := 'Failed'</l>
+<l>                return ()</l>
+<l>            endif</l>
+<c>            </c>
+<l>            tuple_length(Score, SuccessNum)</l>
+<l>            VisRotationCenters := []</l>
+<l>            CPose := []</l>
+<l>            StartNUM := 0</l>
+<l>            EndNUM := 6</l>
+<l>            ObjectModel3D_Arrow := []</l>
+<l>            for Index := 0 to SuccessNum-1 by 1</l>
+<l>                if (AxisAlign == 1)</l>
+<l>                    RotateCheck := Pose[StartNUM:EndNUM]</l>
+<l>                    if(RotateCheck[3] &gt; 90 and RotateCheck[3] &lt; 270)</l>
+<l>                        pose_to_hom_mat3d (Pose[StartNUM:EndNUM], camHwcs)</l>
+<l>                        hom_mat3d_rotate_local (camHwcs, rad(180), 'x', camHwcs)</l>
+<l>                        hom_mat3d_to_pose (camHwcs, PoseOfWCS)</l>
+<l>                        Pose[StartNUM:EndNUM] := PoseOfWCS</l>
+<l>                    elseif(RotateCheck[4] &gt; 90 and RotateCheck[4] &lt; 270)</l>
+<l>                        pose_to_hom_mat3d (Pose[StartNUM:EndNUM], camHwcs)</l>
+<l>                        hom_mat3d_rotate_local (camHwcs, rad(180), 'y', camHwcs)</l>
+<l>                        hom_mat3d_to_pose (camHwcs, PoseOfWCS)</l>
+<l>                        Pose[StartNUM:EndNUM] := PoseOfWCS</l>
+<l>                    endif </l>
+<l>                endif</l>
+<l>*                 if(RotateCheck[3] &gt; 270 or RotateCheck[3] &lt; 90 and RotateCheck[4] &lt; 90)</l>
+<l>*                      pose_to_hom_mat3d (Pose[StartNUM:EndNUM], camHwcs)</l>
+<l>*                     hom_mat3d_rotate_local (camHwcs, rad(-90), 'x', camHwcs)</l>
+<l>                    *hom_mat3d_rotate_local (camHwcs, rad(180), 'z', camHwcs)</l>
+<l>*                     hom_mat3d_to_pose (camHwcs, PoseOfWCS)</l>
+<l>*                     Pose[StartNUM:EndNUM] := PoseOfWCS</l>
+<l>*                 endif</l>
+<c>        </c>
+<l>*                 if(RotateCheck[3] &lt; 90 and RotateCheck[4] &lt; 90)</l>
+<l>*                      pose_to_hom_mat3d (Pose[StartNUM:EndNUM], camHwcs)</l>
+<l>*                     hom_mat3d_rotate_local (camHwcs, rad(90), 'z', camHwcs)</l>
+<l>*                     hom_mat3d_rotate_local (camHwcs, rad(-90), 'x', camHwcs)</l>
+<c>                    </c>
+<l>*                     hom_mat3d_to_pose (camHwcs, PoseOfWCS)</l>
+<l>*                     Pose[StartNUM:EndNUM] := PoseOfWCS</l>
+<l>*                 endif</l>
+<l>                *CPose := Pose[StartNUM:EndNUM]</l>
+<l>                CPose := Pose[StartNUM:EndNUM]</l>
+<l>                rigid_trans_object_model_3d (ObjectModel3D, CPose, ObjectModel3D_Result)</l>
+<l>                *visualize_object_model_3d (Window3D, [ObjectModel3D_Result[4]], [], [], [], [], [], [], [], PoseOut)</l>
+<l>                get_object_model_3d_params (ObjectModel3D_Result, 'center', VisRotationCenter)</l>
+<l>                VisRotationCenters := [VisRotationCenters,VisRotationCenter]</l>
+<l>                PoseOther := [0,0,0, Pose[StartNUM+3] , Pose[StartNUM+4], Pose[StartNUM+5],0]</l>
+<c>                </c>
+<l>                *LookPose := [LookPose,PoseOther]</l>
+<c>        </c>
+<l>                create_pose (0, 0, 0, 0, 0, 0, 'Rp+T', 'gba', 'point', IdentityPose)</l>
+<c>                * </c>
+<c>                * 3D model for the tool.</c>
+<l>                create_pose (ArrowLength, 0, 0, 0, 0, 0, 'Rp+T', 'gba', 'point', TransXPose)</l>
+<l>                gen_arrow_object_model_3d (ArrowThickness, IdentityPose, TransXPose, OM3DToolXOrigin)</l>
+<l>                create_pose (0, ArrowLength, 0, 0, 0, 0, 'Rp+T', 'gba', 'point', TransYPose)</l>
+<l>                gen_arrow_object_model_3d (ArrowThickness, IdentityPose, TransYPose, OM3DToolYOrigin)</l>
+<l>                create_pose (0, 0, ArrowLength, 0, 0, 0, 'Rp+T', 'gba', 'point', TransZPose)</l>
+<l>                gen_arrow_object_model_3d (ArrowThickness, IdentityPose, TransZPose, OM3DToolZOrigin)</l>
+<l>                OM3DToolOrigin := [OM3DToolXOrigin,OM3DToolYOrigin,OM3DToolZOrigin]</l>
+<l>                rigid_trans_object_model_3d (OM3DToolOrigin, Pose[StartNUM:EndNUM], Dummy)</l>
+<l>                ObjectModel3D_Arrow := [ObjectModel3D_Arrow, Dummy]</l>
+<c>                </c>
+<l>                StartNUM := StartNUM + 7</l>
+<l>                EndNUM := EndNUM + 7</l>
+<l>            endfor</l>
+<l>            rigid_trans_object_model_3d (ObjectModel3D, Pose, ObjectModel3D_ResultImg)</l>
+<l>            get_object_model_3d_params (ObjectModel_Scene, 'bounding_box1', SceneBoundingBox)</l>
+<l>            get_object_model_3d_params (ObjectModel_SceneSampled, 'center', SceneCenters)</l>
+<l>            *fit_primitives_object_model_3d (ObjectModel_Scene, 'primitive_type', 'plane', ObjectModel3DOut)</l>
+<c>            </c>
+<l>            *get_object_model_3d_params (ObjectModel3DOut, 'primitive_parameter_pose', ROIPOSE)</l>
+<l>            *gen_box_object_model_3d ([SceneCenter[0],SceneCenter[1],SceneCenter[2],0,0,0,0], 300 + 300 * 0.001, 200 + 200 * 0.001, 1 + 50, ObjectModel3DROI)</l>
+<l>            ROIPOSE := Pose_primitive_plane</l>
+<l>            tuple_abs(ROIZPlaneMinDepth, adjustROIZPlaneMinDepth)</l>
+<l>            tuple_abs(ROIZPlaneMaxDepth, adjustROIZPlaneMaxDepth)</l>
+<l>             if(ROIZPlaneMinDepth &lt; 0)</l>
+<l>                ZAdjustTmp := (adjustROIZPlaneMinDepth + adjustROIZPlaneMaxDepth)</l>
+<l>            else</l>
+<l>                ZAdjustTmp := (adjustROIZPlaneMaxDepth - adjustROIZPlaneMinDepth)</l>
+<l>            endif</l>
+<l>            ZAdjust := SampleSceneCenterZ[2]-(ZAdjustTmp/2)</l>
+<l>            ROIPOSE[0] := SceneCenters[0]</l>
+<l>            ROIPOSE[1] := SceneCenters[1]</l>
+<l>            ROIPOSE[2] := ZAdjust</l>
+<c>             </c>
+<l>            tuple_abs(Index1 , absROIXAreaMin)</l>
+<l>            tuple_abs(Index1+ScanXArea, absROIXAreaMax)</l>
+<l>            tuple_abs(SceneBoundingBox[1], absROIYAreaMin)</l>
+<l>            tuple_abs(SceneBoundingBox[4], absROIYAreaMax)</l>
+<l>            tuple_abs(ROIZPlaneMinDepth, absROIZPlaneMinDepth)</l>
+<l>            tuple_abs(ROIZPlaneMaxDepth, absROIZPlaneMaxDepth)</l>
+<l>            if(Index1 &lt; 0)</l>
+<l>                genBoxX := (absROIXAreaMin + absROIXAreaMax)</l>
+<l>            else</l>
+<l>                genBoxX := (absROIXAreaMax - absROIXAreaMin)</l>
+<l>            endif</l>
+<l>            if(SceneBoundingBox[1] &lt; 0)</l>
+<l>                genBoxY := (absROIYAreaMin + absROIYAreaMax)</l>
+<l>            else</l>
+<l>                genBoxY := (absROIYAreaMax - absROIYAreaMin)</l>
+<l>            endif</l>
+<c>            </c>
+<l>            if(ROIZPlaneMinDepth &lt; 0)</l>
+<l>                genBoxZ := (absROIZPlaneMinDepth + absROIZPlaneMaxDepth)</l>
+<l>            else</l>
+<l>                genBoxZ := (absROIZPlaneMaxDepth - absROIZPlaneMinDepth)</l>
+<l>            endif</l>
+<l>            gen_box_object_model_3d (ROIPOSE, genBoxX, genBoxY, genBoxZ, ObjectModel3DROI)</l>
+<c>            </c>
+<l>            RGB_Scene := RGBA</l>
+<l>            ObjectModel_Scene := ObjectModel_Scene</l>
+<l>            ObjectModel3D_Result := ObjectModel3D_ResultImg</l>
+<l>            ObjectModel3D_ResultArrow := ObjectModel3D_Arrow</l>
+<l>            ObjectModel3D_ResultRoI := ObjectModel3DROI</l>
+<c>            </c>
+<l>            VisStart := 0</l>
+<l>            PoseStart := 3</l>
+<c>            </c>
+<l>            SavePoseUR := []</l>
+<l>            for Index := 0 to SuccessNum-1 by 1</l>
+<l>                SavePose := []</l>
+<l>                SavePose[0] := VisRotationCenters[VisStart]</l>
+<l>                SavePose[1] := VisRotationCenters[VisStart+1]</l>
+<l>                SavePose[2] := VisRotationCenters[VisStart+2]</l>
+<l>                SavePose[3] := Pose[PoseStart]</l>
+<l>                SavePose[4] := Pose[PoseStart+1]</l>
+<l>                SavePose[5] := Pose[PoseStart+2]</l>
+<l>                SavePose[6] := 0</l>
+<c>                </c>
+<l>                *Pose := [VisRotationCenters[VisStart], VisRotationCenters[VisStart+1], VisRotationCenters[VisStart+2], Pose[PoseStart], Pose[PoseStart+1], Pose[PoseStart+1] ,0]</l>
+<l>                convert_pose_type (SavePose, 'Rp+T', 'rodriguez', 'point', PoseRodriguez)</l>
+<l>                RodLeng := sqrt(sum(PoseRodriguez[3:5]*PoseRodriguez[3:5]))</l>
+<l>                AngleInRad := 2*atan(RodLeng)</l>
+<l>                UnitAxisOfRotation := PoseRodriguez[3:5]/RodLeng</l>
+<l>                OrientationVector := UnitAxisOfRotation*AngleInRad</l>
+<l>                PoseUR := [PoseRodriguez[0:2], OrientationVector]</l>
+<l>                SavePoseUR := [SavePoseUR, PoseUR]</l>
+<l>                VisStart := VisStart + 3</l>
+<l>                PoseStart := PoseStart + 7</l>
+<l>            endfor</l>
+<l>            SavePoseStart := 0</l>
+<l>            RTVal := []</l>
+<l>            for Index := 0 to SuccessNum-1 by 1</l>
+<l>                strMerged := Index+','+ \
+                         Score[Index]+','+ \
+                         SavePoseUR[SavePoseStart]+','+ \ 
+                         SavePoseUR[SavePoseStart+1]+','+ \
+                         SavePoseUR[SavePoseStart+2]+','+ \
+                         SavePoseUR[SavePoseStart+3]+','+ \
+                         SavePoseUR[SavePoseStart+4]+','+ \
+                         SavePoseUR[SavePoseStart+5]</l>
+<l>                RTVal := [RTVal, strMerged]</l>
+<l>                SavePoseStart := SavePoseStart + 6</l>
+<l>            endfor</l>
+<l>            MatchResult := RTVal</l>
+<l>            break</l>
+<l>        else</l>
+<l>            RGB_Scene := RGBA</l>
+<l>            ObjectModel_Scene := ObjectModel_Scene</l>
+<l>            ObjectModel3D_Result := ObjectModel_Scene</l>
+<l>            ObjectModel3D_ResultArrow := ObjectModel_Scene</l>
+<l>            ObjectModel3D_ResultRoI := ObjectModel_Scene</l>
+<c>            </c>
+<l>            MatchResult := 'Failed'</l>
+<l>        endif</l>
+<l>    endfor</l>
+<l>elseif (RoiForm ==2)</l>
+<l>    if (MatchForm == 1)</l>
+<l>        RGB_Scene := RGBA</l>
+<l>        ObjectModel_Scene := ObjectModel_Scene</l>
+<l>        ObjectModel3D_Result := ObjectModel_Scene</l>
+<l>        xyz_to_object_model_3d (X, Y, Z, ObjectModel_Scene)</l>
+<l>        sample_object_model_3d (ObjectModel_Scene, sampling_method, sampling_distance, [], [], ObjectModel_Scene)</l>
+<l>        triangulate_object_model_3d (ObjectModel_Scene, 'xyz_mapping', [], [], TriangulatedObjectModel3D1, Information)</l>
+<l>        fit_primitives_object_model_3d (TriangulatedObjectModel3D1, 'primitive_type', 'plane', ObjectModel3DOut)</l>
+<c>        </c>
+<l>        get_object_model_3d_params (ObjectModel3DOut, 'primitive_parameter_pose', Pose_primitive_plane)</l>
+<c>        </c>
+<l>        pose_invert (Pose_primitive_plane, PoseInvert_primitive_plane)</l>
+<l>        SampleSceneCenterZ := PoseInvert_primitive_plane</l>
+<l>        pose_to_hom_mat3d (PoseInvert_primitive_plane, HomMat3D_invert)</l>
+<l>        affine_trans_object_model_3d (TriangulatedObjectModel3D1, HomMat3D_invert, ObjectModel_SceneSampled)</l>
+<c>        </c>
+<l>        *select_points_object_model_3d (Triangulated_ObjectModel3DAffineTrans, 'point_coord_z', 1, 5, ObjectModel3DThresholded2)</l>
+<l>        *select_points_object_model_3d (Triangulated_ObjectModel3DAffineTrans, 'point_coord_z', 5, 50, ObjectModel3DThresholded2)</l>
+<l>        select_points_object_model_3d (ObjectModel_SceneSampled, 'point_coord_z', ROIZPlaneMinDepth, ROIZPlaneMaxDepth, ObjectModel3DThresholded2)</l>
+<l>        pose_to_hom_mat3d (Pose_primitive_plane, HomMat3D)</l>
+<l>        affine_trans_object_model_3d (ObjectModel3DThresholded2, HomMat3D, ObjectModel_SceneSampled)</l>
+<l>        select_points_object_model_3d (ObjectModel_SceneSampled, 'point_coord_x', ROIXAreaMin, ROIXAreaMax, ObjectModel_SceneSampled)</l>
+<l>        select_points_object_model_3d (ObjectModel_SceneSampled, 'point_coord_y', ROIYAreaMin, ROIYAreaMax, ObjectModel_SceneSampled)</l>
+<c>        </c>
+<l>        *pose_to_hom_mat3d (Pose_primitive_plane, HomMat3D)</l>
+<l>        *affine_trans_object_model_3d (ObjectModel3DThresholded2, HomMat3D, ObjectModel3DAffineTrans)</l>
+<l>    elseif(MatchForm == 2)</l>
+<l>        RGB_Scene := RGBA</l>
+<l>        ObjectModel_Scene := ObjectModel_Scene</l>
+<l>        ObjectModel3D_Result := ObjectModel_Scene</l>
+<l>        xyz_to_object_model_3d (X, Y, Z, ObjectModel_Scene)</l>
+<l>        sample_object_model_3d (ObjectModel_Scene, sampling_method, sampling_distance, [], [], ObjectModel_SceneSampled)</l>
+<l>        fit_primitives_object_model_3d (ObjectModel_SceneSampled, 'primitive_type', 'plane', ObjectModel3DOut)</l>
+<c>        </c>
+<l>        get_object_model_3d_params (ObjectModel3DOut, 'primitive_parameter_pose', Pose_primitive_plane)</l>
+<c>        </c>
+<l>        pose_invert (Pose_primitive_plane, PoseInvert_primitive_plane)</l>
+<l>        SampleSceneCenterZ := PoseInvert_primitive_plane</l>
+<l>        pose_to_hom_mat3d (PoseInvert_primitive_plane, HomMat3D_invert)</l>
+<l>        affine_trans_object_model_3d (ObjectModel_SceneSampled, HomMat3D_invert, ObjectModel_SceneSampled)</l>
+<c>        </c>
+<l>        *select_points_object_model_3d (Triangulated_ObjectModel3DAffineTrans, 'point_coord_z', 1, 5, ObjectModel3DThresholded2)</l>
+<l>        *select_points_object_model_3d (Triangulated_ObjectModel3DAffineTrans, 'point_coord_z', 5, 50, ObjectModel3DThresholded2)</l>
+<l>        select_points_object_model_3d (ObjectModel_SceneSampled, 'point_coord_z', ROIZPlaneMinDepth, ROIZPlaneMaxDepth, ObjectModel3DThresholded2)</l>
+<l>        pose_to_hom_mat3d (Pose_primitive_plane, HomMat3D)</l>
+<l>        affine_trans_object_model_3d (ObjectModel3DThresholded2, HomMat3D, ObjectModel_SceneSampled)</l>
+<l>        select_points_object_model_3d (ObjectModel_SceneSampled, 'point_coord_x', ROIXAreaMin, ROIXAreaMax, ObjectModel_SceneSampled)</l>
+<l>        select_points_object_model_3d (ObjectModel_SceneSampled, 'point_coord_y', ROIYAreaMin, ROIYAreaMax, ObjectModel_SceneSampled)</l>
+<l>        triangulate_object_model_3d (ObjectModel_SceneSampled, 'greedy', [], [], ObjectModel_SceneSampled, Information)</l>
+<l>    else</l>
+<l>        RGB_Scene := RGBA</l>
+<l>        ObjectModel_Scene := ObjectModel_Scene</l>
+<l>        ObjectModel3D_Result := ObjectModel_Scene</l>
+<l>        xyz_to_object_model_3d (X, Y, Z, ObjectModel_Scene)</l>
+<l>        *select_points_object_model_3d (ObjectModel_Scene, 'point_coord_x', Index1, Index1+ScanXArea, ObjectModel_Scene)</l>
+<l>         sample_object_model_3d (ObjectModel_Scene, sampling_method, sampling_distance, [], [], ObjectModel_Scene)</l>
+<c>    </c>
+<l>*        smooth_object_model_3d (ObjectModel_Scene, 'mls', ['mls_kNN','mls_force_inwards'], [60,'true'], ObjectModel_Scene)</l>
+<l>        *triangulate_object_model_3d (ObjectModel_Scene, 'xyz_mapping', [], [], TriangulatedObjectModel3D1, Information)</l>
+<l>        fit_primitives_object_model_3d (ObjectModel_Scene, 'primitive_type', 'plane', ObjectModel3DOut)</l>
+<c>        </c>
+<l>        get_object_model_3d_params (ObjectModel3DOut, 'primitive_parameter_pose', Pose_primitive_plane)</l>
+<l>        pose_invert (Pose_primitive_plane, PoseInvert_primitive_plane)</l>
+<l>        SampleSceneCenterZ := PoseInvert_primitive_plane</l>
+<l>        pose_to_hom_mat3d (PoseInvert_primitive_plane, HomMat3D_invert)</l>
+<l>        affine_trans_object_model_3d (ObjectModel_Scene, HomMat3D_invert, ObjectModel_SceneSampled)</l>
+<c>        </c>
+<l>        *select_points_object_model_3d (Triangulated_ObjectModel3DAffineTrans, 'point_coord_z', 1, 5, ObjectModel3DThresholded2)</l>
+<l>        *select_points_object_model_3d (Triangulated_ObjectModel3DAffineTrans, 'point_coord_z', 5, 50, ObjectModel3DThresholded2)</l>
+<l>        select_points_object_model_3d (ObjectModel_SceneSampled, 'point_coord_z', ROIZPlaneMinDepth, ROIZPlaneMaxDepth, ObjectModel3DThresholded2)</l>
+<l>        pose_to_hom_mat3d (Pose_primitive_plane, HomMat3D)</l>
+<l>        affine_trans_object_model_3d (ObjectModel3DThresholded2, HomMat3D, ObjectModel_SceneSampled)</l>
+<l>        select_points_object_model_3d (ObjectModel_SceneSampled, 'point_coord_x', ROIXAreaMin, ROIXAreaMax, ObjectModel_SceneSampled)</l>
+<l>        select_points_object_model_3d (ObjectModel_SceneSampled, 'point_coord_y', ROIYAreaMin, ROIYAreaMax, ObjectModel_SceneSampled)</l>
+<l>        *pose_to_hom_mat3d (Pose_primitive_plane, HomMat3D)</l>
+<l>        *affine_trans_object_model_3d (ObjectModel3DThresholded2, HomMat3D, ObjectModel3DAffineTrans)</l>
+<l>        *ObjectModel_Scene := ObjectModel3DAffineTrans</l>
+<l>    endif</l>
+<l>else</l>
+<l>    if (MatchForm == 1)</l>
+<l>        RGB_Scene := RGBA</l>
+<l>        ObjectModel_Scene := ObjectModel_Scene</l>
+<l>        ObjectModel3D_Result := ObjectModel_Scene</l>
+<l>        xyz_to_object_model_3d (X, Y, Z, ObjectModel_Scene)</l>
+<l>        *select_points_object_model_3d (ObjectModel_Scene, 'point_coord_x', Index1, Index1+ScanXArea, ObjectModel_Scene)</l>
+<l>         sample_object_model_3d (ObjectModel_Scene, sampling_method, sampling_distance, [], [], ObjectModel_Scene)</l>
+<c>    </c>
+<l>*        smooth_object_model_3d (ObjectModel_Scene, 'mls', ['mls_kNN','mls_force_inwards'], [60,'true'], ObjectModel_Scene)</l>
+<l>        triangulate_object_model_3d (ObjectModel_Scene, 'xyz_mapping', [], [], TriangulatedObjectModel3D1, Information)</l>
+<l>        *visualize_object_model_3d (Window3D, [TriangulatedObjectModel3D1], [], [], [], [], [], [], [], PoseOut)</l>
+<l>        *fit_primitives_object_model_3d (TriangulatedObjectModel3D1, 'primitive_type', 'plane', ObjectModel3DOut)</l>
+<c>        </c>
+<l>        *get_object_model_3d_params (ObjectModel3DOut, 'primitive_parameter_pose', Pose_primitive_plane)</l>
+<c>        </c>
+<l>        *pose_invert (Pose_primitive_plane, PoseInvert_primitive_plane)</l>
+<l>        *pose_to_hom_mat3d (PoseInvert_primitive_plane, HomMat3D_invert)</l>
+<l>        *affine_trans_object_model_3d (TriangulatedObjectModel3D1, HomMat3D_invert, Triangulated_ObjectModel3DAffineTrans)</l>
+<c>        </c>
+<l>        *select_points_object_model_3d (Triangulated_ObjectModel3DAffineTrans, 'point_coord_z', 1, 5, ObjectModel3DThresholded2)</l>
+<l>        *select_points_object_model_3d (Triangulated_ObjectModel3DAffineTrans, 'point_coord_z', 5, 50, ObjectModel3DThresholded2)</l>
+<l>        *select_points_object_model_3d (Triangulated_ObjectModel3DAffineTrans, 'point_coord_z', ZPlaneMinDepth, ZPlaneMaxDepth, ObjectModel3DThresholded2)</l>
+<l>        *pose_to_hom_mat3d (Pose_primitive_plane, HomMat3D)</l>
+<l>        *affine_trans_object_model_3d (ObjectModel3DThresholded2, HomMat3D, ObjectModel3DAffineTrans)</l>
+<l>        ObjectModel_SceneSampled := TriangulatedObjectModel3D1</l>
+<l>    elseif(MatchForm == 2)</l>
+<l>        RGB_Scene := RGBA</l>
+<l>        ObjectModel_Scene := ObjectModel_Scene</l>
+<l>        ObjectModel3D_Result := ObjectModel_Scene</l>
+<l>        xyz_to_object_model_3d (X, Y, Z, ObjectModel_Scene)</l>
+<l>        *select_points_object_model_3d (ObjectModel_Scene, 'point_coord_x', Index1, Index1+ScanXArea, ObjectModel_Scene)</l>
+<l>         sample_object_model_3d (ObjectModel_Scene, sampling_method, sampling_distance, [], [], ObjectModel_Scene)</l>
+<c>    </c>
+<l>*        smooth_object_model_3d (ObjectModel_Scene, 'mls', ['mls_kNN','mls_force_inwards'], [60,'true'], ObjectModel_Scene)</l>
+<l>        triangulate_object_model_3d (ObjectModel_Scene, 'greedy', [], [], TriangulatedObjectModel3D1, Information)</l>
+<l>        *visualize_object_model_3d (Window3D, [TriangulatedObjectModel3D1], [], [], [], [], [], [], [], PoseOut)</l>
+<l>        *fit_primitives_object_model_3d (TriangulatedObjectModel3D1, 'primitive_type', 'plane', ObjectModel3DOut)</l>
+<c>        </c>
+<l>        *get_object_model_3d_params (ObjectModel3DOut, 'primitive_parameter_pose', Pose_primitive_plane)</l>
+<c>        </c>
+<l>        *pose_invert (Pose_primitive_plane, PoseInvert_primitive_plane)</l>
+<l>        *pose_to_hom_mat3d (PoseInvert_primitive_plane, HomMat3D_invert)</l>
+<l>        *affine_trans_object_model_3d (TriangulatedObjectModel3D1, HomMat3D_invert, Triangulated_ObjectModel3DAffineTrans)</l>
+<c>        </c>
+<l>        *select_points_object_model_3d (Triangulated_ObjectModel3DAffineTrans, 'point_coord_z', 1, 5, ObjectModel3DThresholded2)</l>
+<l>        *select_points_object_model_3d (Triangulated_ObjectModel3DAffineTrans, 'point_coord_z', 5, 50, ObjectModel3DThresholded2)</l>
+<l>        *select_points_object_model_3d (Triangulated_ObjectModel3DAffineTrans, 'point_coord_z', ZPlaneMinDepth, ZPlaneMaxDepth, ObjectModel3DThresholded2)</l>
+<l>        *pose_to_hom_mat3d (Pose_primitive_plane, HomMat3D)</l>
+<l>        *affine_trans_object_model_3d (ObjectModel3DThresholded2, HomMat3D, ObjectModel3DAffineTrans)</l>
+<l>        ObjectModel_SceneSampled := TriangulatedObjectModel3D1</l>
+<l>    else</l>
+<l>        RGB_Scene := RGBA</l>
+<l>        ObjectModel_Scene := ObjectModel_Scene</l>
+<l>        ObjectModel3D_Result := ObjectModel_Scene</l>
+<l>        xyz_to_object_model_3d (X, Y, Z, ObjectModel_Scene)</l>
+<l>        *select_points_object_model_3d (ObjectModel_Scene, 'point_coord_x', Index1, Index1+ScanXArea, ObjectModel_Scene)</l>
+<l>         sample_object_model_3d (ObjectModel_Scene, sampling_method, sampling_distance, [], [], ObjectModel_Scene)</l>
+<l>        ObjectModel_SceneSampled := ObjectModel_Scene</l>
+<l>*        smooth_object_model_3d (ObjectModel_Scene, 'mls', ['mls_kNN','mls_force_inwards'], [60,'true'], ObjectModel_Scene)</l>
+<l>        *triangulate_object_model_3d (ObjectModel_Scene, 'xyz_mapping', [], [], TriangulatedObjectModel3D1, Information)</l>
+<l>        *fit_primitives_object_model_3d (ObjectModel_Scene, 'primitive_type', 'plane', ObjectModel3DOut)</l>
+<c>        </c>
+<l>        *get_object_model_3d_params (ObjectModel3DOut, 'primitive_parameter_pose', Pose_primitive_plane)</l>
+<c>        </c>
+<l>        *pose_invert (Pose_primitive_plane, PoseInvert_primitive_plane)</l>
+<l>        *pose_to_hom_mat3d (PoseInvert_primitive_plane, HomMat3D_invert)</l>
+<l>        *affine_trans_object_model_3d (ObjectModel_Scene, HomMat3D_invert, Triangulated_ObjectModel3DAffineTrans)</l>
+<c>        </c>
+<l>        *select_points_object_model_3d (Triangulated_ObjectModel3DAffineTrans, 'point_coord_z', 1, 5, ObjectModel3DThresholded2)</l>
+<l>        *select_points_object_model_3d (Triangulated_ObjectModel3DAffineTrans, 'point_coord_z', 5, 50, ObjectModel3DThresholded2)</l>
+<l>        *select_points_object_model_3d (Triangulated_ObjectModel3DAffineTrans, 'point_coord_z', ZPlaneMinDepth, ZPlaneMaxDepth, ObjectModel3DThresholded2)</l>
+<l>        *pose_to_hom_mat3d (Pose_primitive_plane, HomMat3D)</l>
+<l>        *affine_trans_object_model_3d (ObjectModel3DThresholded2, HomMat3D, ObjectModel3DAffineTrans)</l>
+<l>        *ObjectModel_Scene := ObjectModel3DAffineTrans</l>
+<l>    endif</l>
+<l>endif</l>
+<c></c>
+<l>if(RoiForm != 1)</l>
+<l>    get_object_model_3d_params (ObjectModel_SceneSampled, 'num_points', Scene_PointNum)</l>
+<c>        </c>
+<l>    if(Scene_PointNum &lt;= 0)</l>
+<l>        RGB_Scene := RGBA</l>
+<l>        ObjectModel_Scene := ObjectModel_Scene</l>
+<l>        ObjectModel3D_Result := ObjectModel_Scene</l>
+<l>        ObjectModel3D_ResultArrow := ObjectModel_Scene</l>
+<l>        ObjectModel3D_ResultRoI := ObjectModel_Scene</l>
+<c>        </c>
+<l>        MatchResult := 'Failed'</l>
+<l>        return()</l>
+<l>    endif</l>
+<l>* find_surface_model_image (img2D, SFM, ObjectModel_Scene, find_sfm_RelSamplingDistance, find_sfm_KeyPointFraction, find_sfm_MinScore, 'true', ['num_matches', 'scene_normal_computation'], [find_sfm_NumMatch, 'mls'], Pose, Score, SurfaceMatchingResultID)</l>
+<l>* find_surface_model (SFM, ObjectModel_SceneSampled, find_sfm_RelSamplingDistance, find_sfm_KeyPointFraction, find_sfm_MinScore, 'true', ['num_matches', 'scene_normal_computation'], [find_sfm_NumMatch, find_sfm_FindMethod], Pose, Score, SurfaceMatchingResultID)</l>
+<l>    find_surface_model (SFM, ObjectModel_SceneSampled, find_sfm_RelSamplingDistance, find_sfm_KeyPointFraction, find_sfm_MinScore, 'true', ['num_matches', 'scene_normal_computation', 'score_type', 'max_overlap_dist_rel'], [find_sfm_NumMatch, find_sfm_FindMethod, find_sfm_ScoreType, find_sfm_max_overlap_dist_rel_value], Pose, Score, SurfaceMatchingResultID)</l>
+<c>    </c>
+<l>    if (Score!=[])</l>
+<l>        ObjectModel3D_Arrow := []</l>
+<l>        if (Score[0] &lt; find_sfm_MinScore)</l>
+<l>            RGB_Scene := RGBA</l>
+<l>            ObjectModel_Scene := ObjectModel_Scene</l>
+<l>            ObjectModel3D_Result := ObjectModel_Scene</l>
+<l>            ObjectModel3D_ResultArrow := ObjectModel_Scene</l>
+<l>            ObjectModel3D_ResultRoI := ObjectModel_Scene</l>
+<l>            MatchResult := 'Failed'</l>
+<l>            return()</l>
+<l>        endif</l>
+<c>        </c>
+<l>        tuple_length(Score, SuccessNum)</l>
+<l>        VisRotationCenters := []</l>
+<l>        CPose := []</l>
+<l>        StartNUM := 0</l>
+<l>        EndNUM := 6</l>
+<l>        for Index := 0 to SuccessNum-1 by 1</l>
+<l>            if (AxisAlign == 1)</l>
+<l>                RotateCheck := Pose[StartNUM:EndNUM]</l>
+<c>        </c>
+<l>                if(RotateCheck[3] &gt; 90 and RotateCheck[3] &lt; 270)</l>
+<l>                    pose_to_hom_mat3d (Pose[StartNUM:EndNUM], camHwcs)</l>
+<l>                    hom_mat3d_rotate_local (camHwcs, rad(180), 'x', camHwcs)</l>
+<l>                    hom_mat3d_to_pose (camHwcs, PoseOfWCS)</l>
+<l>                    Pose[StartNUM:EndNUM] := PoseOfWCS</l>
+<l>                elseif(RotateCheck[4] &gt; 90 and RotateCheck[4] &lt; 270)</l>
+<l>                    pose_to_hom_mat3d (Pose[StartNUM:EndNUM], camHwcs)</l>
+<l>                    hom_mat3d_rotate_local (camHwcs, rad(180), 'y', camHwcs)</l>
+<l>                    hom_mat3d_to_pose (camHwcs, PoseOfWCS)</l>
+<l>                    Pose[StartNUM:EndNUM] := PoseOfWCS</l>
+<l>                endif </l>
+<l>            endif</l>
+<l>*             if(RotateCheck[3] &gt; 270 or RotateCheck[3] &lt; 90 and RotateCheck[4] &lt; 90)</l>
+<l>*                  pose_to_hom_mat3d (Pose[StartNUM:EndNUM], camHwcs)</l>
+<l>*                 hom_mat3d_rotate_local (camHwcs, rad(-90), 'x', camHwcs)</l>
+<l>                *hom_mat3d_rotate_local (camHwcs, rad(180), 'z', camHwcs)</l>
+<l>*                 hom_mat3d_to_pose (camHwcs, PoseOfWCS)</l>
+<l>*                 Pose[StartNUM:EndNUM] := PoseOfWCS</l>
+<l>*             endif</l>
+<c>        </c>
+<l>*             if(RotateCheck[3] &lt; 90 and RotateCheck[4] &lt; 90)</l>
+<l>*                  pose_to_hom_mat3d (Pose[StartNUM:EndNUM], camHwcs)</l>
+<l>*                 hom_mat3d_rotate_local (camHwcs, rad(90), 'z', camHwcs)</l>
+<l>*                 hom_mat3d_rotate_local (camHwcs, rad(-90), 'x', camHwcs)</l>
+<c>                </c>
+<l>*                 hom_mat3d_to_pose (camHwcs, PoseOfWCS)</l>
+<l>*                 Pose[StartNUM:EndNUM] := PoseOfWCS</l>
+<l>*             endif</l>
+<l>        *CPose := Pose[StartNUM:EndNUM]</l>
+<l>        CPose := Pose[StartNUM:EndNUM]</l>
+<l>        rigid_trans_object_model_3d (ObjectModel3D, CPose, ObjectModel3D_Result)</l>
+<l>        *visualize_object_model_3d (Window3D, [ObjectModel3D_Result[4]], [], [], [], [], [], [], [], PoseOut)</l>
+<l>        get_object_model_3d_params (ObjectModel3D_Result, 'center', VisRotationCenter)</l>
+<l>        VisRotationCenters := [VisRotationCenters,VisRotationCenter]</l>
+<l>        PoseOther := [VisRotationCenter[0],VisRotationCenter[1],VisRotationCenter[2], Pose[StartNUM+3] , Pose[StartNUM+4], Pose[StartNUM+5],0]</l>
+<c>        </c>
+<c>    </c>
+<l>        create_pose (0, 0, 0, 0, 0, 0, 'Rp+T', 'gba', 'point', IdentityPose)</l>
+<c>        * </c>
+<c>        * 3D model for the tool.</c>
+<l>        create_pose (ArrowLength, 0, 0, 0, 0, 0, 'Rp+T', 'gba', 'point', TransXPose)</l>
+<l>        gen_arrow_object_model_3d (ArrowThickness, IdentityPose, TransXPose, OM3DToolXOrigin)</l>
+<l>        create_pose (0, ArrowLength, 0, 0, 0, 0, 'Rp+T', 'gba', 'point', TransYPose)</l>
+<l>        gen_arrow_object_model_3d (ArrowThickness, IdentityPose, TransYPose, OM3DToolYOrigin)</l>
+<l>        create_pose (0, 0, ArrowLength, 0, 0, 0, 'Rp+T', 'gba', 'point', TransZPose)</l>
+<l>        gen_arrow_object_model_3d (ArrowThickness, IdentityPose, TransZPose, OM3DToolZOrigin)</l>
+<l>        OM3DToolOrigin := [OM3DToolXOrigin,OM3DToolYOrigin,OM3DToolZOrigin]</l>
+<l>        rigid_trans_object_model_3d (OM3DToolOrigin, PoseOther, Dummy)</l>
+<l>        ObjectModel3D_Arrow := [ObjectModel3D_Arrow, Dummy]</l>
+<c>        </c>
+<l>        StartNUM := StartNUM + 7</l>
+<l>        EndNUM := EndNUM + 7</l>
+<l>        endfor</l>
+<l>        rigid_trans_object_model_3d (ObjectModel3D, Pose, ObjectModel3D_ResultImg)</l>
+<c>        </c>
+<c>        </c>
+<l>        if(RoiForm == 2)</l>
+<l>            *get_object_model_3d_params (ObjectModel_SceneSampled, 'center', SceneCenters)</l>
+<l>            *fit_primitives_object_model_3d (ObjectModel_Scene, 'primitive_type', 'plane', ObjectModel3DOut)</l>
+<c>            </c>
+<l>            *get_object_model_3d_params (ObjectModel3DOut, 'primitive_parameter_pose', ROIPOSE)</l>
+<l>            *gen_box_object_model_3d ([SceneCenter[0],SceneCenter[1],SceneCenter[2],0,0,0,0], 300 + 300 * 0.001, 200 + 200 * 0.001, 1 + 50, ObjectModel3DROI)</l>
+<l>            ROIPOSE := Pose_primitive_plane</l>
+<l>            tuple_abs(ROIZPlaneMinDepth, adjustROIZPlaneMinDepth)</l>
+<l>            tuple_abs(ROIZPlaneMaxDepth, adjustROIZPlaneMaxDepth)</l>
+<l>             if(ROIZPlaneMinDepth &lt; 0)</l>
+<l>                ZAdjustTmp := (adjustROIZPlaneMinDepth + adjustROIZPlaneMaxDepth)</l>
+<l>            else</l>
+<l>                ZAdjustTmp := (adjustROIZPlaneMaxDepth - adjustROIZPlaneMinDepth)</l>
+<l>            endif</l>
+<l>            ZAdjust := SampleSceneCenterZ[2]-(ZAdjustTmp/2)</l>
+<l>            tuple_mean([ROIXAreaMin,ROIXAreaMax], MeanX)</l>
+<l>            tuple_mean([ROIYAreaMin,ROIYAreaMax], MeanY)</l>
+<l>            ROIPOSE[0] := MeanX</l>
+<l>            ROIPOSE[1] := MeanY</l>
+<l>            ROIPOSE[2] := ZAdjust</l>
+<c>             </c>
+<l>            tuple_abs(ROIXAreaMin, absROIXAreaMin)</l>
+<l>            tuple_abs(ROIXAreaMax, absROIXAreaMax)</l>
+<l>            tuple_abs(ROIYAreaMin, absROIYAreaMin)</l>
+<l>            tuple_abs(ROIYAreaMax, absROIYAreaMax)</l>
+<l>            tuple_abs(ROIZPlaneMinDepth, absROIZPlaneMinDepth)</l>
+<l>            tuple_abs(ROIZPlaneMaxDepth, absROIZPlaneMaxDepth)</l>
+<l>            if(ROIXAreaMin &lt; 0)</l>
+<l>                genBoxX := (absROIXAreaMin + absROIXAreaMax)</l>
+<l>            else</l>
+<l>                genBoxX := (absROIXAreaMax - absROIXAreaMin)</l>
+<l>            endif</l>
+<l>            if(ROIYAreaMin &lt; 0)</l>
+<l>                genBoxY := (absROIYAreaMin + absROIYAreaMax)</l>
+<l>            else</l>
+<l>                genBoxY := (absROIYAreaMax - absROIYAreaMin)</l>
+<l>            endif</l>
+<c>            </c>
+<l>            if(ROIZPlaneMinDepth &lt; 0)</l>
+<l>                genBoxZ := (absROIZPlaneMinDepth + absROIZPlaneMaxDepth)</l>
+<l>            else</l>
+<l>                genBoxZ := (absROIZPlaneMaxDepth - absROIZPlaneMinDepth)</l>
+<l>            endif</l>
+<l>            gen_box_object_model_3d (ROIPOSE, genBoxX, genBoxY, genBoxZ, ObjectModel3DROI)</l>
+<c>            </c>
+<l>        endif</l>
+<c>    </c>
+<l>        RGB_Scene := RGBA</l>
+<l>        ObjectModel_Scene := ObjectModel_Scene</l>
+<l>        ObjectModel3D_Result := ObjectModel3D_ResultImg</l>
+<l>        ObjectModel3D_ResultArrow := ObjectModel3D_Arrow</l>
+<l>        if(RoiForm == 2)</l>
+<l>            ObjectModel3D_ResultRoI := ObjectModel3DROI</l>
+<l>        else</l>
+<l>            ObjectModel3D_ResultRoI := ObjectModel3D_ResultImg</l>
+<l>        endif</l>
+<c>       </c>
+<c>        </c>
+<l>        VisStart := 0</l>
+<l>        PoseStart := 3</l>
+<c>        </c>
+<l>        SavePoseUR := []</l>
+<l>        for Index := 0 to SuccessNum-1 by 1</l>
+<l>            SavePose := []</l>
+<l>            SavePose[0] := VisRotationCenters[VisStart]</l>
+<l>            SavePose[1] := VisRotationCenters[VisStart+1]</l>
+<l>            SavePose[2] := VisRotationCenters[VisStart+2]</l>
+<l>            SavePose[3] := Pose[PoseStart]</l>
+<l>            SavePose[4] := Pose[PoseStart+1]</l>
+<l>            SavePose[5] := Pose[PoseStart+2]</l>
+<l>            SavePose[6] := 0</l>
+<c>            </c>
+<l>            *Pose := [VisRotationCenters[VisStart], VisRotationCenters[VisStart+1], VisRotationCenters[VisStart+2], Pose[PoseStart], Pose[PoseStart+1], Pose[PoseStart+1] ,0]</l>
+<l>            convert_pose_type (SavePose, 'Rp+T', 'rodriguez', 'point', PoseRodriguez)</l>
+<l>            RodLeng := sqrt(sum(PoseRodriguez[3:5]*PoseRodriguez[3:5]))</l>
+<l>            AngleInRad := 2*atan(RodLeng)</l>
+<l>            UnitAxisOfRotation := PoseRodriguez[3:5]/RodLeng</l>
+<l>            OrientationVector := UnitAxisOfRotation*AngleInRad</l>
+<l>            PoseUR := [PoseRodriguez[0:2], OrientationVector]</l>
+<l>            SavePoseUR := [SavePoseUR, PoseUR]</l>
+<l>            VisStart := VisStart + 3</l>
+<l>            PoseStart := PoseStart + 7</l>
+<l>        endfor</l>
+<l>        SavePoseStart := 0</l>
+<l>        RTVal := []</l>
+<l>        for Index := 0 to SuccessNum-1 by 1</l>
+<l>            strMerged := Index+','+ \
+                     Score[Index]+','+ \
+                     SavePoseUR[SavePoseStart]+','+ \ 
+                     SavePoseUR[SavePoseStart+1]+','+ \
+                     SavePoseUR[SavePoseStart+2]+','+ \
+                     SavePoseUR[SavePoseStart+3]+','+ \
+                     SavePoseUR[SavePoseStart+4]+','+ \
+                     SavePoseUR[SavePoseStart+5]</l>
+<l>            RTVal := [RTVal, strMerged]</l>
+<l>            SavePoseStart := SavePoseStart + 6</l>
+<l>        endfor</l>
+<l>        MatchResult := RTVal</l>
+<l>    else</l>
+<l>        RGB_Scene := RGBA</l>
+<l>        ObjectModel_Scene := ObjectModel_Scene</l>
+<l>        ObjectModel3D_Result := ObjectModel_Scene</l>
+<l>        ObjectModel3D_ResultArrow := ObjectModel_Scene</l>
+<l>        ObjectModel3D_ResultRoI := ObjectModel_Scene</l>
+<c>        </c>
+<l>        MatchResult := 'Failed'</l>
+<l>    endif</l>
+<l>endif</l>
+<l>return()</l>
+</body>
+<docu id="SurfMatch_FileHandle_0_0_7">
+<parameters>
+<parameter id="AxisAlign"/>
+<parameter id="MatchForm"/>
+<parameter id="MatchResult"/>
+<parameter id="ObjectModel3D_Result"/>
+<parameter id="ObjectModel3D_ResultArrow"/>
+<parameter id="ObjectModel3D_ResultRoI"/>
+<parameter id="ObjectModel_Scene"/>
+<parameter id="RGB_Scene"/>
+<parameter id="ROIXAreaMax"/>
+<parameter id="ROIXAreaMin"/>
+<parameter id="ROIYAreaMax"/>
+<parameter id="ROIYAreaMin"/>
+<parameter id="ROIZPlaneMaxDepth"/>
+<parameter id="ROIZPlaneMinDepth"/>
+<parameter id="RoiForm"/>
+<parameter id="ScanXArea"/>
+<parameter id="ScanXOverwrap"/>
+<parameter id="find_sfm_FindMethod"/>
+<parameter id="find_sfm_KeyPointFraction"/>
+<parameter id="find_sfm_MinScore"/>
+<parameter id="find_sfm_NumMatch"/>
+<parameter id="find_sfm_RelSamplingDistance"/>
+<parameter id="find_sfm_ScoreType"/>
+<parameter id="find_sfm_max_overlap_dist_rel_value"/>
+<parameter id="om3FileName"/>
+<parameter id="plyFilename"/>
+<parameter id="sampling_distance"/>
+<parameter id="sampling_method"/>
+<parameter id="sfmFileName"/>
+</parameters>
+</docu>
+</procedure>
+</hdevelop>

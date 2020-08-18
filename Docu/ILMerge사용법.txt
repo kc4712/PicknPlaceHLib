@@ -1,0 +1,1 @@
+d:\ILMerge.exe /targetplatform:v4,"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5.2" d:\PicknPlaceHLib.dll d:\halcondotnet.dll d:\hdevenginedotnet.dll  /xmldocs:d:\PicknPlaceHLib.XML /ver:0.1.1.0 /copyattrs /out:d:\PicknPlaceHLibMerged.dll

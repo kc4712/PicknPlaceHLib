@@ -1,0 +1,322 @@
+<?xml version="1.0"?>
+<doc>
+  <assembly>
+    <name>PicknPlaceHLibMerged</name>
+  </assembly>
+  <members>
+    <member name="T:PicknPlaceHLib.libModelCreate">
+      <summary>
+            libModelCreate Surface매칭용 3D모델 생성 Class
+            </summary>
+    </member>
+    <member name="T:PicknPlaceHLib.libModelCreate.CBHalconState">
+      <summary>
+            CBHalconState 프로시저객체와, 모델 변수의 상태를 알려주는 이벤트 핸들링
+            </summary>
+      <value>이벤트 콜백</value>
+      <param name="hfunc">"p" = PROCEDURE OBJ, "m" = MODEL VAR</param>
+      <param name="state">ENUM_HPROCEDURESTATE, ENUM_HMODELSTATE 값 콜백</param>
+    </member>
+    <member name="M:PicknPlaceHLib.libModelCreate.#ctor">
+      <summary>
+            libModelCreate Class 생성자
+            </summary>
+    </member>
+    <member name="M:PicknPlaceHLib.libModelCreate.#ctor(System.String)">
+      <summary>
+            libModelCreate Class 생성자
+            </summary>
+      <param name="plyfileName">경로 포함한 .ply file명 </param>
+    </member>
+    <member name="M:PicknPlaceHLib.libModelCreate.saveSegmentParam(System.Int32,System.Double,System.Double,System.Int32,System.String,System.Double,System.Int32,System.String,System.Double,System.Double,System.Int32,System.String,System.Double,System.Double)">
+      <summary>
+            saveSegmentParam 배경을 분리한 3D 모델 생성 메서드
+            </summary>
+      <param name="BackgroundFeature">배경 분리에 관계적 알고리즘 사용(스무싱 필수) = 1, 지면을 기준으로 피사체까지의 Z Depth Min과 Max를 사용 = 0 (default:1) 0, 1 </param>
+      <param name="minZDepth">지면 기준은 0.0이며, 0이상부터는 지면보다 높은데서 PCL형성(default:0.0) -N ~ N (카메라 센서 위치) </param>
+      <param name="maxZDepth">피사체의 PCL이 형성될 높이이며, 0.0 ~ N(카메라 센서 위치) </param>
+      <param name="SmoothFeature">점구름을 이어 텍스쳐를 형성 = 1, 순수 점구름 형성 = 0 (defalut:0) </param>
+      <param name="sampleMethod">샘플링 도구 (default:"fast") "accurate", "accurate_use_normals", "fast", "fast_compute_normals" </param>
+      <param name="sampleValue">샘플 값 (default:0.01) 0.1 ~ 0.9</param>
+      <param name="polygonKnnCnt">폴리곤 Knn 갯수 (default:40) int 0 ~ 100</param>
+      <param name="polygonKnnRadiusParam">폴리곤 반경 파라메터 (default:"auto") "auto", "fixed", "z_factor"</param>
+      <param name="polygonKnnRadiusValue">폴리곤 반경 값 (default:0.3) 0.15 ~ 5.0</param>
+      <param name="surfaceRemoveValue">튀는 표면 제거 값 (default:0.1) 0.0 ~ 1000.0</param>
+      <param name="greedy_mesh_dilationValue">폴리곤 증폭 값 (default:0) 0 ~ 3</param>
+      <param name="segmentFeature">배경분리 피쳐 (default:"distance_3d") "distance_3d", "mesh"</param>
+      <param name="segmentValue">배경분리 값 (default:"10") 0.0 ~ 100.0</param>
+      <param name="samplesurfValue">surface모델 샘플링 거리 값 (default:"0.03") 0.0 ~ 1.0</param>
+    </member>
+    <member name="M:PicknPlaceHLib.libModelCreate.ModelCreate(HalconDotNet.HWindow)">
+      <summary>
+            ModelCreate 모델 생성 메서드
+            생성 과정중 UI에 HALCON 3D 모델링을 넣어줌
+            </summary>
+      <param name="extWin">HWindow 핸들</param>
+    </member>
+    <member name="M:PicknPlaceHLib.libModelCreate.ModelCreate(System.Double,System.Double,System.Int32,System.Int32,System.Int32,System.Int32)">
+      <summary>
+            ModelCreate 모델 생성 메서드
+            배경을 포함한 피사체 영역의 z축 min, max와, 피사체 영역의 왼쪽상단 꼭지점, 오른쪽하단꼭지점 만큼을 이용해 입체 사각형을 만들어 피사체와 배경을 분리
+            output: surface 모델 파일(.sfm), 3d object 모델 파일 (.om3)
+            </summary>
+      <param name="minDepth">깊이이미지로 본 피사체 Z축의 최소 값</param>
+      <param name="maxDepth">깊이이미지로 본 피사체 Z축의 최대 값</param>
+      <param name="leftTopPX_Y">2D 이미지로 보는 피사체 픽셀의 왼쪽 상단 Y축</param>
+      <param name="leftTopPX_X">2D 이미지로 보는 피사체 픽셀의 왼쪽 상단 X축</param>
+      <param name="rightBottomPX_Y">2D 이미지로 보는 피사체 픽셀의 오른쪽 하단 Y축</param>
+      <param name="rightBottomPX_X">2D 이미지로 보는 피사체 픽셀의 오른쪽 하단 X축</param>
+    </member>
+    <member name="M:PicknPlaceHLib.libModelCreate.Create_OM3_SFM(System.String,System.String)">
+      <summary>
+            Create_OM3_SFM 배경을 분리한 3D 모델 생성 메서드
+            </summary>
+      <param name="OM3FileName">OM3(할콘3D모델)파일이 생성될 디렉토리를 포함한 절대 경로</param>
+      <param name="SFMFileName">SFM(Surface Mathing용 3D모델)파일이 생성될 디렉토리를 포함한 절대 경로</param>
+    </member>
+    <member name="M:PicknPlaceHLib.libModelCreate.Dispose">
+      <summary>
+            Dispose 본 라이브러리에서 사용한 객체 파괴 메서드
+            </summary>
+    </member>
+    <member name="P:PicknPlaceHLib.libModelCreate.HPROCEDURE_STATE">
+      <summary>
+            HPROCEDURE_STATE PROCEDURE 객체의 상태를 확인할 수 있는 Property 변수
+            </summary>
+      <value> ENUM_HPROCEDURESTATE 값을 SET하게 되어 있다</value>
+    </member>
+    <member name="P:PicknPlaceHLib.libModelCreate.HMODEL_STATE">
+      <summary>
+            HMODEL_STATE MODEL 변수의 상태를 확인할 수 있는 Property 변수
+            </summary>
+      <value> ENUM_HMODELSTATE값을 SET하게 되어있다</value>
+    </member>
+    <member name="E:PicknPlaceHLib.libModelCreate.mCBHalconState">
+      <summary>
+            CBHalconState 프로시저객체와, 모델 변수의 상태를 알려주는 이벤트 핸들링
+            </summary>
+      <value>이벤트 콜백</value>
+    </member>
+    <member name="T:PicknPlaceHLib.libModelUnion">
+      <summary>
+            libModelUnion Class
+            피사체를 다각도에서 찍은 생성모델을 합성하여 하나의 입체 모델을 만드는 클래스
+            </summary>
+    </member>
+    <member name="T:PicknPlaceHLib.libModelUnion.CBHalconState">
+      <summary>
+            CBHalconState 프로시저객체와, 모델 변수의 상태를 알려주는 이벤트 핸들링
+            </summary>
+      <value>이벤트 콜백</value>
+      <param name="hfunc">"p" = PROCEDURE OBJ, "m" = MODEL VAR</param>
+      <param name="state">ENUM_HPROCEDURESTATE, ENUM_HMODELSTATE 값 콜백</param>
+    </member>
+    <member name="M:PicknPlaceHLib.libModelUnion.#ctor">
+      <summary>
+            libModelUnion 생성 메서드
+            </summary>
+    </member>
+    <member name="M:PicknPlaceHLib.libModelUnion.#ctor(System.String[])">
+      <summary>
+            libModelUnion 생성 메서드
+            배경을 포함한 피사체 영역의 z축 min, max와, 피사체 영역의 왼쪽상단 꼭지점, 오른쪽하단꼭지점 만큼을 이용해 입체 사각형을 만들어 피사체와 배경을 분리
+            </summary>
+      <param name="filesName">경로를 포함한 om3파일명 </param>
+    </member>
+    <member name="M:PicknPlaceHLib.libModelUnion.saveUnionParam(System.Double,System.String,System.Int32,System.String,System.Double,System.Double,System.Int32,System.String,System.Double,System.Double)">
+      <summary>
+            saveUnionParam 합성용 파라메터 설정 메서드
+            </summary>
+      <param name="smoothLv_val">3D 모델 뭉개기 레벨(default:60) 0.1 ~ 60.0 </param>
+      <param name="unionParam">합성 피쳐 (default:"robust") "accurate", "robust"</param>
+      <param name="polygonKnnCnt">폴리곤 Knn 갯수 (default:40) int 0 ~ 100</param>
+      <param name="polygonKnnRadiusParam">폴리곤 반경 파라메터 (default:"auto") "auto", "fixed", "z_factor"</param>
+      <param name="polygonKnnRadiusValue">폴리곤 반경 값 (default:0.5) 0.15 ~ 5.0</param>
+      <param name="surfaceRemoveValue">튀는 표면 제거 값 (default:0) 0.0 ~ 1000.0</param>
+      <param name="greedy_mesh_dilationValue">폴리곤 증폭 값 (default:0) 0 ~ 3</param>
+      <param name="sampleMethod">샘플링 도구 (default:"fast") "accurate", "accurate_use_normals", "fast", "fast_compute_normals" </param>
+      <param name="sampleValue">샘플 값 (default:0.5) 0.1 ~ 0.9</param>
+      <param name="samplesurfValue">surface모델 샘플링 거리 값 (default:"0.03") 0.0 ~ 1.0</param>
+    </member>
+    <member name="M:PicknPlaceHLib.libModelUnion.ModelUnion(HalconDotNet.HWindow)">
+      <summary>
+            ModelUnion 모델 생성 메서드
+            생성 과정중 UI에 HALCON 3D 모델링을 넣어줌
+            output: surface 모델 파일(.sfm), 3d object 모델 파일 (.om3)
+            </summary>
+      <param name="extWin">HWindow 핸들</param>
+    </member>
+    <member name="M:PicknPlaceHLib.libModelUnion.ModelUnion">
+      <summary>
+            ModelUnion 모델 생성 메서드
+            output: surface 모델 파일(.sfm), 3d object 모델 파일 (.om3)
+            </summary>
+    </member>
+    <member name="M:PicknPlaceHLib.libModelUnion.Create_OM3_SFM(System.String,System.String)">
+      <summary>
+            Create_OM3_SFM 합성 3D 모델 생성 메서드
+            </summary>
+      <param name="OM3FileName">OM3(할콘3D모델)파일이 생성될 디렉토리를 포함한 절대 경로</param>
+      <param name="SFMFileName">SFM(Surface Mathing용 3D모델)파일이 생성될 디렉토리를 포함한 절대 경로</param>
+    </member>
+    <member name="M:PicknPlaceHLib.libModelUnion.Dispose">
+      <summary>
+            Dispose 본 라이브러리에서 사용한 객체 파괴 메서드
+            </summary>
+    </member>
+    <member name="P:PicknPlaceHLib.libModelUnion.HPROCEDURE_STATE">
+      <summary>
+            HPROCEDURE_STATE PROCEDURE 객체의 상태를 확인할 수 있는 Property 변수.
+            ENUM_HPROCEDURESTATE 값을 SET하게 되어 있다
+            </summary>
+    </member>
+    <member name="P:PicknPlaceHLib.libModelUnion.HMODEL_STATE">
+      <summary>
+            HMODEL_STATE MODEL 변수의 상태를 확인할 수 있는 Property 변수.
+            ENUM_HMODELSTATE값을 SET하게 되어있다
+            </summary>
+    </member>
+    <member name="E:PicknPlaceHLib.libModelUnion.mCBHalconState">
+      <summary>
+            CBHalconState 프로시저객체와, 모델 변수의 상태를 알려주는 이벤트 핸들링
+            </summary>
+      <value>이벤트 콜백</value>
+    </member>
+    <member name="T:PicknPlaceHLib.libSurfaceMatching">
+      <summary>
+            libSurfaceMatching Class 
+            3d surface matching을 하고 6축 좌표를 리턴 
+            필요시 2d, 3d halcon ui에 이미지를 넣어줌
+            </summary>
+    </member>
+    <member name="T:PicknPlaceHLib.libSurfaceMatching.CBHalconState">
+      <summary>
+            CBHalconState 프로시저객체와, 모델 변수의 상태를 알려주는 이벤트 핸들링
+            </summary>
+      <value>이벤트 콜백</value>
+      <param name="hfunc">"p" = PROCEDURE OBJ</param>
+      <param name="state">ENUM_HPROCEDURESTATE 값 콜백</param>
+    </member>
+    <member name="M:PicknPlaceHLib.libSurfaceMatching.#ctor">
+      <summary>
+            libModelCreate Class 생성자
+            </summary>
+      <summary>
+            libSurfaceMatching 생성자
+            </summary>
+    </member>
+    <member name="M:PicknPlaceHLib.libSurfaceMatching.saveSceneParam(System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Double,System.Double,System.String,System.Double)">
+      <summary>
+            saveModelSceneParam 
+            매칭 전, 씬에 대한 처리 방법과 연산 속도와 정확도를 위해 어느 정도로 샘플링 할지 셋팅하는 메서드
+            </summary>
+      <param name="RoiForm">0:미사용, 1:Moving ROI, 2:Static ROI (default:"0")</param>
+      <param name="MatchForm">0:SurfaceMatch, 1:SurfaceMatch with EDGE, 2:SurfaceMatch with Triangulate(default:"0") </param>
+      <param name="ScanXArea">(ROI_USE = 1일 경우 기입)WIDTH 탐색 범위 0 ~ N </param>
+      <param name="ScanXOverwrap">(ROI_USE = 1일 경우 기입) ScanXArea보다 크거나 같을 경우 MOVING ROI탐색시 겹치는 영역없음, 작을 경우 겹치는 영역 발생</param>
+      <param name="ROIXAreaMin">(ROI_USE = 1 또는 2일 경우 기입)ZIVID FOV WIDTH 중간값 0을 기준으로 왼쪽 음의 값 </param>
+      <param name="ROIXAreaMax">(ROI_USE = 1 또는 2일 경우 기입)ZIVID FOV WIDTH 중간값 0을 기준으로 오른쪽 양의 값 </param>
+      <param name="ROIYAreaMin">(ROI_USE = 2일 경우 기입)ZIVID FOV HEIGHT 중간값 0을 기준으로 왼쪽 음의 값 </param>
+      <param name="ROIYAreaMax">(ROI_USE = 2일 경우 기입)ZIVID FOV HEIGHT 중간값 0을 기준으로 오른쪽 양의 값 </param>
+      <param name="ROIZPlaneMinDepth">(ROI_USE = 1 또는 2일 경우, ROI 사용시)작업대 지면(0)을 기준으로 Z축 ROI 최소 범위값</param>
+      <param name="ROIZPlaneMaxDepth">(ROI_USE = 1 또는 2일 경우, ROI 사용시)ZPlaneMinDepth를 기준으로 Z축 ROI 최대 범위값</param>
+      <param name="sampleMethod">샘플링 도구 (default:"fast") "accurate", "accurate_use_normals", "fast", "fast_compute_normals" </param>
+      <param name="sampleValue">샘플 값 (default:0.5) 0.1 ~ 0.9</param>
+    </member>
+    <member name="M:PicknPlaceHLib.libSurfaceMatching.saveSurfmatchParam(System.Double,System.Double,System.Double,System.Int32,System.String,System.Double)">
+      <summary>
+            saveSurfmatchParam 
+            3d surface matching에 있어 찾는 방법, 점수 산정 등에 대한 설정 메서드
+            </summary>
+      <param name="RelSamplingDistance">매칭할 씬과 3D 모델간의 연관거리 값(default:0.1) 0.0 ~ 1.0</param>
+      <param name="KeyPointFraction">매칭할 씬과 3D 모델의 사용할 점구름의 %비율(default: 0.1) 0.0 ~ 1.0  </param>
+      <param name="MinScore">매칭 최소 합격기준 %(default : 0.35) 0.0 ~ 1.0 </param>
+      <param name="NumMatch">매칭 갯수(default:1) 1 ~ 100 </param>
+      <param name="FindMethod">매칭 방법(default:"mls") "mls", "fast"</param>
+      <param name="ScoreWeight">모델, 씬 사이의 점수 가중치(default:0.5) 0.0 ~ 1 </param>
+    </member>
+    <member name="M:PicknPlaceHLib.libSurfaceMatching.findSurFaceMatching(System.String,System.String,System.String)">
+      <summary>
+            findSurFaceMatching 3d surface matching 수행 메서드
+            </summary>
+      <param name="plyfileName">현재 씬의 3d 이미지인입 인자 (경로를 포함한 ply파일명) </param>
+      <param name="sfmfileName">피사체의 surface model 파일(경로를 포함한 sfm파일명)</param>
+      <param name="om3fileName">피사체의 object3 d model 파일(경로를 포함한 om3파일명)</param>
+      <returns> 피사체의 로봇 6축 Base 좌표 (형식 Array[matchingid, score, tx, ty, tz, rx, ry, rz], ex:)[0, 0.7, 200.23, 150.5, 52.1, 0.1, 0.5, 0.1]) </returns>
+    </member>
+    <member name="M:PicknPlaceHLib.libSurfaceMatching.findSurFaceMatching(System.String,System.Int32,System.Double,System.Double,System.Double,System.Double,System.Double,System.Double,System.Double,System.Double,System.Double)">
+      <summary>
+            findSurFaceMatching 상자, 구체, 원통 중 하나를 임의로 생성하여 인입된 씬에서 상자, 구체, 원통을 매칭하는 메서드
+            </summary>
+      <param name="plyfileName">현재 씬의 3d 이미지인입 인자 (경로를 포함한 ply파일명) </param>
+      <param name="SimpleObjMatch">0:미사용, 1:박스 모델 생성, 2:구체 모델 생성, 3: 원통 모델 생성</param>
+      <param name="BOXLengthX">SimpleObjMatch = 1 일 경우, 박스의 X길이(mm) </param>
+      <param name="BOXLengthY">SimpleObjMatch = 1 일 경우, 박스의 Y길이(mm)</param>
+      <param name="BOXLengthZ">SimpleObjMatch = 1 일 경우, 박스의 Z길이(mm)</param>
+      <param name="SphereRadius">SimpleObjMatch = 2 일 경우, 구체의 반지름(mm)</param>
+      <param name="CylinderRadius">SimpleObjMatch = 3 일 경우, 원통의 반지름(mm)</param>
+      <param name="CylinderZMinExt">SimpleObjMatch = 3 일 경우, 높이의 중간 0을 기준으로 원통 하판 음의 위치(mm)</param>
+      <param name="CylinderZMaxExt">SimpleObjMatch = 3 일 경우, 높이의 중간 0을 기준으로 원통 상판 양의 위치(mm)</param>
+      <param name="SimpleModelSampleVal"> SimpleObj들의 포인트를 증강시키기 위한 샘플링값(default:0.9) 0.0 ~ 1.0</param>
+      <param name="CreateSFMSampleVal">임의로 생성되는 점구름 모델의 샘플링값(default:0.5) 0.0 ~ 1.0</param>
+      <returns> 피사체의 로봇 6축 Base 좌표 (형식 Array[matchingid, score, tx, ty, tz, rx, ry, rz], ex:)[0, 0.7, 200.23, 150.5, 52.1, 0.1, 0.5, 0.1])</returns>
+    </member>
+    <member name="M:PicknPlaceHLib.libSurfaceMatching.getResult3DDisp(HalconDotNet.HWindow)">
+      <summary>
+            getResult3DDisp 메서드
+            form에 붙은 halconwindow에 3d 이미지 인입
+            </summary>
+      <param name="extWin">form의 hwindow 핸들</param>
+    </member>
+    <member name="M:PicknPlaceHLib.libSurfaceMatching.getResult2DDisp(HalconDotNet.HWindow)">
+      <summary>
+            getResult2DDisp 메서드
+            form에 붙은 halconwindow에 2d 이미지 인입
+            </summary>
+      <param name="extWin">form의 hwindow 핸들</param>
+    </member>
+    <member name="M:PicknPlaceHLib.libSurfaceMatching.Dispose">
+      <summary>
+            Dispose 본 라이브러리에서 사용한 객체 파괴 메서드
+            </summary>
+    </member>
+    <member name="P:PicknPlaceHLib.libSurfaceMatching.HPROCEDURE_STATE">
+      <summary>
+            HPROCEDURE_STATE PROCEDURE 객체의 상태를 확인할 수 있는 Property 변수
+            </summary>
+      <value> ENUM_HPROCEDURESTATE 값을 SET하게 되어 있다</value>
+    </member>
+    <member name="E:PicknPlaceHLib.libSurfaceMatching.mCBHalconState">
+      <summary>
+            CBHalconState 프로시저객체와, 모델 변수의 상태를 알려주는 이벤트 핸들링
+            </summary>
+      <value>이벤트 콜백</value>
+    </member>
+    <member name="T:PicknPlaceHLib.ENUM_HPROCEDURESTATE">
+      <summary>
+            PROCEDURE 객체 상태
+            </summary>
+    </member>
+    <member name="T:PicknPlaceHLib.ENUM_HMODELSTATE">
+      <summary>
+            MODEL 변수 상태
+            </summary>
+    </member>
+    <member name="T:PicknPlaceHLib.Properties.Resources">
+      <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+    </member>
+    <member name="P:PicknPlaceHLib.Properties.Resources.ResourceManager">
+      <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+    </member>
+    <member name="P:PicknPlaceHLib.Properties.Resources.Culture">
+      <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+    </member>
+  </members>
+</doc>

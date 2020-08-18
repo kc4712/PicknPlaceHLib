@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hdevelop file_version="1.2" halcon_version="18.11.2.0">
+<procedure name="ModelUnion_0_0_2">
+<interface>
+<ic>
+<par name="Window3D" base_type="ctrl" dimension="0"/>
+<par name="ExtWinOnOff" base_type="ctrl" dimension="0"/>
+<par name="FilesName" base_type="ctrl" dimension="0"/>
+<par name="smooth_mls_knncnt" base_type="ctrl" dimension="0"/>
+<par name="register_obj3d_Param" base_type="ctrl" dimension="0"/>
+<par name="triangulate_greedyKnnCnt" base_type="ctrl" dimension="0"/>
+<par name="triangulate_greedyKnnRadiusParam" base_type="ctrl" dimension="0"/>
+<par name="triangulate_greedyKnnRadiusValue" base_type="ctrl" dimension="0"/>
+<par name="triangulate_smallsurfaceremoveValue" base_type="ctrl" dimension="0"/>
+<par name="triangulate_greedy_mesh_dilationValue" base_type="ctrl" dimension="0"/>
+<par name="sampling_method" base_type="ctrl" dimension="0"/>
+<par name="sampling_distance" base_type="ctrl" dimension="0"/>
+<par name="create_sfm_RelSampleDistance" base_type="ctrl" dimension="0"/>
+</ic>
+<oc>
+<par name="RetOM3" base_type="ctrl" dimension="0"/>
+<par name="RetSFM" base_type="ctrl" dimension="0"/>
+</oc>
+</interface>
+<body>
+<l>dev_update_off()</l>
+<l>*WinWidth := 1920 / 2</l>
+<l>*WinHeight := 1200 / 2</l>
+<l>*dev_open_window (0, 0, WinWidth, WinHeight, 'black', Window3D)</l>
+<c></c>
+<l>if (ExtWinOnOff == 1)</l>
+<l>    dev_clear_window()    </l>
+<l>endif</l>
+<c></c>
+<l>RegisteredOM3s := []</l>
+<l>PreviousOM3 := []</l>
+<l>CollectedAffineObjects := []</l>
+<l>*HomMat3DCompose := []</l>
+<l>tuple_length(FilesName, Filesnum)</l>
+<c></c>
+<l>if (ExtWinOnOff == 1)</l>
+<l>    dev_set_window (Window3D)</l>
+<l>*    set_window_extents(Window3D, 0, 0, 1920, 1200)</l>
+<l>*    dev_open_window(0, 0, 1920, 1200, 'black', Window3D)</l>
+<l>    read_image(RGBA,'DummyDisp')</l>
+<l>    dev_display(RGBA)</l>
+<l>endif</l>
+<l>cnt := 1</l>
+<l>for Index := 0 to Filesnum-1 by 1</l>
+<c>    </c>
+<l>    if (Index == 0)</l>
+<l>        dev_set_window (Window3D)</l>
+<l>        read_object_model_3d( FilesName[Index], 'm', [], [], PreviousOM3, Status)</l>
+<l>        smooth_object_model_3d (PreviousOM3, 'mls', ['mls_kNN', 'mls_force_inwards'], [smooth_mls_knncnt, 'true'], PreviousOM3)</l>
+<l>* smooth_object_model_3d (PreviousOM3, 'mls', 'mls_kNN', smooth_mls_knncnt, PreviousOM3)</l>
+<l>        copy_object_model_3d (PreviousOM3, 'all', CollectedAffineObjects)</l>
+<l>        Offsets := []</l>
+<l>        hom_mat3d_identity (HomMat3DStart)</l>
+<l>        HomMat3DCompose := HomMat3DStart</l>
+<l>        if (ExtWinOnOff == 1)</l>
+<c>            * Displaying the 3D color point cloud, press the button to continue</c>
+<l>            Title := cnt +'/'+ (Filesnum) + '번째 이미지'</l>
+<l>            Instructions[0] := 'Rotate: Left button'</l>
+<l>            Instructions[1] := 'Zoom:   Shift + left button'</l>
+<l>            Instructions[2] := 'Move:   Ctrl  + left button'</l>
+<c>            </c>
+<l>            visualize_object_model_3d (Window3D, PreviousOM3, [], [], [], [], Title, [], Instructions, PoseOut)</l>
+<l>            dev_clear_window()</l>
+<l>        endif</l>
+<l>        RegisteredOM3s := PreviousOM3</l>
+<l>*         cnt := cnt + 1</l>
+<l>    else</l>
+<l>        read_object_model_3d (FilesName[Index], 'm', [], [], ObjectModel3D, Status)</l>
+<l>        smooth_object_model_3d(ObjectModel3D, 'mls', ['mls_kNN', 'mls_force_inwards'], [smooth_mls_knncnt, 'true'], ObjectModel3D)</l>
+<l>* smooth_object_model_3d (ObjectModel3D, 'mls', 'mls_kNN', smooth_mls_knncnt, ObjectModel3D)</l>
+<c>        * Skip small objects, because the registration will likely fail</c>
+<l>        get_object_model_3d_params (ObjectModel3D, 'num_points', GenParamValue)</l>
+<l>*        if (GenParamValue &lt; 1000)</l>
+<l>*        continue</l>
+<l>*        endif</l>
+<c>        * Register the last successful match and the current model</c>
+<l>        register_object_model_3d_pair (ObjectModel3D, PreviousOM3, 'matching', 'default_parameters', register_obj3d_Param, Pose, Score)</l>
+<c>        * If registration failed, ignore this view</c>
+<l>*        if (|Pose| == 0 or Score &lt; 0.7)</l>
+<l>*        continue</l>
+<l>*        endif</l>
+<c>        * Accumulate the result</c>
+<l>        pose_to_hom_mat3d (Pose, HomMat3D)</l>
+<l>        RegisteredOM3s := [RegisteredOM3s,ObjectModel3D]</l>
+<l>        Offsets := [Offsets,HomMat3D]</l>
+<c>        * Create 3D object model for visualization</c>
+<l>        hom_mat3d_compose (HomMat3DCompose, HomMat3D, HomMat3DCompose)</l>
+<l>        affine_trans_object_model_3d (ObjectModel3D, HomMat3DCompose, ObjectModel3DAffineTrans)</l>
+<l>        CollectedAffineObjects := [ObjectModel3DAffineTrans,CollectedAffineObjects]</l>
+<c>        * Prepare next round</c>
+<l>        PreviousOM3 := ObjectModel3D</l>
+<c>        * </c>
+<c>        * Show all 3D object models</c>
+<l>        if (ExtWinOnOff == 1)</l>
+<l>            dev_set_window (Window3D)</l>
+<l>            Title := cnt +'/'+ (Filesnum) + '번째 이미지'</l>
+<l>            MSG[0] := 'Pose:' + Pose[0]</l>
+<l>            MSG[1] := 'Pose:' + Pose[1]</l>
+<l>            MSG[2] := 'Pose:' + Pose[2]</l>
+<l>            MSG[3] := 'Pose:' + Pose[3]</l>
+<l>            MSG[4] := 'Pose:' + Pose[4]</l>
+<l>            MSG[5] := 'Pose:' + Pose[5]</l>
+<l>            MSG[6] := 'Pose:' + Pose[6]</l>
+<l>            MSG[7] := 'Score:' + Score</l>
+<l>            visualize_object_model_3d (Window3D, CollectedAffineObjects, [], [], [], [], Title, [], MSG, PoseOut)</l>
+<l>            dev_clear_window()</l>
+<l>        endif</l>
+<l>        cnt := cnt + 1</l>
+<l>    endif</l>
+<c>    </c>
+<l>*    disp_object_model_3d_safe (Window3D, CollectedAffineObjects, CamParam1, PoseVisualize, VisualizeParameterNames, VisualizeParameterValues)</l>
+<l>endfor</l>
+<c></c>
+<c></c>
+<l>count_seconds (T0)</l>
+<c></c>
+<l>register_object_model_3d_global (RegisteredOM3s, Offsets, 'previous', [], 'max_num_iterations', 1, HomMat3DRefined, Score)</l>
+<c>* Apply results</c>
+<l>affine_trans_object_model_3d (RegisteredOM3s, HomMat3DRefined, GloballyRegisteredOM3s)</l>
+<c>* </c>
+<c></c>
+<c></c>
+<c></c>
+<l>*visualize_object_model_3d (Window3D, GloballyRegisteredOM3s, [], [], [], [], Title, [], [], PoseOut)</l>
+<c></c>
+<l>union_object_model_3d (GloballyRegisteredOM3s, 'points_surface', UnionOptimized)</l>
+<c></c>
+<c>*fuse_object_model_3d</c>
+<l>*MinNumPoints := 5</l>
+<l>*SampleDistance := 0.5</l>
+<l>*smooth_object_model_3d (UnionOptimized, 'mls', 'mls_force_inwards', 'true', SmoothObject3D)</l>
+<l>smooth_object_model_3d (UnionOptimized, 'mls', ['mls_kNN', 'mls_force_inwards'], [smooth_mls_knncnt, 'true'], SmoothObject3D)</l>
+<c></c>
+<l>*triangulate_object_model_3d (SmoothObject3D, 'greedy', [], [], Surface3D, Information)</l>
+<c></c>
+<l>if (triangulate_greedyKnnCnt == 0 or triangulate_greedyKnnCnt == 0.0)</l>
+<l>    greed_Knn_Param := []</l>
+<l>    triangulate_greedyKnnCnt := []</l>
+<l>else</l>
+<l>    greed_Knn_Param := 'greedy_kNN'</l>
+<l>endif</l>
+<c></c>
+<l>if (triangulate_greedyKnnRadiusParam == [] or triangulate_greedyKnnRadiusParam == '')</l>
+<l>    greedy_radius_type_Param := []</l>
+<l>    triangulate_greedyKnnRadiusParam := []</l>
+<l>else</l>
+<l>    greedy_radius_type_Param := 'greedy_radius_type'</l>
+<l>endif</l>
+<c></c>
+<l>if (triangulate_greedyKnnRadiusValue == 0 or triangulate_greedyKnnRadiusValue == 0.0)</l>
+<l>    greedy_radius_value_Param := []</l>
+<l>    triangulate_greedyKnnRadiusValue := []</l>
+<l>else</l>
+<l>    greedy_radius_value_Param := 'greedy_radius_value'</l>
+<l>endif</l>
+<l>if (triangulate_smallsurfaceremoveValue == 0 or triangulate_smallsurfaceremoveValue == 0.0)</l>
+<l>    greedy_remove_small_surfaces_Param := []</l>
+<l>    triangulate_smallsurfaceremoveValue := []</l>
+<l>else</l>
+<l>    greedy_remove_small_surfaces_Param := 'greedy_remove_small_surfaces'</l>
+<l>endif</l>
+<c></c>
+<l>if (triangulate_greedy_mesh_dilationValue == 0 or triangulate_greedy_mesh_dilationValue == 0.0)</l>
+<l>    greedy_mesh_dilation_Param := []</l>
+<l>    triangulate_greedy_mesh_dilationValue := []</l>
+<l>else</l>
+<l>    greedy_mesh_dilation_Param := 'greedy_mesh_dilation'</l>
+<l>endif</l>
+<c></c>
+<l>triangulate_object_model_3d (SmoothObject3D, 'greedy', [greed_Knn_Param,  greedy_radius_type_Param, greedy_radius_value_Param, greedy_remove_small_surfaces_Param, greedy_mesh_dilation_Param], [triangulate_greedyKnnCnt, triangulate_greedyKnnRadiusParam, triangulate_greedyKnnRadiusValue, triangulate_smallsurfaceremoveValue, triangulate_greedy_mesh_dilationValue], Surface3D, Information)</l>
+<l>sample_object_model_3d (Surface3D, sampling_method, sampling_distance, [], [], SampleExact)</l>
+<l>*count_seconds (T1)</l>
+<l>*TimeForSampling := (T1 - T0)</l>
+<c></c>
+<c>* Creating a HALCON surface-based matching model</c>
+<l>*count_seconds (T0)</l>
+<l>*create_surface_model (SampleExact, 0.01, 'train_3d_edges', 'true', SFM)</l>
+<l>if (ExtWinOnOff == 1)</l>
+<l>    dev_set_window(Window3D)</l>
+<l>    Title := '최종 합성 모델. 방향성 주입을 위해 모델의 방향을 마우스 클릭으로 선정하고 Continue버튼 클릭'</l>
+<l>    visualize_object_model_3d (Window3D, SampleExact, [], [], [], [], Title, [], [], PoseOut)</l>
+<l>endif</l>
+<l>rigid_trans_object_model_3d (SampleExact, PoseOut, SampleExact)</l>
+<c></c>
+<c>* Request the Diameter for estimating a reasonable  subsampling rate</c>
+<l>get_object_model_3d_params (SampleExact, 'diameter', Diameter)</l>
+<c>* Subsample the scene and compute the normals only for those few points</c>
+<l>sample_object_model_3d (SampleExact, 'fast_compute_normals', Diameter * 0.01, [], [], SampledObjectModel3D)</l>
+<c>* Request all normals and point values</c>
+<l>get_object_model_3d_params (SampledObjectModel3D, 'point_normal_x', NX)</l>
+<l>get_object_model_3d_params (SampledObjectModel3D, 'point_normal_y', NY)</l>
+<l>get_object_model_3d_params (SampledObjectModel3D, 'point_normal_z', NZ)</l>
+<l>get_object_model_3d_params (SampledObjectModel3D, 'point_coord_x', X)</l>
+<l>get_object_model_3d_params (SampledObjectModel3D, 'point_coord_y', Y)</l>
+<l>get_object_model_3d_params (SampledObjectModel3D, 'point_coord_z', Z)</l>
+<c>* Compute the mean point, which will be used as a virtual center</c>
+<l>moments_object_model_3d (SampledObjectModel3D, 'mean_points', M)</l>
+<c>* Calculate the distance of all points + and - their normals to the virtual center</c>
+<l>Test1 := mean(((X + NX * Diameter * 0.03) - M[0]) * ((X + NX * Diameter * 0.03) - M[0]) + ((Y + NY * Diameter * 0.03) - M[1]) * ((Y + NY * Diameter * 0.03) - M[1]) + ((Z + NZ * Diameter * 0.03) - M[2]) * ((Z + NZ * Diameter * 0.03) - M[2]))</l>
+<l>Test2 := mean(((X - NX * Diameter * 0.03) - M[0]) * ((X - NX * Diameter * 0.03) - M[0]) + ((Y - NY * Diameter * 0.03) - M[1]) * ((Y - NY * Diameter * 0.03) - M[1]) + ((Z - NZ * Diameter * 0.03) - M[2]) * ((Z - NZ * Diameter * 0.03) - M[2]))</l>
+<c>*  If Test2 is larger than Test1 the normals point to the center and have to be inverted for surface based matching</c>
+<l>if (Test1 &lt; Test2)</l>
+<l>    InvertNormals := 'true'</l>
+<l>else</l>
+<l>    InvertNormals := 'false'</l>
+<l>endif</l>
+<l>return ()</l>
+<c></c>
+<c></c>
+<l>* create_surface_model (SampleExact, create_sfm_RelSampleDistance, [], [], SFM)</l>
+<l>create_surface_model (SampleExact, create_sfm_RelSampleDistance, [], [], SFM)</l>
+<l>*count_seconds (T1)</l>
+<l>*TimeForCreating := (T1 - T0)</l>
+<c></c>
+<c></c>
+<l>RetSFM := SFM</l>
+<l>RetOM3 := SampleExact</l>
+<c></c>
+<c>* Loading the HALCON 3D object model</c>
+<l>*read_object_model_3d(Filename, 'm', [], [], SampleExact, Status)</l>
+<c></c>
+<c>* Loading the HALCON surface-based matching model</c>
+<l>*read_surface_model(Filename, SFM)</l>
+<c></c>
+<c>* Displaying the 3D color point cloud, press the button to continue</c>
+<l>*Instructions[0] := 'Rotate: Left button'</l>
+<l>*Instructions[1] := 'Zoom:   Shift + left button'</l>
+<l>*Instructions[2] := 'Move:   Ctrl  + left button'</l>
+<l>*Instructions[3] := 'Last?'</l>
+<l>*disp_message (Window3D, Instructions, 'window', 12, 12, 'red', 'true')    </l>
+<l>*visualize_object_model_3d (Window3D, SampleExact, [], [], [], [], [], [], [], PoseOut)</l>
+<l>return ()</l>
+</body>
+<docu id="ModelUnion_0_0_2">
+<parameters>
+<parameter id="ExtWinOnOff"/>
+<parameter id="FilesName"/>
+<parameter id="RetOM3"/>
+<parameter id="RetSFM"/>
+<parameter id="Window3D"/>
+<parameter id="create_sfm_RelSampleDistance"/>
+<parameter id="register_obj3d_Param"/>
+<parameter id="sampling_distance"/>
+<parameter id="sampling_method"/>
+<parameter id="smooth_mls_knncnt"/>
+<parameter id="triangulate_greedyKnnCnt"/>
+<parameter id="triangulate_greedyKnnRadiusParam"/>
+<parameter id="triangulate_greedyKnnRadiusValue"/>
+<parameter id="triangulate_greedy_mesh_dilationValue"/>
+<parameter id="triangulate_smallsurfaceremoveValue"/>
+</parameters>
+</docu>
+</procedure>
+</hdevelop>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hdevelop file_version="1.2" halcon_version="18.11.2.0">
+<procedure name="Halcon3DVis_0_0_1">
+<interface>
+<ic>
+<par name="Window3D" base_type="ctrl" dimension="0"/>
+<par name="ObjectModel3D_Scene" base_type="ctrl" dimension="0"/>
+<par name="ObjectModel3D_Result" base_type="ctrl" dimension="0"/>
+</ic>
+</interface>
+<body>
+<l>dev_update_off ()</l>
+<l>try</l>
+<l>    create_pose (0.0, 0.0, 1000, 0, 0, 0, 'Rp+T', 'gba', 'point', Pose)</l>
+<l>    gen_cam_par_area_scan_division (0.025, 0, 1.1e-05, 1.1e-05, 960.0, 600.0, 1920, 1200, CameraParam)</l>
+<l>    *tuple_length(ObjectModel3D_Scene[1], NumResult)</l>
+<l>    NumResult := |ObjectModel3D_Result|</l>
+<l>    tuple_gen_const (NumResult, 'green', Colors)</l>
+<l>    tuple_gen_const (NumResult, 'circle', Shapes)</l>
+<l>    tuple_gen_const (NumResult, 3, Radii)</l>
+<l>    Indices := [1:NumResult]</l>
+<l>*    dev_clear_window ()</l>
+<l>    Instructions[0] := 'Rotate: Left button'</l>
+<l>    Instructions[1] := 'Zoom:   Shift + left button'</l>
+<l>    Instructions[2] := 'Move:   Ctrl  + left button'</l>
+<l>*      dev_set_window(Window3D)</l>
+<l>    visualize_object_model_3d (Window3D, [ObjectModel3D_Scene, ObjectModel3D_Result], [], [], ['color_' + [0,Indices],'point_size_0'], ['gray',Colors,1.0], [], [], Instructions, PoseOut)</l>
+<l>*    visualize_object_model_3d (Window3D, ObjectModel3D_Scene, CameraParam, Pose, ['color_0'], ['green'] ,[] , [], [], PoseOut)    </l>
+<c></c>
+<l>catch (Exception)</l>
+<l>    exit()</l>
+<l>    return()</l>
+<l>endtry</l>
+<l>return ()</l>
+</body>
+<docu id="Halcon3DVis_0_0_1">
+<parameters>
+<parameter id="ObjectModel3D_Result"/>
+<parameter id="ObjectModel3D_Scene"/>
+<parameter id="Window3D"/>
+</parameters>
+</docu>
+</procedure>
+</hdevelop>

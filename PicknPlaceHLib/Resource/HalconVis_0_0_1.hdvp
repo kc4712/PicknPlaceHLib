@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hdevelop file_version="1.2" halcon_version="18.11.2.0">
+<procedure name="HalconVis_0_0_1">
+<interface>
+<ic>
+<par name="FileName" base_type="ctrl" dimension="0"/>
+<par name="MovingView" base_type="ctrl" dimension="0"/>
+<par name="Window2D" base_type="ctrl" dimension="0"/>
+<par name="Window3D" base_type="ctrl" dimension="0"/>
+</ic>
+</interface>
+<body>
+<l>dev_update_off ()</l>
+<c></c>
+<c></c>
+<c>*ZoomParam 외부 파라메터 준비용 변수 Default:0.9</c>
+<l>ZoomParam := 1.6</l>
+<l>Instructions[0] := 'Rotate: Left button'</l>
+<l>Instructions[1] := 'Zoom:   Shift + left button'</l>
+<l>Instructions[2] := 'Move:   Ctrl  + left button'</l>
+<c></c>
+<l>read_image(RGBA,'./halconDev/DummyDisp')</l>
+<l>dev_set_window(Window3D)</l>
+<l>dev_display(RGBA)</l>
+<l>tuple_add(FileName,'', ImageFilename)</l>
+<c></c>
+<l>tuple_split(ImageFilename, '.', FileFormat)</l>
+<l>if(FileFormat[1] == 'ply' or FileFormat[1] == 'PLY')</l>
+<l>    read_object_model_3d (ImageFilename, 'm', ['xyz_map_width'], [1920], ObjectModel3D, Status)</l>
+<l>    get_object_model_3d_params (ObjectModel3D, 'red', red)</l>
+<l>    get_object_model_3d_params (ObjectModel3D, 'green', green)</l>
+<l>    get_object_model_3d_params (ObjectModel3D, 'blue', blue)</l>
+<l>    set_object_model_3d_attrib (ObjectModel3D, '&amp;red', 'points', red, ObjectModel3D)</l>
+<l>    set_object_model_3d_attrib (ObjectModel3D, '&amp;green', 'points', green, ObjectModel3D)</l>
+<l>    set_object_model_3d_attrib (ObjectModel3D, '&amp;blue', 'points', blue, ObjectModel3D)</l>
+<c>    </c>
+<l>    object_model_3d_to_xyz( X, Y, Z, ObjectModel3D, 'from_xyz_map', [], [])  </l>
+<l>    get_image_size (X, Width, Height)</l>
+<l>    gen_image_const (R, 'real', Width, Height)</l>
+<l>    gen_image_const (G, 'real', Width, Height)</l>
+<l>    gen_image_const (B, 'real', Width, Height)</l>
+<l>    get_domain (R, Domain)</l>
+<l>    get_region_points (Domain, Rows, Columns)</l>
+<l>    set_grayval (R, Rows, Columns, red)</l>
+<l>    set_grayval (G, Rows, Columns, green)</l>
+<l>    set_grayval (B, Rows, Columns, blue)</l>
+<l>    compose3 (R, G, B, RGBA)</l>
+<c>    </c>
+<l>    *dev_clear_window ()</l>
+<l>*     dev_open_window (0, 0, 1920/2, 1200/2, 'black', Window2D)</l>
+<l>    if (MovingView == 1)</l>
+<l>        dev_set_window (Window2D)</l>
+<l>        dev_display(RGBA)</l>
+<l>        dev_set_window (Window3D)</l>
+<l>        try</l>
+<l>            par_start&lt;HID_1&gt; : visualize_object_model_3d (Window3D, [ObjectModel3D], [], [], ['color', 'point_size', 'alpha'], ['light gray', 0.9, 0.8], [], [], Instructions, PoseOut)    </l>
+<l>        catch (Exception)</l>
+<l>            return()</l>
+<l>        endtry</l>
+<l>    else</l>
+<l>        dev_set_window (Window2D)</l>
+<l>        dev_display(RGBA)</l>
+<l>        dev_set_window (Window3D)</l>
+<l>        get_window_extents (Window3D, RowNotUsed, ColumnNotUsed, Width, Height)</l>
+<l>        get_part (Window3D, WPRow1, WPColumn1, WPRow2, WPColumn2)</l>
+<l>        set_part (Window3D, 0, 0, Height - 1, Width - 1)</l>
+<l>        *gen_cam_par_area_scan_division (1.622452e-02, 0, 5.860000e-06, 5.860000e-06, Width / 2 , Height / 2 , Width , Height, CamParam)</l>
+<l>         gen_cam_par_area_scan_division (0.06, 0, 8.5e-6, 8.5e-6, Width / 2, Height / 2, Width, Height, CamParam)</l>
+<l>        get_object_models_center ([ObjectModel3D], Center)</l>
+<l>        create_pose (-Center[0],-Center[1], -Center[2], 0, 0, 0, 'Rp+T', 'gba', 'point', PoseIn)</l>
+<l>        determine_optimum_pose_distance ([ObjectModel3D], CamParam, ZoomParam, PoseIn, PoseEstimated)</l>
+<l>        disp_object_model_3d (Window3D, [ObjectModel3D], [], PoseEstimated, ['color', 'point_size', 'alpha'], ['light gray', 0.9, 0.8])</l>
+<l>    endif</l>
+<c>    </c>
+<l>elseif(FileFormat[1] == 'om3' or FileFormat[1] == 'OM3')</l>
+<l>    read_object_model_3d(ImageFilename, 'm', [], [], ObjectModel3D, status)</l>
+<l>    if (MovingView == 1)</l>
+<l>        dev_set_window (Window3D)</l>
+<l>        try</l>
+<l>            par_start&lt;HID_1&gt; : visualize_object_model_3d (Window3D, [ObjectModel3D], [], [], ['color', 'point_size', 'alpha'], ['light gray', 0.9, 0.8], [], [], Instructions, PoseOut)</l>
+<l>        catch (Exception)</l>
+<l>            return()</l>
+<l>        endtry</l>
+<c></c>
+<l>    else</l>
+<l>        dev_set_window (Window3D)</l>
+<l>        get_window_extents (Window3D, RowNotUsed, ColumnNotUsed, Width, Height)</l>
+<l>        get_part (Window3D, WPRow1, WPColumn1, WPRow2, WPColumn2)</l>
+<l>        set_part (Window3D, 0, 0, Height - 1, Width - 1)</l>
+<l>        *gen_cam_par_area_scan_division (1.622452e-02, 0, 5.860000e-06, 5.860000e-06, Width / 2 , Height / 2 , Width , Height, CamParam)</l>
+<l>         gen_cam_par_area_scan_division (0.06, 0, 8.5e-6, 8.5e-6, Width / 2, Height / 2, Width, Height, CamParam)</l>
+<l>        get_object_models_center ([ObjectModel3D], Center)</l>
+<l>        create_pose (-Center[0],-Center[1], -Center[2], 0, 0, 0, 'Rp+T', 'gba', 'point', PoseIn)</l>
+<l>        determine_optimum_pose_distance ([ObjectModel3D], CamParam, ZoomParam, PoseIn, PoseEstimated)</l>
+<l>        disp_object_model_3d (Window3D, [ObjectModel3D], [], PoseEstimated, ['color', 'point_size', 'alpha'], ['light gray', 0.9, 0.8])</l>
+<l>    endif</l>
+<l>elseif(FileFormat[1] == 'sfm' or FileFormat[1] == 'SFM')</l>
+<l>    read_surface_model(ImageFilename, SFM)</l>
+<l>    get_surface_model_param(SFM, 'sampled_model', ObjectModel3D)</l>
+<l>    if (MovingView == 1)</l>
+<l>        dev_set_window (Window3D)</l>
+<l>        try</l>
+<l>            par_start&lt;HID_1&gt; : visualize_object_model_3d (Window3D, [ObjectModel3D], [], [], ['color', 'point_size', 'alpha'], ['light gray', 0.9, 0.8], [], [], Instructions, PoseOut)</l>
+<l>        catch (Exception)</l>
+<l>            return()</l>
+<l>        endtry</l>
+<c>        </c>
+<l>    else</l>
+<l>        dev_set_window (Window3D)</l>
+<l>        get_window_extents (Window3D, RowNotUsed, ColumnNotUsed, Width, Height)</l>
+<l>        get_part (Window3D, WPRow1, WPColumn1, WPRow2, WPColumn2)</l>
+<l>        set_part (Window3D, 0, 0, Height - 1, Width - 1)</l>
+<l>        *gen_cam_par_area_scan_division (1.622452e-02, 0, 5.860000e-06, 5.860000e-06, Width / 2 , Height / 2 , Width , Height, CamParam)</l>
+<l>         gen_cam_par_area_scan_division (0.06, 0, 8.5e-6, 8.5e-6, Width / 2, Height / 2, Width, Height, CamParam)</l>
+<l>        get_object_models_center ([ObjectModel3D], Center)</l>
+<l>        create_pose (-Center[0],-Center[1], -Center[2], 0, 0, 0, 'Rp+T', 'gba', 'point', PoseIn)</l>
+<l>        determine_optimum_pose_distance ([ObjectModel3D], CamParam, ZoomParam, PoseIn, PoseEstimated)</l>
+<l>        disp_object_model_3d (Window3D, [ObjectModel3D], [], PoseEstimated, ['color', 'point_size', 'alpha'], ['light gray', 0.9, 0.8])</l>
+<l>    endif</l>
+<l>endif</l>
+<l>*wait_seconds(2)</l>
+<l>*interrupt_operator(HID_1, 'cancel')</l>
+<l>return ()</l>
+</body>
+<docu id="HalconVis_0_0_1">
+<parameters>
+<parameter id="FileName"/>
+<parameter id="MovingView"/>
+<parameter id="Window2D"/>
+<parameter id="Window3D"/>
+</parameters>
+</docu>
+</procedure>
+</hdevelop>

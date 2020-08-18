@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hdevelop file_version="1.2" halcon_version="18.11.2.0">
+<procedure name="Halcon3DVis_0_0_3">
+<interface>
+<ic>
+<par name="MovingView" base_type="ctrl" dimension="0"/>
+<par name="Window3D" base_type="ctrl" dimension="0"/>
+<par name="ObjectModel3D_Scene" base_type="ctrl" dimension="0"/>
+<par name="ObjectModel3D_Result" base_type="ctrl" dimension="0"/>
+<par name="ObjectModel3D_ResultArrow" base_type="ctrl" dimension="0"/>
+<par name="ObjectModel3D_ROI" base_type="ctrl" dimension="0"/>
+</ic>
+</interface>
+<body>
+<l>dev_update_off ()</l>
+<c></c>
+<l>create_pose (0.0, 0.0, 1000, 0, 0, 0, 'Rp+T', 'gba', 'point', Pose)</l>
+<l>gen_cam_par_area_scan_division (0.025, 0, 1.1e-05, 1.1e-05, 960.0, 600.0, 1920, 1200, CameraParam)</l>
+<l>*tuple_length(ObjectModel3D_Scene[1], NumResult)</l>
+<l>*Message1 := 'Scene: ' + Index</l>
+<l>Message1 := 'Found ' + |ObjectModel3D_Result| + ' object(s) '</l>
+<l>*ScoreString := sum(Score$'.2f' + ' / ')</l>
+<l>*Message1[2] := 'Score(s): ' + ScoreString{0:strlen(ScoreString) - 4}</l>
+<l>NumResult := |ObjectModel3D_Result|</l>
+<l>ArrowLength := |ObjectModel3D_ResultArrow|</l>
+<c></c>
+<c>*ZoomParam 외부 파라메터 준비용 변수 Default:0.9</c>
+<l>ZoomParam := 1.6</l>
+<c></c>
+<l>if(ArrowLength &lt;= 1)</l>
+<l>    tuple_gen_const (ArrowLength, 'light gray', Colors)</l>
+<l>    tuple_gen_const (ArrowLength, 1.0, Alphas)</l>
+<l>    tuple_gen_const (ArrowLength, 1.0, PointSizes)</l>
+<l>    Indices := [1:ArrowLength]</l>
+<l>    dev_clear_window ()</l>
+<l>    Instructions[0] := 'Rotate: Left button'</l>
+<l>    Instructions[1] := 'Zoom:   Shift + left button'</l>
+<l>    Instructions[2] := 'Move:   Ctrl  + left button'</l>
+<l>*    dev_open_window(0,0,1920/2,1200/2,'black', Window3D)</l>
+<l>    dev_set_window(Window3D)</l>
+<l>    if(MovingView == 1)</l>
+<l>        try</l>
+<l>            dev_set_window(Window3D)</l>
+<l>            par_start&lt;HID_1&gt; : visualize_object_model_3d (Window3D, [ObjectModel3D_Scene], [],[], ['color', 'point_size', 'alpha'], ['light gray', 0.9, 0.3], Message1, [], Instructions, PoseOut)</l>
+<l>        catch (Exception)</l>
+<l>            return()</l>
+<l>        endtry</l>
+<l>    else</l>
+<l>        get_window_extents (Window3D, RowNotUsed, ColumnNotUsed, Width, Height)</l>
+<l>        get_part (Window3D, WPRow1, WPColumn1, WPRow2, WPColumn2)</l>
+<l>        set_part (Window3D, 0, 0, Height - 1, Width - 1)</l>
+<l>        *gen_cam_par_area_scan_division (1.622452e-02, 0, 5.860000e-06, 5.860000e-06, Width / 2 , Height / 2 , Width , Height, CamParam)</l>
+<l>         gen_cam_par_area_scan_division (0.06, 0, 8.5e-6, 8.5e-6, Width / 2, Height / 2, Width, Height, CamParam)</l>
+<l>        get_object_models_center ([ObjectModel3D_Scene], Center)</l>
+<l>        create_pose (-Center[0],-Center[1], -Center[2], 0, 0, 0, 'Rp+T', 'gba', 'point', PoseIn)</l>
+<l>        determine_optimum_pose_distance ([ObjectModel3D_Scene], CamParam, ZoomParam, PoseIn, PoseEstimated)</l>
+<l>        disp_object_model_3d(Window3D, [ObjectModel3D_Scene], [], PoseEstimated, ['color', 'point_size', 'alpha'], ['light gray', 0.9, 0.3])</l>
+<l>    endif</l>
+<l>else</l>
+<l>    tuple_gen_const (ArrowLength, 'light gray', Colors)</l>
+<l>    tuple_gen_const (ArrowLength+1, 1.0, Alphas)</l>
+<l>    tuple_gen_const (ArrowLength+1, 1.0, PointSizes)</l>
+<l>    for Index1 := 0 to 1 by 1</l>
+<l>        if(Index1 == 0)</l>
+<l>            Alphas[Index1] := 0.1</l>
+<l>        else</l>
+<l>        *    Alphas[Index1] := 0.2</l>
+<l>        endif</l>
+<l>    endfor</l>
+<c></c>
+<l>    for Index2 := 0 to ArrowLength by 3</l>
+<l>        if(ArrowLength &lt;= Index2)</l>
+<l>            break</l>
+<l>        endif</l>
+<l>        Colors[Index2] := 'red'</l>
+<l>        Colors[Index2+1] := 'green'</l>
+<l>        Colors[Index2+2] := 'blue'</l>
+<l>    endfor</l>
+<c>    </c>
+<l>    for Index1 := 0 to 1 by 1</l>
+<l>        if(Index1 == 0)</l>
+<l>            PointSizes[Index1] := 0.71</l>
+<l>        else</l>
+<l>        *    PointSizes[Index1] := 0.9</l>
+<l>        endif</l>
+<l>    endfor</l>
+<l>    Indices := [1:ArrowLength+1]</l>
+<l>    dev_clear_window ()</l>
+<l>    Instructions[0] := 'Rotate: Left button'</l>
+<l>    Instructions[1] := 'Zoom:   Shift + left button'</l>
+<l>    Instructions[2] := 'Move:   Ctrl  + left button'</l>
+<l>*    dev_open_window(0,0,1920/2,1200/2,'black', Window3D)</l>
+<l>    dev_set_window(Window3D)</l>
+<l>    dev_clear_window()</l>
+<l>    if(MovingView == 1)</l>
+<l>        try</l>
+<l>            dev_set_window(Window3D)</l>
+<l>            par_start&lt;HID_1&gt; : visualize_object_model_3d (Window3D, [ObjectModel3D_Scene, ObjectModel3D_ResultArrow, ObjectModel3D_ROI], [],[], ['color_' + [0,Indices],'point_size_'+[0,Indices], 'alpha_' + [0,Indices], 'disp_background'], ['light gray',Colors,'green',PointSizes, 0.1, Alphas, 0.1, 'true'], Message1, [], Instructions, PoseOut)</l>
+<l>        catch (Exception)</l>
+<l>            return()</l>
+<l>        endtry</l>
+<l>    else</l>
+<l>        get_window_extents (Window3D, RowNotUsed, ColumnNotUsed, Width, Height)</l>
+<l>        get_part (Window3D, WPRow1, WPColumn1, WPRow2, WPColumn2)</l>
+<l>        set_part (Window3D, 0, 0, Height - 1, Width - 1)</l>
+<l>        *gen_cam_par_area_scan_division (1.622452e-02, 0, 5.860000e-06, 5.860000e-06, Width / 2 , Height / 2 , Width , Height, CamParam)</l>
+<l>         gen_cam_par_area_scan_division (0.06, 0, 8.5e-6, 8.5e-6, Width / 2, Height / 2, Width, Height, CamParam)</l>
+<l>        get_object_models_center ([ObjectModel3D_Scene], Center)</l>
+<l>        create_pose (-Center[0],-Center[1], -Center[2], 0, 0, 0, 'Rp+T', 'gba', 'point', PoseIn)</l>
+<l>        determine_optimum_pose_distance ([ObjectModel3D_Scene], CamParam, ZoomParam, PoseIn, PoseEstimated)</l>
+<l>        disp_object_model_3d(Window3D, [ObjectModel3D_Scene, ObjectModel3D_ResultArrow, ObjectModel3D_ROI], [], PoseEstimated, ['color_' + [0,Indices],'point_size_'+[0,Indices], 'alpha_' + [0,Indices]], ['light gray',Colors,'green',PointSizes, 0.1, Alphas, 0.1])</l>
+<l>    endif</l>
+<l>*    visualize_object_model_3d (Window3D, ObjectModel3D_Scene, CameraParam, Pose, ['color_0'], ['green'] ,[] , [], [], PoseOut)    </l>
+<l>endif</l>
+<c></c>
+<l>return ()</l>
+</body>
+<docu id="Halcon3DVis_0_0_3">
+<parameters>
+<parameter id="MovingView"/>
+<parameter id="ObjectModel3D_ROI"/>
+<parameter id="ObjectModel3D_Result"/>
+<parameter id="ObjectModel3D_ResultArrow"/>
+<parameter id="ObjectModel3D_Scene"/>
+<parameter id="Window3D"/>
+</parameters>
+</docu>
+</procedure>
+</hdevelop>

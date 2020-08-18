@@ -1,0 +1,52 @@
+# INTERNAL CAMERA PARAMETERS
+
+ParGroup: Camera: Parameter;
+  "Internal camera parameters";
+
+Focus:foc:      1.622452e-02;
+  DOUBLE:0.0:;
+  "Focal length of the lens [meter]";
+
+Poly1:poly1:   9.666470e+02;
+  DOUBLE::;
+  "1st polynomial distortion coefficient";
+
+Poly2:poly2:   2.652258e-02;
+  DOUBLE::;
+  "2nd polynomial distortion coefficient";
+
+Poly3:poly3:   7.626522e-07;
+  DOUBLE::;
+  "3rd polynomial distortion coefficient";
+
+Poly4:poly4:   -6.478270e-02;
+  DOUBLE::;
+  "4th polynomial distortion coefficient";
+
+Poly5:poly5:   4.361925e-02;
+  DOUBLE::;
+  "5th polynomial distortion coefficient";
+
+Sx:sx:   5.860000e-06;
+  DOUBLE:0.0:;
+  "Width of a cell on the sensor";
+
+Sy:sy:   5.860000e-06;
+  DOUBLE:0.0:;
+  "Height of a cell on the sensor";
+
+Cx:cx:   9.460048e+02;
+  DOUBLE::;
+  "X-coordinate of the image center";
+
+Cy:cy:   5.977600e+02;
+  DOUBLE::;
+  "Y-coordinate of the image center";
+
+ImageWidth:imgw:  1920;
+  INT:1:32768;
+  "Width of the images";
+
+ImageHeight:imgh:  1200;
+  INT:1:32768;
+  "Height of the images";
