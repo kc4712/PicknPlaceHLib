@@ -1,2 +1,1 @@
 # PicknPlaceHLib
-# KMNI-POP
