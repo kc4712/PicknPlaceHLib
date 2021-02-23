@@ -62,6 +62,8 @@ namespace PicknPlaceHLib
 
         private double CreateSurfModelTimeoutSec = 120;
 
+        private double Simple_HalfCut = 0;
+
         private HTuple RetOM3;
         private HTuple RetSFM;
 
@@ -73,9 +75,9 @@ namespace PicknPlaceHLib
         private const string DUMMY_PROCEDURE_NAME = "DummyDisp.png";
         
 
-        private const string CREATE_PROCEDURE_PATH_NAME = "./halconDev/CreateSurfModel_0_0_7.hdvp";
-        private const string CREATE_RESOURCE_PATH_NAME = "PicknPlaceHLib.Resource.CreateSurfModel_0_0_7.hdvp";
-        private const string CREATE_PROCEDURE_NAME = "CreateSurfModel_0_0_7";
+        private const string CREATE_PROCEDURE_PATH_NAME = "./halconDev/CreateSurfModel_0_0_8.hdvp";
+        private const string CREATE_RESOURCE_PATH_NAME = "PicknPlaceHLib.Resource.CreateSurfModel_0_0_8.hdvp";
+        private const string CREATE_PROCEDURE_NAME = "CreateSurfModel_0_0_8";
         private const string ClassName = "libModelCreate";
 
         /// <summary>
@@ -273,7 +275,9 @@ namespace PicknPlaceHLib
             {
                 this.CreateSurfModelTimeoutSec = CreateSurfModelTimeoutSec;
             }
-            
+            this.Simple_HalfCut = 0;
+
+
             HLog.LogStr(ClassName, currentMethodName.ToString() + '\n' +
                 "plyfileName " + plyfileName + '\n' +
                 "minDepth " + minDepth + '\n' +
@@ -326,7 +330,8 @@ namespace PicknPlaceHLib
         /// <para>값이 클 경우 SurfaceModel의 Point간의 배치 거리가 넓어져 정교함이 낮은 피사체 모델이 생성</para>
         /// <para>값이 작을 경우 SurfaceModel의 Point간의 배치 거리가 좁아져 정교함이 높은 피사체 모델이 생성</para></param>
         /// <param name="CreateSurfModelTimeoutSec">Surface Model 변환 타임아웃 시간 단위 "초"</param>
-        public void saveSimpleCreateModelParam(int SimpleObj, double BOXLengthX, double BOXLengthY, double BOXLengthZ, double SphereRadius, double CylinderRadius, double CylinderZMinExt, double CylinderZMaxExt, int ModelForm, string sampling_method, double sampling_distance, int triangulate_greedyKnnCnt, string triangulate_greedyKnnRadiusParam, double triangulate_greedyKnnRadiusValue, double triangulate_smallsurfaceremoveValue, int triangulate_greedy_mesh_dilationValue, int create_sfm_useInvertNormals, double create_sfm_RelSampleDistance, double CreateSurfModelTimeoutSec)
+        /// <param name="Simple_HalfCut">Surface Model 생성전 SIMPLE OBJ3D의 탑뷰를 기준으로 Z축 중앙부터 뒷편의 포인트 제거</param>
+        public void saveSimpleCreateModelParam(int SimpleObj, double BOXLengthX, double BOXLengthY, double BOXLengthZ, double SphereRadius, double CylinderRadius, double CylinderZMinExt, double CylinderZMaxExt, int ModelForm, string sampling_method, double sampling_distance, int triangulate_greedyKnnCnt, string triangulate_greedyKnnRadiusParam, double triangulate_greedyKnnRadiusValue, double triangulate_smallsurfaceremoveValue, int triangulate_greedy_mesh_dilationValue, int create_sfm_useInvertNormals, double create_sfm_RelSampleDistance, double CreateSurfModelTimeoutSec, int Simple_HalfCut)
         {
             var st = new StackTrace();
             var sf = st.GetFrame(0);
@@ -423,6 +428,11 @@ namespace PicknPlaceHLib
             {
                 this.CreateSurfModelTimeoutSec = CreateSurfModelTimeoutSec;
             }
+            this.Simple_HalfCut = 0;
+            if (Simple_HalfCut == 0 || Simple_HalfCut == 1)
+            {
+                this.Simple_HalfCut = Simple_HalfCut;
+            }
 
             HLog.LogStr(ClassName, currentMethodName.ToString() + '\n' +
                 "SimpleObj " + SimpleObj + '\n' +
@@ -443,7 +453,8 @@ namespace PicknPlaceHLib
                 "triangulate_greedy_mesh_dilationValue " + triangulate_greedy_mesh_dilationValue + '\n' +
                 "create_sfm_useInvertNormals " + create_sfm_useInvertNormals + '\n' +
                 "create_sfm_RelSampleDistance " + create_sfm_RelSampleDistance + '\n' +
-                "CreateSurfModelTimeoutSec " + CreateSurfModelTimeoutSec + '\n');
+                "CreateSurfModelTimeoutSec " + CreateSurfModelTimeoutSec + '\n' +
+                "Simple_HalfCut " + Simple_HalfCut + '\n');
             HLog.LogStr(ClassName, currentMethodName.ToString() + '\n' + "END");
         }
 
@@ -546,6 +557,7 @@ namespace PicknPlaceHLib
                     ProcCall.SetInputCtrlParamTuple(26, create_sfm_useInvertNormals);
                     ProcCall.SetInputCtrlParamTuple(27, create_sfm_RelSampleDistance);
                     ProcCall.SetInputCtrlParamTuple(28, CreateSurfModelTimeoutSec);
+                    ProcCall.SetInputCtrlParamTuple(29, Simple_HalfCut);
 
                     HLog.LogStr(ClassName, currentMethodName.ToString() + '\n' +
                         "PATH_NAME " + PATH_NAME + '\n' +
@@ -575,7 +587,9 @@ namespace PicknPlaceHLib
                         "connection_obj3d_value " + connection_obj3d_value + '\n' +
                         "create_sfm_useInvertNormals " + create_sfm_useInvertNormals + '\n' +
                         "create_sfm_RelSampleDistance " + create_sfm_RelSampleDistance + '\n' +
-                        "CreateSurfModelTimeoutSec " + CreateSurfModelTimeoutSec + '\n');
+                        "CreateSurfModelTimeoutSec " + CreateSurfModelTimeoutSec + '\n' +
+                        "Simple_HalfCut " + Simple_HalfCut + '\n');
+                    
 
 
                     HPROCEDURE_STATE = (int)ENUM_HPROCEDURESTATE.PROCEDUREREADY;

@@ -77,7 +77,7 @@
                as debugger to step through engine code.
             </summary>
             <remarks>
-               With default settings server waits on port 7786 and engine runs
+               With default settings server waits on port 57786 and engine runs
                normally until HDevelop is connected and F9 is pressed to stop
                execution.
              </remarks>
@@ -231,6 +231,10 @@
         <member name="M:HalconDotNet.IHDevOperators.DevSetDraw(HalconDotNet.HTuple)">
             <summary>Define the region fill mode.</summary>
             <param name="drawMode">Fill mode for region output. Default: "fill"</param>
+        </member>
+        <member name="M:HalconDotNet.IHDevOperators.DevSetContourStyle(HalconDotNet.HTuple)">
+            <summary>Define the contour fill style.</summary>
+            <param name="style">Fill style for contour output. Default: "stroke"</param>
         </member>
         <member name="M:HalconDotNet.IHDevOperators.DevSetShape(HalconDotNet.HTuple)">
             <summary>Define the region output shape.</summary>

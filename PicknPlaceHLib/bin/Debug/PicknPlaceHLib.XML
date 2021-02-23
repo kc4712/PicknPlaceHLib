@@ -96,7 +96,7 @@
             <para>값이 작을 경우 SurfaceModel의 Point간의 배치 거리가 좁아져 정교함이 높은 피사체 모델이 생성</para></param>
             <param name="CreateSurfModelTimeoutSec">Surface Model 변환 타임아웃 시간 단위 "초"</param>
         </member>
-        <member name="M:PicknPlaceHLib.libModelCreate.saveSimpleCreateModelParam(System.Int32,System.Double,System.Double,System.Double,System.Double,System.Double,System.Double,System.Double,System.Int32,System.String,System.Double,System.Int32,System.String,System.Double,System.Double,System.Int32,System.Int32,System.Double,System.Double)">
+        <member name="M:PicknPlaceHLib.libModelCreate.saveSimpleCreateModelParam(System.Int32,System.Double,System.Double,System.Double,System.Double,System.Double,System.Double,System.Double,System.Int32,System.String,System.Double,System.Int32,System.String,System.Double,System.Double,System.Int32,System.Int32,System.Double,System.Double,System.Int32)">
             <summary>
             saveSimpleCreateModelParam SimpleObject 3D Model을 생성하는 메서드
             </summary>
@@ -128,6 +128,7 @@
             <para>값이 클 경우 SurfaceModel의 Point간의 배치 거리가 넓어져 정교함이 낮은 피사체 모델이 생성</para>
             <para>값이 작을 경우 SurfaceModel의 Point간의 배치 거리가 좁아져 정교함이 높은 피사체 모델이 생성</para></param>
             <param name="CreateSurfModelTimeoutSec">Surface Model 변환 타임아웃 시간 단위 "초"</param>
+            <param name="Simple_HalfCut">Surface Model 생성전 SIMPLE OBJ3D의 탑뷰를 기준으로 Z축 중앙부터 뒷편의 포인트 제거</param>
         </member>
         <member name="M:PicknPlaceHLib.libModelCreate.ModelCreate(HalconDotNet.HWindow)">
             <summary>
@@ -256,7 +257,7 @@
             saveSceneParam 
             매칭 전, 씬에 대한 처리 방법과 연산 속도와 정확도를 위해 어느 정도로 샘플링 할지 셋팅하는 메서드
             </summary>
-            <param name="RoiForm">0:미사용, 1:Moving ROI, 2:Static ROI (default:"0")</param>
+            <param name="RoiForm">0:미사용, 1:Moving ROI, 2:Static ROI, 3:Auto ROI (default:"0")</param>
             <param name="MatchForm">0:SurfaceMatch, 1:SurfaceMatch with EDGE, 2:SurfaceMatch with Triangulate(default:"0") </param>
             <param name="ScanXArea">(ROI_USE = 1일 경우 기입)WIDTH 탐색 범위 0 ~ N </param>
             <param name="ScanXOverwrap">(ROI_USE = 1일 경우 기입) ScanXArea보다 크거나 같을 경우 MOVING ROI탐색시 겹치는 영역없음, 작을 경우 겹치는 영역 발생</param>
@@ -269,7 +270,7 @@
             <param name="sampling_method">샘플링 도구 (default:"fast") "accurate", "accurate_use_normals", "fast", "fast_compute_normals" </param>
             <param name="sampling_distance">샘플 값 (default:0.5) 0.1 ~ 0.9</param>
         </member>
-        <member name="M:PicknPlaceHLib.libSurfaceMatching.saveSurfmatchParam(System.Double,System.Double,System.Double,System.Int32,System.String,System.String,System.Double,System.Int32,System.String,System.Int32,System.Int32,System.Int32)">
+        <member name="M:PicknPlaceHLib.libSurfaceMatching.saveSurfmatchParam(System.Double,System.Double,System.Double,System.Int32,System.String,System.String,System.Double,System.Int32,System.String,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32)">
             <summary>
             saveSurfmatchParam 
             3d surface matching에 있어 찾는 방법, 점수 산정 등에 대한 설정 메서드
@@ -307,6 +308,12 @@
             <para>값이 높을 수록 정확도는 올라가지만 연산시간이 늘어나며, 특정 횟수에서 최적화가 되면 그 이상 반복해도 정확도는 올라가지 않음(default:5) 1 ~ n </para></param>
             <param name="find_sfm_pose_ref_sub_sampling_value">Dense pose refinement에 사용될 Scene point 비율
             <para>값을 높이면 사용되는 point는 줄어들고 연산시간, 정확도 낮아짐(default:2) 1 ~ n </para></param>
+            <param name="PickLimitDegree">Picking 각도 제한값</param>
+            <param name="FindSurfModelTimeoutSec">FindSurfaceModel Operator 수행 제한시간</param>
+            <param name="RZAlignOrder"><para> Rz정렬 기능(default:0)</para>
+            <para>0: 사용안함, 1:우측상단, 2: 우측하단, 3: 좌측하단, 4: 좌측상단</para></param>
+            <param name="PickArea"> 1: Rz 정렬 후 피사체의 넓이가 넓은 쪽으로 잡기, 2: Rz 정렬 후 피사체의 넓이가 좁은 쪽으로 잡기, (default :0 무동작)</param>
+            <param name="RotateZero"> 1: Rx 로테이션 무시, 2: Ry 로테이션 무시, 3: Rx,RY 로테이션 무시(default :0 무동작)</param>
         </member>
         <member name="M:PicknPlaceHLib.libSurfaceMatching.findSurFaceMatching(System.String,System.String,System.String)">
             <summary>

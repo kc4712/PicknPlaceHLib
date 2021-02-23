@@ -9,4 +9,3 @@ C:\Users\ABC\Documents\Visual Studio 2015\Projects\PicknPlaceHLib\PicknPlaceHLib
 C:\Users\ABC\Documents\Visual Studio 2015\Projects\PicknPlaceHLib\PicknPlaceHLib\obj\Debug\PicknPlaceHLib.csproj.GenerateResource.Cache
 C:\Users\ABC\Documents\Visual Studio 2015\Projects\PicknPlaceHLib\PicknPlaceHLib\obj\Debug\PicknPlaceHLib.dll
 C:\Users\ABC\Documents\Visual Studio 2015\Projects\PicknPlaceHLib\PicknPlaceHLib\obj\Debug\PicknPlaceHLib.pdb
-C:\Users\ABC\Documents\Visual Studio 2015\Projects\PicknPlaceHLib\PicknPlaceHLib\obj\Debug\PicknPlaceHLib.csprojResolveAssemblyReference.cache

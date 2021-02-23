@@ -35,14 +35,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="halcondotnet, Version=18.11.2.0, Culture=neutral, PublicKeyToken=4973bed59ddbf2b8, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\..\Program Files\MVTec\HALCON-18.11-Steady\bin\dotnet35\halcondotnet.dll</HintPath>
+    <Reference Include="halcondotnet">
+      <HintPath>..\..\..\..\..\..\..\Program Files\MVTec\HALCON-20.11-Steady\bin\dotnet35\halcondotnet.dll</HintPath>
       <Aliases>dest</Aliases>
     </Reference>
-    <Reference Include="hdevenginedotnet, Version=18.11.2.0, Culture=neutral, PublicKeyToken=4973bed59ddbf2b8, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\..\Program Files\MVTec\HALCON-18.11-Steady\bin\dotnet35\hdevenginedotnet.dll</HintPath>
+    <Reference Include="hdevenginedotnet">
+      <HintPath>..\..\..\..\..\..\..\Program Files\MVTec\HALCON-20.11-Steady\bin\dotnet35\hdevenginedotnet.dll</HintPath>
       <Aliases>dest</Aliases>
     </Reference>
     <Reference Include="System" />
@@ -84,8 +82,8 @@
     <EmbeddedResource Include="Resource\Halcon3DVis_0_0_3.hdvp" />
     <EmbeddedResource Include="Resource\HalconVis_0_0_1.hdvp" />
     <EmbeddedResource Include="Resource\HCamParam.dat" />
-    <EmbeddedResource Include="Resource\SurfMatch_FileHandle_0_0_9.hdvp" />
-    <EmbeddedResource Include="Resource\CreateSurfModel_0_0_7.hdvp" />
+    <EmbeddedResource Include="Resource\CreateSurfModel_0_0_8.hdvp" />
+    <EmbeddedResource Include="Resource\SurfMatch_FileHandle_0_1_3.hdvp" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resource\DummyDisp.png" />

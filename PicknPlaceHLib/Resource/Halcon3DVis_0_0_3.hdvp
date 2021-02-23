@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<hdevelop file_version="1.2" halcon_version="18.11.2.0">
+<hdevelop file_version="1.2" halcon_version="18.11.3.0">
 <procedure name="Halcon3DVis_0_0_3">
 <interface>
 <ic>
@@ -41,7 +41,7 @@
 <l>    if(MovingView == 1)</l>
 <l>        try</l>
 <l>            dev_set_window(Window3D)</l>
-<l>            par_start&lt;HID_1&gt; : visualize_object_model_3d (Window3D, [ObjectModel3D_Scene], [],[], ['color', 'point_size', 'alpha'], ['light gray', 0.9, 0.3], Message1, [], Instructions, PoseOut)</l>
+<l>            par_start&lt;HID_1&gt; : visualize_object_model_3d (Window3D, [ObjectModel3D_Scene], [],[], ['color', 'point_size', 'alpha', 'disp_normals'], ['light gray', 0.9, 0.3, 'true'], Message1, [], Instructions, PoseOut)</l>
 <l>        catch (Exception)</l>
 <l>            return()</l>
 <l>        endtry</l>
@@ -54,7 +54,7 @@
 <l>        get_object_models_center ([ObjectModel3D_Scene], Center)</l>
 <l>        create_pose (-Center[0],-Center[1], -Center[2], 0, 0, 0, 'Rp+T', 'gba', 'point', PoseIn)</l>
 <l>        determine_optimum_pose_distance ([ObjectModel3D_Scene], CamParam, ZoomParam, PoseIn, PoseEstimated)</l>
-<l>        disp_object_model_3d(Window3D, [ObjectModel3D_Scene], [], PoseEstimated, ['color', 'point_size', 'alpha'], ['light gray', 0.9, 0.3])</l>
+<l>        disp_object_model_3d(Window3D, [ObjectModel3D_Scene], [], PoseEstimated, ['color', 'point_size', 'alpha', 'disp_normals'], ['light gray', 0.9, 0.3, 'true'])</l>
 <l>    endif</l>
 <l>else</l>
 <l>    tuple_gen_const (ArrowLength, 'light gray', Colors)</l>
@@ -95,7 +95,7 @@
 <l>    if(MovingView == 1)</l>
 <l>        try</l>
 <l>            dev_set_window(Window3D)</l>
-<l>            par_start&lt;HID_1&gt; : visualize_object_model_3d (Window3D, [ObjectModel3D_Scene, ObjectModel3D_ResultArrow, ObjectModel3D_ROI], [],[], ['color_' + [0,Indices],'point_size_'+[0,Indices], 'alpha_' + [0,Indices], 'disp_background'], ['light gray',Colors,'green',PointSizes, 0.1, Alphas, 0.1, 'true'], Message1, [], Instructions, PoseOut)</l>
+<l>            par_start&lt;HID_1&gt; : visualize_object_model_3d (Window3D, [ObjectModel3D_Scene, ObjectModel3D_ResultArrow, ObjectModel3D_ROI], [],[], ['color_' + [0,Indices],'point_size_'+[0,Indices], 'alpha_' + [0,Indices], 'disp_normals'], ['light gray',Colors,'green',PointSizes, 0.1, Alphas, 0.1, 'true'], Message1, [], Instructions, PoseOut)</l>
 <l>        catch (Exception)</l>
 <l>            return()</l>
 <l>        endtry</l>
@@ -108,7 +108,7 @@
 <l>        get_object_models_center ([ObjectModel3D_Scene], Center)</l>
 <l>        create_pose (-Center[0],-Center[1], -Center[2], 0, 0, 0, 'Rp+T', 'gba', 'point', PoseIn)</l>
 <l>        determine_optimum_pose_distance ([ObjectModel3D_Scene], CamParam, ZoomParam, PoseIn, PoseEstimated)</l>
-<l>        disp_object_model_3d(Window3D, [ObjectModel3D_Scene, ObjectModel3D_ResultArrow, ObjectModel3D_ROI], [], PoseEstimated, ['color_' + [0,Indices],'point_size_'+[0,Indices], 'alpha_' + [0,Indices]], ['light gray',Colors,'green',PointSizes, 0.1, Alphas, 0.1])</l>
+<l>        disp_object_model_3d(Window3D, [ObjectModel3D_Scene, ObjectModel3D_ResultArrow, ObjectModel3D_ROI], [], PoseEstimated, ['color_' + [0,Indices],'point_size_'+[0,Indices], 'alpha_' + [0,Indices], 'disp_normals'], ['light gray',Colors,'green',PointSizes, 0.1, Alphas, 0.1, 'true'])</l>
 <l>    endif</l>
 <l>*    visualize_object_model_3d (Window3D, ObjectModel3D_Scene, CameraParam, Pose, ['color_0'], ['green'] ,[] , [], [], PoseOut)    </l>
 <l>endif</l>
