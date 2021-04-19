@@ -296,6 +296,8 @@
 <l>*                         TransAxisCenterResultPose[0:6] := PoseOfWCS</l>
 <l>*                     endif </l>
 <l>                endif</l>
+<c>                </c>
+<c>                </c>
 <c>        </c>
 <l>                create_pose (0, 0, 0, 0, 0, 0, 'Rp+T', 'gba', 'point', IdentityPose)</l>
 <c>                * </c>
@@ -793,9 +795,6 @@
 <l>            if(AxisAlign &gt; 0 and AxisAlign &lt;= 5)</l>
 <l>                RotateCheck := TransAxisCenterResultPose[0:6]</l>
 <l>                ALIGN_FLAG := false</l>
-<l>                if(AxisAlign == 2)</l>
-<l>                    TransAxisCenterResultPose[3] := 0</l>
-<l>                endif</l>
 <l>                if(AxisAlign == 3)</l>
 <l>                    TransAxisCenterResultPose[4] := 0</l>
 <l>                endif</l>
@@ -812,46 +811,75 @@
 <l>                    TransAxisCenterResultPose[4] := 0</l>
 <l>                endif</l>
 <l>                ForLimit := 0</l>
-<l>                while(ALIGN_FLAG == false)</l>
-<l>                    RotX90 := [0,0,0,-90,0,0,0]</l>
-<l>                    RotY90 := [0,0,0,0,-90,0,0]</l>
-<l>                    *RotX180 := [0,0,0,-180,0,0,0]</l>
-<l>                    *RotY180 := [0,0,0,0,-180,0,0]</l>
-<l>                    MinLimitDeg := (0 + (PickLimitDegree/2))</l>
-<l>                    MaxLimitDeg := (360 - (PickLimitDegree/2))</l>
-<l>                    if(TransAxisCenterResultPose[3] &gt; MinLimitDeg and TransAxisCenterResultPose[3] &lt; MaxLimitDeg or TransAxisCenterResultPose[4] &gt; MinLimitDeg and TransAxisCenterResultPose[4] &lt; MaxLimitDeg)</l>
-<l>                        pose_compose( TransAxisCenterResultPose,RotX90,TransAxisCenterResultPoseX90 )</l>
-<l>                        TransAxisCenterResultPose := TransAxisCenterResultPoseX90</l>
-<l>                    else</l>
-<l>                        ALIGN_FLAG := true</l>
-<l>                        break</l>
-<l>                    endif</l>
-<l>                    if(TransAxisCenterResultPose[3] &gt; MinLimitDeg and TransAxisCenterResultPose[3] &lt; MaxLimitDeg or TransAxisCenterResultPose[4] &gt; MinLimitDeg and TransAxisCenterResultPose[4] &lt; MaxLimitDeg)</l>
-<l>                        pose_compose( TransAxisCenterResultPose,RotY90,TransAxisCenterResultPoseY90 )</l>
-<l>                        TransAxisCenterResultPose := TransAxisCenterResultPoseY90</l>
-<l>                    else</l>
-<l>                        ALIGN_FLAG := true</l>
-<l>                        break</l>
-<l>                    endif</l>
-<l>*                     if(TransAxisCenterResultPose[3] &gt; MinLimitDeg and TransAxisCenterResultPose[3] &lt; MaxLimitDeg or TransAxisCenterResultPose[4] &gt; MinLimitDeg and TransAxisCenterResultPose[4] &lt; MaxLimitDeg)</l>
-<l>*                         pose_compose( TransAxisCenterResultPose,RotX180,TransAxisCenterResultPoseX180 )</l>
-<l>*                         TransAxisCenterResultPose := TransAxisCenterResultPoseX180</l>
-<l>*                     else</l>
-<l>*                         ALIGN_FLAG := true</l>
-<l>*                         break</l>
-<l>*                     endif</l>
-<l>*                     if(TransAxisCenterResultPose[3] &gt; MinLimitDeg and TransAxisCenterResultPose[3] &lt; MaxLimitDeg or TransAxisCenterResultPose[4] &gt; MinLimitDeg and TransAxisCenterResultPose[4] &lt; MaxLimitDeg)</l>
-<l>*                         pose_compose( TransAxisCenterResultPose,RotY180,TransAxisCenterResultPoseY180 )</l>
-<l>*                         TransAxisCenterResultPose := TransAxisCenterResultPoseY180</l>
-<l>*                     else</l>
-<l>*                         ALIGN_FLAG := true</l>
-<l>*                         break</l>
-<l>*                     endif</l>
-<l>                    ForLimit := ForLimit + 1 </l>
-<l>                    if (ForLimit % 20 == 0)</l>
-<l>                        PickLimitDegree := PickLimitDegree + 1</l>
-<l>                    endif</l>
-<l>                endwhile</l>
+<l>                if(AxisAlign == 1)</l>
+<l>                    while(ALIGN_FLAG == false)</l>
+<l>                        RotX90 := [0,0,0,-90,0,0,0]</l>
+<l>                        RotY90 := [0,0,0,0,-90,0,0]</l>
+<l>                        *RotX180 := [0,0,0,-180,0,0,0]</l>
+<l>                        *RotY180 := [0,0,0,0,-180,0,0]</l>
+<l>                        MinLimitDeg := (0 + (PickLimitDegree/2))</l>
+<l>                        MaxLimitDeg := (360 - (PickLimitDegree/2))</l>
+<l>                        if(TransAxisCenterResultPose[3] &gt; MinLimitDeg and TransAxisCenterResultPose[3] &lt; MaxLimitDeg or TransAxisCenterResultPose[4] &gt; MinLimitDeg and TransAxisCenterResultPose[4] &lt; MaxLimitDeg)</l>
+<l>                            pose_compose( TransAxisCenterResultPose,RotX90,TransAxisCenterResultPoseX90 )</l>
+<l>                            TransAxisCenterResultPose := TransAxisCenterResultPoseX90</l>
+<l>                        else</l>
+<l>                            ALIGN_FLAG := true</l>
+<l>                            break</l>
+<l>                        endif</l>
+<l>                        if(TransAxisCenterResultPose[3] &gt; MinLimitDeg and TransAxisCenterResultPose[3] &lt; MaxLimitDeg or TransAxisCenterResultPose[4] &gt; MinLimitDeg and TransAxisCenterResultPose[4] &lt; MaxLimitDeg)</l>
+<l>                            pose_compose( TransAxisCenterResultPose,RotY90,TransAxisCenterResultPoseY90 )</l>
+<l>                            TransAxisCenterResultPose := TransAxisCenterResultPoseY90</l>
+<l>                        else</l>
+<l>                            ALIGN_FLAG := true</l>
+<l>                            break</l>
+<l>                        endif</l>
+<l>*                         if(TransAxisCenterResultPose[3] &gt; MinLimitDeg and TransAxisCenterResultPose[3] &lt; MaxLimitDeg or TransAxisCenterResultPose[4] &gt; MinLimitDeg and TransAxisCenterResultPose[4] &lt; MaxLimitDeg)</l>
+<l>*                             pose_compose( TransAxisCenterResultPose,RotX180,TransAxisCenterResultPoseX180 )</l>
+<l>*                             TransAxisCenterResultPose := TransAxisCenterResultPoseX180</l>
+<l>*                         else</l>
+<l>*                             ALIGN_FLAG := true</l>
+<l>*                             break</l>
+<l>*                         endif</l>
+<l>*                         if(TransAxisCenterResultPose[3] &gt; MinLimitDeg and TransAxisCenterResultPose[3] &lt; MaxLimitDeg or TransAxisCenterResultPose[4] &gt; MinLimitDeg and TransAxisCenterResultPose[4] &lt; MaxLimitDeg)</l>
+<l>*                             pose_compose( TransAxisCenterResultPose,RotY180,TransAxisCenterResultPoseY180 )</l>
+<l>*                             TransAxisCenterResultPose := TransAxisCenterResultPoseY180</l>
+<l>*                         else</l>
+<l>*                             ALIGN_FLAG := true</l>
+<l>*                             break</l>
+<l>*                         endif</l>
+<l>                        ForLimit := ForLimit + 1 </l>
+<l>                        if (ForLimit % 20 == 0)</l>
+<l>                            PickLimitDegree := PickLimitDegree + 1</l>
+<l>                        endif</l>
+<l>                    endwhile</l>
+<l>                endif</l>
+<l>                elseif(AxisAlign ==2)</l>
+<l>                    while(ALIGN_FLAG == false)</l>
+<l>                        RotX90 := [0,0,0,-90,0,0,0]</l>
+<l>                        RotY90 := [0,0,0,0,-90,0,0]</l>
+<l>                        MinLimitDeg := (0 + (PickLimitDegree/2))</l>
+<l>                        MaxLimitDeg := (360 - (PickLimitDegree/2))</l>
+<l>                        TxState := []</l>
+<l>                        TyState := []</l>
+<l>                        TzState := []</l>
+<c>                        </c>
+<l>                        RotateState_0_0_1(TransAxisCenterResultPose, TxState, TyState, TzState)</l>
+<l>                        tuple_split(TxState, ',', TxState)</l>
+<l>                        tuple_split(TyState, ',', TyState)</l>
+<l>                        tuple_split(TzState, ',', TzState)</l>
+<l>                        if(TzState[2] == 'DOWN')</l>
+<l>                            ALIGN_FLAG := true</l>
+<l>                            break</l>
+<l>                        else</l>
+<l>                            pose_compose( TransAxisCenterResultPose,RotY90,TransAxisCenterResultPoseY90 )</l>
+<l>                            TransAxisCenterResultPose := TransAxisCenterResultPoseY90</l>
+<l>                        endif</l>
+<l>                        ForLimit := ForLimit + 1 </l>
+<l>                        if (ForLimit % 20 == 0)</l>
+<l>                            PickLimitDegree := PickLimitDegree + 1</l>
+<l>                        endif</l>
+<l>                    endwhile</l>
+<l>                endif</l>
 <c>                </c>
 <l>                ALIGN_FLAG := false</l>
 <l>                ForLimit := 0</l>
