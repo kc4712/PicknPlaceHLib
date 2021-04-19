@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hdevelop file_version="1.2" halcon_version="20.11.1.2">
+<procedure name="RotateState_0_0_1">
+<interface>
+<ic>
+<par name="TransAxisCenterResultPose" base_type="ctrl" dimension="0"/>
+</ic>
+<oc>
+<par name="TxState" base_type="ctrl" dimension="0"/>
+<par name="TyState" base_type="ctrl" dimension="0"/>
+<par name="TzState" base_type="ctrl" dimension="0"/>
+</oc>
+</interface>
+<body>
+<l>ArrowLength := 80</l>
+<l>ArrowThickness := 3</l>
+<l>create_pose (0, 0, 0, 0, 0, 0, 'Rp+T', 'gba', 'point', IdentityPose)</l>
+<l>create_pose (ArrowLength, 0, 0, 0, 0, 0, 'Rp+T', 'gba', 'point', TransXPose)</l>
+<l>gen_arrow_object_model_3d (ArrowThickness, IdentityPose, TransXPose, OM3DToolXOrigin)</l>
+<l>create_pose (0, ArrowLength, 0, 0, 0, 0, 'Rp+T', 'gba', 'point', TransYPose)</l>
+<l>gen_arrow_object_model_3d (ArrowThickness, IdentityPose, TransYPose, OM3DToolYOrigin)</l>
+<l>create_pose (0, 0, ArrowLength, 0, 0, 0, 'Rp+T', 'gba', 'point', TransZPose)</l>
+<l>gen_arrow_object_model_3d (ArrowThickness, IdentityPose, TransZPose, OM3DToolZOrigin)</l>
+<l>OM3DToolOrigin := [OM3DToolXOrigin,OM3DToolYOrigin,OM3DToolZOrigin]</l>
+<c></c>
+<l>rigid_trans_object_model_3d (OM3DToolOrigin, TransAxisCenterResultPose, ResultTzAlignArrow)</l>
+<c></c>
+<c>** 최초 매칭후 결과 좌표를 표현하는 Trans 3축 화살표</c>
+<l>ArrowLength := 60</l>
+<l>ArrowThickness := 2</l>
+<l>create_pose (0, 0, 0, 0, 0, 0, 'Rp+T', 'gba', 'point', IdentityPose)</l>
+<l>create_pose (ArrowLength, 0, 0, 0, 0, 0, 'Rp+T', 'gba', 'point', TransXPose)</l>
+<l>gen_arrow_object_model_3d (ArrowThickness, IdentityPose, TransXPose, OM3DToolXOrigin)</l>
+<l>create_pose (0, ArrowLength, 0, 0, 0, 0, 'Rp+T', 'gba', 'point', TransYPose)</l>
+<l>gen_arrow_object_model_3d (ArrowThickness, IdentityPose, TransYPose, OM3DToolYOrigin)</l>
+<l>create_pose (0, 0, ArrowLength, 0, 0, 0, 'Rp+T', 'gba', 'point', TransZPose)</l>
+<l>gen_arrow_object_model_3d (ArrowThickness, IdentityPose, TransZPose, OM3DToolZOrigin)</l>
+<l>OM3DToolOrigin := [OM3DToolXOrigin,OM3DToolYOrigin,OM3DToolZOrigin]</l>
+<c></c>
+<c>** Tz를 바닥으로 향하게 한 Trans화살표 X, Y, Z 마다 BoundBox각 축 Min Max의 차를 구함</c>
+<c>** 각 Trans화살표의 BoundBox 각각의 축 길이를 획득</c>
+<l>get_object_model_3d_params (ResultTzAlignArrow, 'bounding_box1', ResultTzAlignArrowbndbox)</l>
+<l>tuple_abs(ResultTzAlignArrowbndbox[0] - ResultTzAlignArrowbndbox[3], ResultTzAlignArrowbndboxXArrowTxDiff)</l>
+<l>tuple_abs(ResultTzAlignArrowbndbox[1] - ResultTzAlignArrowbndbox[4], ResultTzAlignArrowbndboxXArrowTyDiff)</l>
+<l>tuple_abs(ResultTzAlignArrowbndbox[2] - ResultTzAlignArrowbndbox[5], ResultTzAlignArrowbndboxXArrowTzDiff)</l>
+<c></c>
+<l>tuple_abs(ResultTzAlignArrowbndbox[6] - ResultTzAlignArrowbndbox[9], ResultTzAlignArrowbndboxYArrowTxDiff)</l>
+<l>tuple_abs(ResultTzAlignArrowbndbox[7] - ResultTzAlignArrowbndbox[10], ResultTzAlignArrowbndboxYArrowTyDiff)</l>
+<l>tuple_abs(ResultTzAlignArrowbndbox[8] - ResultTzAlignArrowbndbox[11], ResultTzAlignArrowbndboxYArrowTzDiff)</l>
+<c></c>
+<l>tuple_abs(ResultTzAlignArrowbndbox[12] - ResultTzAlignArrowbndbox[15], ResultTzAlignArrowbndboxZArrowTxDiff)</l>
+<l>tuple_abs(ResultTzAlignArrowbndbox[13] - ResultTzAlignArrowbndbox[16], ResultTzAlignArrowbndboxZArrowTyDiff)</l>
+<l>tuple_abs(ResultTzAlignArrowbndbox[14] - ResultTzAlignArrowbndbox[17], ResultTzAlignArrowbndboxZArrowTzDiff)</l>
+<c></c>
+<l>ResultTzAlignXArrowXYZDiff := [ResultTzAlignArrowbndboxXArrowTxDiff, ResultTzAlignArrowbndboxXArrowTyDiff, ResultTzAlignArrowbndboxXArrowTzDiff]</l>
+<l>ResultTzAlignYArrowXYZDiff := [ResultTzAlignArrowbndboxYArrowTxDiff, ResultTzAlignArrowbndboxYArrowTyDiff, ResultTzAlignArrowbndboxYArrowTzDiff]</l>
+<l>ResultTzAlignZArrowXYZDiff := [ResultTzAlignArrowbndboxZArrowTxDiff, ResultTzAlignArrowbndboxZArrowTyDiff, ResultTzAlignArrowbndboxZArrowTzDiff]</l>
+<l>get_object_model_3d_params (ResultTzAlignArrow, 'center', ResultTzAlignArrowCenters)</l>
+<c></c>
+<l>*disp_object_model_3d (Window3D, [ObjectModel_Scene,ObjectModel3D_Result,Dummy, Origins], [],[], ['color_0','color_1','color_2','color_3','color_4','color_5','color_6','color_7', 'point_size', 'alpha'], ['light gray', 'gray','red', 'green','blue', 'orange red', 'spring green','cornflower blue', 0.9, 0.3])</l>
+<c>                 </c>
+<l>tuple_max(ResultTzAlignXArrowXYZDiff, XArrowMaxXYZElem)</l>
+<l>tuple_max(ResultTzAlignYArrowXYZDiff, YArrowMaxXYZElem)</l>
+<l>tuple_max(ResultTzAlignZArrowXYZDiff, ZArrowMaxXYZElem)</l>
+<l>XArrowT_XYZIdx := []</l>
+<l>YArrowT_XYZIdx := []</l>
+<l>ZArrowT_XYZIdx := []</l>
+<l>for Idx := 0 to 2 by 1</l>
+<l>    if(ResultTzAlignXArrowXYZDiff[Idx] == XArrowMaxXYZElem)</l>
+<l>        XArrowT_XYZIdx := Idx</l>
+<l>    endif</l>
+<l>    if(ResultTzAlignYArrowXYZDiff[Idx] == YArrowMaxXYZElem)</l>
+<l>        YArrowT_XYZIdx := Idx</l>
+<l>    endif</l>
+<l>    if(ResultTzAlignZArrowXYZDiff[Idx] == ZArrowMaxXYZElem)</l>
+<l>        ZArrowT_XYZIdx := Idx</l>
+<l>    endif</l>
+<l>endfor</l>
+<l>Str_Inform3DVisXStat := []</l>
+<l>Str_Inform3DVisYStat := []</l>
+<l>Str_Inform3DVisZStat := []</l>
+<l>Str_Monitor_Center_Horizon := []</l>
+<l>for Idx := 0 to 2 by 1</l>
+<c>   **X ARROW STAT</c>
+<l>   if(XArrowT_XYZIdx == Idx)</l>
+<l>       if(ResultTzAlignArrowbndbox[3] - ResultTzAlignArrowbndbox[0]  &lt; 30 )</l>
+<l>           Str_Inform3DVisXStat := [Str_Inform3DVisXStat , 'CENTER']</l>
+<l>           calcnum := ResultTzAlignArrowbndbox[3] - ResultTzAlignArrowbndbox[0]</l>
+<l>           Str_Monitor_Center_Horizon := [Str_Monitor_Center_Horizon, sum('XArrowTx:' + calcnum)]</l>
+<l>       elseif(TransAxisCenterResultPose[0] &lt; ResultTzAlignArrowCenters[0] )</l>
+<l>           Str_Inform3DVisXStat := [Str_Inform3DVisXStat , 'RIGHT']</l>
+<l>       elseif(TransAxisCenterResultPose[0] &gt; ResultTzAlignArrowCenters[0] )</l>
+<l>           Str_Inform3DVisXStat := [Str_Inform3DVisXStat , 'LEFT']</l>
+<l>       else</l>
+<l>           Str_Inform3DVisXStat := [Str_Inform3DVisXStat , 'UNKNOWN']</l>
+<l>       endif</l>
+<l>   endif</l>
+<l>   if(XArrowT_XYZIdx == Idx)</l>
+<l>       if(ResultTzAlignArrowbndbox[4] - ResultTzAlignArrowbndbox[1]  &lt; 30 )</l>
+<l>           Str_Inform3DVisXStat := [Str_Inform3DVisXStat , 'CENTER']</l>
+<l>           calcnum := ResultTzAlignArrowbndbox[4] - ResultTzAlignArrowbndbox[1]</l>
+<l>           Str_Monitor_Center_Horizon := [Str_Monitor_Center_Horizon, sum('XArrowTy:' + calcnum)]</l>
+<l>       elseif(TransAxisCenterResultPose[1] &lt; ResultTzAlignArrowCenters[1] )</l>
+<l>           Str_Inform3DVisXStat := [Str_Inform3DVisXStat , 'FORWARD']</l>
+<l>       elseif(TransAxisCenterResultPose[1] &gt; ResultTzAlignArrowCenters[1] )</l>
+<l>           Str_Inform3DVisXStat := [Str_Inform3DVisXStat , 'BACKWARD']</l>
+<l>       else</l>
+<l>           Str_Inform3DVisXStat := [Str_Inform3DVisXStat , 'UNKNOWN']</l>
+<l>       endif</l>
+<l>   endif</l>
+<l>   if(XArrowT_XYZIdx == Idx)</l>
+<l>       if(ResultTzAlignArrowbndbox[5] - ResultTzAlignArrowbndbox[2]  &lt; 35 )</l>
+<l>           Str_Inform3DVisXStat := [Str_Inform3DVisXStat , 'HORRIZON']</l>
+<l>           calcnum := ResultTzAlignArrowbndbox[5] - ResultTzAlignArrowbndbox[2]</l>
+<l>           Str_Monitor_Center_Horizon := [Str_Monitor_Center_Horizon, sum('XArrowTz:' + calcnum)]</l>
+<l>       elseif(TransAxisCenterResultPose[2] &lt; ResultTzAlignArrowCenters[2])</l>
+<l>           Str_Inform3DVisXStat := [Str_Inform3DVisXStat , 'DOWN']</l>
+<l>       elseif(TransAxisCenterResultPose[2] &gt; ResultTzAlignArrowCenters[2])</l>
+<l>           Str_Inform3DVisXStat := [Str_Inform3DVisXStat , 'UP']</l>
+<l>       else</l>
+<l>           Str_Inform3DVisXStat := [Str_Inform3DVisXStat , 'UNKNOWN']</l>
+<l>       endif</l>
+<l>   endif</l>
+<c>   </c>
+<c>   **Y ARROW STAT</c>
+<l>   if(YArrowT_XYZIdx == Idx)</l>
+<l>       if(ResultTzAlignArrowbndbox[9] - ResultTzAlignArrowbndbox[6]  &lt; 30 )</l>
+<l>           Str_Inform3DVisYStat := [Str_Inform3DVisYStat , 'CENTER']</l>
+<l>           calcnum := ResultTzAlignArrowbndbox[9] - ResultTzAlignArrowbndbox[6]</l>
+<l>           Str_Monitor_Center_Horizon := [Str_Monitor_Center_Horizon, sum('YArrowTx:' + calcnum)]</l>
+<l>       elseif(TransAxisCenterResultPose[0] &lt; ResultTzAlignArrowCenters[3] )</l>
+<l>           Str_Inform3DVisYStat := [Str_Inform3DVisYStat , 'RIGHT']</l>
+<l>       elseif(TransAxisCenterResultPose[0] &gt; ResultTzAlignArrowCenters[3] )</l>
+<l>           Str_Inform3DVisYStat := [Str_Inform3DVisYStat , 'LEFT']</l>
+<l>       else</l>
+<l>           Str_Inform3DVisYStat := [Str_Inform3DVisYStat , 'UNKNOWN']</l>
+<l>       endif</l>
+<l>   endif</l>
+<l>   if(YArrowT_XYZIdx == Idx)</l>
+<l>       if(ResultTzAlignArrowbndbox[10] - ResultTzAlignArrowbndbox[7]  &lt; 30 )</l>
+<l>           Str_Inform3DVisYStat := [Str_Inform3DVisYStat , 'CENTER']</l>
+<l>           calcnum := ResultTzAlignArrowbndbox[10] - ResultTzAlignArrowbndbox[7]</l>
+<l>           Str_Monitor_Center_Horizon := [Str_Monitor_Center_Horizon, sum('YArrowTy:' + calcnum)]</l>
+<l>       elseif(TransAxisCenterResultPose[1] &lt; ResultTzAlignArrowCenters[4] )</l>
+<l>           Str_Inform3DVisYStat := [Str_Inform3DVisYStat , 'FORWARD']</l>
+<l>       elseif(TransAxisCenterResultPose[1] &gt; ResultTzAlignArrowCenters[4] )</l>
+<l>           Str_Inform3DVisYStat := [Str_Inform3DVisYStat , 'BACKWARD']</l>
+<l>       else</l>
+<l>           Str_Inform3DVisYStat := [Str_Inform3DVisYStat , 'UNKNOWN']</l>
+<l>       endif</l>
+<l>   endif</l>
+<l>   if(YArrowT_XYZIdx == Idx)</l>
+<l>       if(ResultTzAlignArrowbndbox[11] - ResultTzAlignArrowbndbox[8]  &lt; 35 )</l>
+<l>           Str_Inform3DVisYStat := [Str_Inform3DVisYStat , 'HORRIZON']</l>
+<l>           calcnum := ResultTzAlignArrowbndbox[11] - ResultTzAlignArrowbndbox[8]</l>
+<l>           Str_Monitor_Center_Horizon := [Str_Monitor_Center_Horizon, sum('YArrowTz:' + calcnum)]</l>
+<l>       elseif(TransAxisCenterResultPose[2] &lt; ResultTzAlignArrowCenters[5])</l>
+<l>           Str_Inform3DVisYStat := [Str_Inform3DVisYStat , 'DOWN']</l>
+<l>       elseif(TransAxisCenterResultPose[2] &gt; ResultTzAlignArrowCenters[5])</l>
+<l>           Str_Inform3DVisYStat := [Str_Inform3DVisYStat , 'UP']</l>
+<l>       else</l>
+<l>           Str_Inform3DVisYStat := [Str_Inform3DVisYStat , 'UNKNOWN']</l>
+<l>       endif</l>
+<l>    endif</l>
+<c>   </c>
+<c>   **Z ARROW STAT</c>
+<l>   if(ZArrowT_XYZIdx == Idx)</l>
+<l>       if(ResultTzAlignArrowbndbox[15] - ResultTzAlignArrowbndbox[12] &lt; 30 )</l>
+<l>           Str_Inform3DVisZStat := [Str_Inform3DVisZStat , 'CENTER']</l>
+<l>           calcnum := ResultTzAlignArrowbndbox[15] - ResultTzAlignArrowbndbox[12]</l>
+<l>           Str_Monitor_Center_Horizon := [Str_Monitor_Center_Horizon, sum('ZArrowTx:' + calcnum)]</l>
+<l>       elseif(TransAxisCenterResultPose[0] &lt; ResultTzAlignArrowCenters[6] )</l>
+<l>           Str_Inform3DVisZStat := [Str_Inform3DVisZStat , 'RIGHT']</l>
+<l>       elseif(TransAxisCenterResultPose[0] &gt; ResultTzAlignArrowCenters[6] )</l>
+<l>           Str_Inform3DVisZStat := [Str_Inform3DVisZStat , 'LEFT']</l>
+<l>       else</l>
+<l>           Str_Inform3DVisZStat := [Str_Inform3DVisZStat , 'UNKNOWN']</l>
+<l>       endif</l>
+<l>   endif</l>
+<l>   if(ZArrowT_XYZIdx == Idx)</l>
+<l>       if(ResultTzAlignArrowbndbox[16] - ResultTzAlignArrowbndbox[13] &lt; 30 )</l>
+<l>           Str_Inform3DVisZStat := [Str_Inform3DVisZStat , 'CENTER']</l>
+<l>           calcnum := ResultTzAlignArrowbndbox[16] - ResultTzAlignArrowbndbox[13]</l>
+<l>           Str_Monitor_Center_Horizon := [Str_Monitor_Center_Horizon, sum('ZArrowTy:' + calcnum)]</l>
+<l>       elseif(TransAxisCenterResultPose[1] &lt; ResultTzAlignArrowCenters[7] )</l>
+<l>           Str_Inform3DVisZStat := [Str_Inform3DVisZStat , 'FORWARD']</l>
+<l>       elseif(TransAxisCenterResultPose[1] &gt; ResultTzAlignArrowCenters[7] )</l>
+<l>           Str_Inform3DVisZStat := [Str_Inform3DVisZStat , 'BACKWARD']</l>
+<l>       else</l>
+<l>           Str_Inform3DVisZStat := [Str_Inform3DVisZStat , 'UNKNOWN']</l>
+<l>       endif</l>
+<l>   endif</l>
+<l>   if(ZArrowT_XYZIdx == Idx)</l>
+<l>       if(ResultTzAlignArrowbndbox[17] - ResultTzAlignArrowbndbox[14] &lt; 35 )</l>
+<l>           Str_Inform3DVisZStat := [Str_Inform3DVisZStat , 'HORRIZON']</l>
+<l>           calcnum := ResultTzAlignArrowbndbox[17] - ResultTzAlignArrowbndbox[14]</l>
+<l>           Str_Monitor_Center_Horizon := [Str_Monitor_Center_Horizon, sum('ZArrowTz:' + calcnum)]</l>
+<l>       elseif(TransAxisCenterResultPose[2] &lt; ResultTzAlignArrowCenters[8])</l>
+<l>           Str_Inform3DVisZStat := [Str_Inform3DVisZStat , 'DOWN']</l>
+<l>       elseif(TransAxisCenterResultPose[2] &gt; ResultTzAlignArrowCenters[8])</l>
+<l>           Str_Inform3DVisZStat := [Str_Inform3DVisZStat , 'UP']</l>
+<l>       else</l>
+<l>           Str_Inform3DVisZStat := [Str_Inform3DVisZStat , 'UNKNOWN']</l>
+<l>       endif</l>
+<l>   endif</l>
+<l>endfor</l>
+<c></c>
+<l>Instructions[0] := sum('X Arrow Status:' + Str_Inform3DVisXStat[0] + ',' + Str_Inform3DVisXStat[1] + ',' + Str_Inform3DVisXStat[2])</l>
+<l>Instructions[1] := sum('Y Arrow Status:' + Str_Inform3DVisYStat[0] + ',' + Str_Inform3DVisYStat[1] + ',' + Str_Inform3DVisYStat[2])</l>
+<l>Instructions[2] := sum('Z Arrow Status:' + Str_Inform3DVisZStat[0] + ',' + Str_Inform3DVisZStat[1] + ',' + Str_Inform3DVisZStat[2])</l>
+<l>TxState := sum(Str_Inform3DVisXStat[0] + ',' + Str_Inform3DVisXStat[1] + ',' + Str_Inform3DVisXStat[2])</l>
+<l>TyState := sum(Str_Inform3DVisYStat[0] + ',' + Str_Inform3DVisYStat[1] + ',' + Str_Inform3DVisYStat[2])</l>
+<l>TzState := sum(Str_Inform3DVisZStat[0] + ',' + Str_Inform3DVisZStat[1] + ',' + Str_Inform3DVisZStat[2])</l>
+<c></c>
+<l>return ()</l>
+</body>
+<docu id="RotateState_0_0_1">
+<parameters>
+<parameter id="TransAxisCenterResultPose"/>
+<parameter id="TxState"/>
+<parameter id="TyState"/>
+<parameter id="TzState"/>
+</parameters>
+</docu>
+</procedure>
+</hdevelop>
