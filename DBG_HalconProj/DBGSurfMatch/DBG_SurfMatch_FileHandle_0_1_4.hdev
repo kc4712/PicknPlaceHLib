@@ -4,9 +4,8 @@
 <interface/>
 <body>
 <l>dev_update_off ()</l>
-<l>AxisAlign := 1</l>
-<l>SurfMatch_FileHandle_0_1_3 := 'SurfMatch_FileHandle_0_1_3.txt'</l>
-<l>open_file(SurfMatch_FileHandle_0_1_3, 'input', FileHandleIn)</l>
+<l>SurfMatch_FileHandle_Params := 'SurfMatch_FileHandle_0_1_4.txt'</l>
+<l>open_file(SurfMatch_FileHandle_Params, 'input', FileHandleIn)</l>
 <l>IsEOF1 := 0</l>
 <l>while (IsEOF1 != 1)</l>
 <l>  fread_line (FileHandleIn, OutLine, IsEOF1)</l>
