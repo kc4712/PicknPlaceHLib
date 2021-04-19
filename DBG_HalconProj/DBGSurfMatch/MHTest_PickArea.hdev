@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hdevelop file_version="1.2" halcon_version="20.11.0.0">
+<procedure name="main">
+<interface/>
+<body>
+<c>* This example program shows how to use the operator</c>
+<c>* rigid_trans_object_model_3d in HALCON.  In this example</c>
+<c>* a cylinder is created. In a second step, the cylinder is</c>
+<c>* tranformed with a rigid transformation.  The generated</c>
+<c>* primitves of the 3D object models are visualized.</c>
+<c>* </c>
+<c>* Initialize program</c>
+<l>dev_close_window ()</l>
+<l>dev_open_window (0, 0, 640, 480, 'black', WindowHandle)</l>
+<l>set_display_font (WindowHandle, 16, 'mono', 'true', 'false')</l>
+<l>gen_cam_par_area_scan_division (0.016, 0, 5e-6, 5e-6, 320, 240, 640, 480, CamParam)</l>
+<l>create_pose (-1, 1, 20, 110, 0, 270, 'Rp+T', 'gba', 'point', DisplayPose)</l>
+<c> </c>
+<c>* Create a cylinder without transformation</c>
+<l>*gen_cylinder_object_model_3d ([0,0,0,0,0,0,0], 0.25, -0.25, 0.25, ObjectModel3DCylinder)</l>
+<l>gen_box_object_model_3d ([0,0,0,0,0,0,0], 0.2, 0.2, 0.2, ObjectModel3DCylinder)</l>
+<c>* Detected Object Pose (1 sample)</c>
+<l>create_pose (0.5, 0.5, 0.5, 45, 0, 0, 'Rp+T', 'gba', 'point', DetectedPose)</l>
+<c></c>
+<l>rigid_trans_object_model_3d (ObjectModel3DCylinder, DetectedPose, DetectedObject)</l>
+<c>* get Object pose and center point</c>
+<l>get_object_model_3d_params(DetectedObject, 'primitive_pose', ObjPose)</l>
+<l>get_object_model_3d_params (DetectedObject, 'center', CenterPoint)</l>
+<l>CenterPose := [CenterPoint[0],CenterPoint[1],CenterPoint[2], ObjPose[3] , ObjPose[4], ObjPose[5],0]</l>
+<l>get_object_model_3d_params (DetectedObject, 'bounding_box1', ObjBoundingBox)</l>
+<l>get_object_model_3d_params (DetectedObject, 'diameter_axis_aligned_bounding_box', DiaObjBoundingBox)</l>
+<c></c>
+<c></c>
+<l>ArrowLength := 0.6</l>
+<l>ArrowThickness := 0.005</l>
+<l>create_pose (0, 0, 0, 0, 0, 0, 'Rp+T', 'gba', 'point', IdentityPose)</l>
+<l>create_pose (ArrowLength, 0, 0, 0, 0, 0, 'Rp+T', 'gba', 'point', TransXPose)</l>
+<l>gen_arrow_object_model_3d (ArrowThickness, IdentityPose, TransXPose, OM3DToolXOrigin)</l>
+<l>create_pose (0, ArrowLength, 0, 0, 0, 0, 'Rp+T', 'gba', 'point', TransYPose)</l>
+<l>gen_arrow_object_model_3d (ArrowThickness, IdentityPose, TransYPose, OM3DToolYOrigin)</l>
+<l>create_pose (0, 0, ArrowLength, 0, 0, 0, 'Rp+T', 'gba', 'point', TransZPose)</l>
+<l>gen_arrow_object_model_3d (ArrowThickness, IdentityPose, TransZPose, OM3DToolZOrigin)</l>
+<l>OM3DToolOrigin := [OM3DToolXOrigin,OM3DToolYOrigin,OM3DToolZOrigin]</l>
+<l>rigid_trans_object_model_3d (OM3DToolOrigin, CenterPose, Dummy)</l>
+<l>ObjectModel3D_Arrow := [DetectedObject, Dummy]</l>
+<c></c>
+<l>GenParNames := ['color_0','color_1','color_2', 'color_3', 'disp_pose']</l>
+<l>GenParValues := ['cyan', 'red','green','blue', 'true']</l>
+<l>disp_object_model_3d_safe (WindowHandle, ObjectModel3D_Arrow, CamParam, DisplayPose, GenParNames, GenParValues)</l>
+<l>disp_message (WindowHandle, 'Cylinder before transformation', 'window', 12, 12, 'black', 'true')</l>
+<l>disp_continue_message (WindowHandle, 'black', 'true')</l>
+<l>stop ()</l>
+</body>
+<docu id="main">
+<parameters/>
+</docu>
+</procedure>
+</hdevelop>

@@ -1,0 +1,11 @@
+filename1Dim C:\Users\ABC\Documents\Visual Studio 2015\Projects\HalconSurface_DLL\HalconSurface\bin\Debug\Save\SignalTrans00.om3, C:\Users\ABC\Documents\Visual Studio 2015\Projects\HalconSurface_DLL\HalconSurface\bin\Debug\Save\SignalTrans01.om3, C:\Users\ABC\Documents\Visual Studio 2015\Projects\HalconSurface_DLL\HalconSurface\bin\Debug\Save\SignalTrans02.om3, C:\Users\ABC\Documents\Visual Studio 2015\Projects\HalconSurface_DLL\HalconSurface\bin\Debug\Save\SignalTrans03.om3, C:\Users\ABC\Documents\Visual Studio 2015\Projects\HalconSurface_DLL\HalconSurface\bin\Debug\Save\SignalTrans04.om3, C:\Users\ABC\Documents\Visual Studio 2015\Projects\HalconSurface_DLL\HalconSurface\bin\Debug\Save\SignalTrans05.om3, 
+smoothLv_val 60
+unionParam robust
+polygonKnnCnt 60
+polygonKnnRadiusParam z_factor
+polygonKnnRadiusValue 0.5
+surfaceRemoveValue 1
+greedy_mesh_dilationValue 0
+sampleMethod fast_compute_normals
+sampleValue 0.9
+samplesurfValue 0.03

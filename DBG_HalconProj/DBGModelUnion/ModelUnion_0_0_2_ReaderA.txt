@@ -1,0 +1,11 @@
+filename1Dim C:\Users\ABC\Documents\Visual Studio 2015\Projects\HalconSurface_DLL\HalconSurface\bin\Debug\Save\SignalTrans00.om3, C:\Users\ABC\Documents\Visual Studio 2015\Projects\HalconSurface_DLL\HalconSurface\bin\Debug\Save\SignalTrans01.om3, C:\Users\ABC\Documents\Visual Studio 2015\Projects\HalconSurface_DLL\HalconSurface\bin\Debug\Save\SignalTrans02.om3, C:\Users\ABC\Documents\Visual Studio 2015\Projects\HalconSurface_DLL\HalconSurface\bin\Debug\Save\SignalTrans03.om3, C:\Users\ABC\Documents\Visual Studio 2015\Projects\HalconSurface_DLL\HalconSurface\bin\Debug\Save\SignalTrans04.om3, C:\Users\ABC\Documents\Visual Studio 2015\Projects\HalconSurface_DLL\HalconSurface\bin\Debug\Save\SignalTrans05.om3, 
+smooth_mls_knncnt 60
+register_obj3d_Param robust
+triangulate_greedyKnnCnt 40
+triangulate_greedyKnnRadiusParam z_factor
+triangulate_greedyKnnRadiusValue 0.5
+triangulate_smallsurfaceremoveValue 0.0
+triangulate_greedy_mesh_dilationValue 0.0 
+sampling_method fast
+sampling_distance 0.5
+create_sfm_RelSampleDistance 0.03

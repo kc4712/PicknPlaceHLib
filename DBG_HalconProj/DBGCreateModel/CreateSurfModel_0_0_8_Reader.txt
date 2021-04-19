@@ -1,0 +1,26 @@
+plyfileName 
+SimpleObj 0
+BOXLengthX 30
+BOXLengthY 60
+BOXLengthZ 30
+SphereRadius 2.5
+CylinderRadius 14
+CylinderZMinExt -29
+CylinderZMaxExt 29
+minDepth 0.5
+maxDepth 300
+Background_Feature 0
+ModelForm 0
+sampling_method fast_compute_normals
+sampling_distance 0.1
+triangulate_greedyKnnCnt 0
+triangulate_greedyKnnRadiusParam auto
+triangulate_greedyKnnRadiusValue 0
+triangulate_smallsurfaceremoveValue 0
+triangulate_greedy_mesh_dilationValue 0
+connection_obj3d_Param distance_3d
+connection_obj3d_value 10
+create_sfm_useInvertNormals 0
+create_sfm_RelSampleDistance 0.03
+CreateSurfModelTimeoutSec 300
+Simple_HalfCut 0

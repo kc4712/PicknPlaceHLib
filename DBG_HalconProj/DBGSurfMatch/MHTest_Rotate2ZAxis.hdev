@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hdevelop file_version="1.2" halcon_version="20.11.1.0">
+<procedure name="main">
+<interface/>
+<body>
+<c>* This example program shows how to use the operator</c>
+<c>* rigid_trans_object_model_3d in HALCON.  In this example</c>
+<c>* a cylinder is created. In a second step, the cylinder is</c>
+<c>* tranformed with a rigid transformation.  The generated</c>
+<c>* primitves of the 3D object models are visualized.</c>
+<c>* </c>
+<c>* Initialize program</c>
+<l>dev_close_window ()</l>
+<l>*dev_open_window (0, 0, 640, 480, 'black', WindowHandle)</l>
+<l>dev_open_window (0, 0, 1024, 768, 'black', WindowHandle)</l>
+<l>set_display_font (WindowHandle, 16, 'mono', 'true', 'false')</l>
+<l>gen_cam_par_area_scan_division (0.016, 0, 5e-6, 5e-6, 512, 384, 1024, 768, CamParam)</l>
+<l>create_pose (-1, 1, 20, 110, 0, 270, 'Rp+T', 'gba', 'point', DisplayPose)</l>
+<c> </c>
+<c>* Create a cylinder without transformation</c>
+<l>*gen_cylinder_object_model_3d ([0,0,0,0,0,0,0], 0.25, -0.25, 0.25, ObjectModel3DCylinder)</l>
+<l>gen_box_object_model_3d ([0,0,0,0,0,0,0], 0.3, 0.3, 0.6, ObjectModel3DCylinder)</l>
+<c>* Detected Object Pose (1 sample)</c>
+<l>*create_pose (0.5, 0.5, 0.5, 45, 0, 0, 'Rp+T', 'gba', 'point', DetectedPose)</l>
+<c></c>
+<l>ExPose := [-49.8797, -388.619, -53.8479, 338.832, 359.165, 20.1071, 0, 93.6376, -270.597, -95.7912, 338.968, 359.043, 58.5237, 0, -570.246, 554.871, 408.132, 68.8565, 34.8357, 90.5713, 0, 234.663, -774.375, 914.503, 247.258, 344.784, 269.316, 0, 259.599, -753.086, 890.42, 248.628, 351.651, 90.1097, 0, 26.9936, -674.154, 878.056, 249.359, 354.767, 89.7286, 0, 41.743, 212.726, 1368.97, 157.807, 0.812304, 240.191, 0]</l>
+<l>Transform :=  [ 7.0690584182739258e-01, 6.6398489475250244e-01,\
+                  -2.4373787641525269e-01, 5.5743640136718750e+02,\
+                  7.0714765787124634e-01, -6.5612906217575073e-01,\
+                  2.6350864768028259e-01, -6.1229571533203125e+02,\
+                  1.5042254701256752e-02, -3.5863447189331055e-01,\
+                  -9.3335688114166260e-01, 6.0019793701171875e+02, 0., 0., 0., 1. ]</l>
+<c></c>
+<l>for idx := 0 to 6 by 1</l>
+<c>    * transform model to detected pose</c>
+<l>    DetectedPose := [0.001*ExPose[7*idx], 0.001*ExPose[7*idx+1], 0.001*ExPose[7*idx+2],\
+                     ExPose[7*idx+3], 0.001*ExPose[7*idx+4], 0.001*ExPose[7*idx+5], 0.001*ExPose[7*idx+6]]</l>
+<l>    pose_to_hom_mat3d (DetectedPose, DetectedHomMat)</l>
+<l>    create_matrix(4, 4, Transform, MatTransform)</l>
+<l>*    hom_mat3d_compose(DetectedHomMat, MatTransform, URHomMat)</l>
+<l>    hom_mat3d_compose(DetectedHomMat, Transform, URHomMat)</l>
+<c>* hom_mat3d_to_pose error. why??? URHomMat type??</c>
+<l>*    hom_mat3d_to_pose(URHomMat, URPose) </l>
+<c>    </c>
+<l>    rigid_trans_object_model_3d (ObjectModel3DCylinder, DetectedPose, DetectedObject)</l>
+<c>    * get Object pose and center point</c>
+<l>    get_object_model_3d_params(DetectedObject, 'primitive_pose', ObjPose)</l>
+<l>    get_object_model_3d_params (DetectedObject, 'center', CenterPoint)</l>
+<l>    CenterPose := [CenterPoint[0],CenterPoint[1],CenterPoint[2], ObjPose[3] , ObjPose[4], ObjPose[5],0]</l>
+<l>    RotY90 := [0,0,0,0,90,0,0]</l>
+<l>    pose_compose( CenterPose, RotY90, CenterPose)</l>
+<l>    ArrowLength := 0.6</l>
+<l>    ArrowThickness := 0.005</l>
+<l>    create_pose (0, 0, 0, 0, 0, 0, 'Rp+T', 'gba', 'point', IdentityPose)</l>
+<l>    create_pose (ArrowLength, 0, 0, 0, 0, 0, 'Rp+T', 'gba', 'point', TransXPose)</l>
+<l>    gen_arrow_object_model_3d (ArrowThickness, IdentityPose, TransXPose, OM3DToolXOrigin)</l>
+<l>    create_pose (0, ArrowLength, 0, 0, 0, 0, 'Rp+T', 'gba', 'point', TransYPose)</l>
+<l>    gen_arrow_object_model_3d (ArrowThickness, IdentityPose, TransYPose, OM3DToolYOrigin)</l>
+<l>    create_pose (0, 0, ArrowLength, 0, 0, 0, 'Rp+T', 'gba', 'point', TransZPose)</l>
+<l>    gen_arrow_object_model_3d (ArrowThickness, IdentityPose, TransZPose, OM3DToolZOrigin)</l>
+<l>    OM3DToolOrigin := [OM3DToolXOrigin,OM3DToolYOrigin,OM3DToolZOrigin]</l>
+<l>    rigid_trans_object_model_3d (OM3DToolOrigin, CenterPose, Dummy)</l>
+<c>    </c>
+<c>    </c>
+<l>    ObjectModel3D_Arrow := [DetectedObject, Dummy]</l>
+<c>    </c>
+<l>    GenParNames := ['color_0','color_1','color_2', 'color_3', 'disp_pose']</l>
+<l>    GenParValues := ['cyan', 'red','green','blue', 'true']</l>
+<l>    disp_object_model_3d_safe (WindowHandle, ObjectModel3D_Arrow, CamParam, DisplayPose, GenParNames, GenParValues)</l>
+<l>    disp_message (WindowHandle, 'Cylinder before transformation', 'window', 12, 12, 'black', 'true')</l>
+<l>    disp_continue_message (WindowHandle, 'black', 'true')</l>
+<l>    stop ()</l>
+<c>    * </c>
+<c>    * Apply a rigid transformation</c>
+<l>    RotX90 := [0,0,0,90,0,0,0]</l>
+<l>    RotY90 := [0,0,0,90,0,0,0]</l>
+<l>    RotX180 := [0,0,0,180,0,0,0]</l>
+<l>    RotY180 := [0,0,0,180,0,0,0]</l>
+<l>    MinLimitDeg := 90</l>
+<l>    MaxLimitDeg := (360 - 90)</l>
+<l>    if((ObjPose[3] &gt; MinLimitDeg and ObjPose[3] &lt; MaxLimitDeg) or (ObjPose[4] &gt; MinLimitDeg and ObjPose[4] &lt; MaxLimitDeg))</l>
+<l>        RotatedPose := CenterPose</l>
+<l>    else</l>
+<l>        pose_compose( CenterPose, RotX180, RotatedPose)</l>
+<l>    endif</l>
+<l>    rigid_trans_object_model_3d (ObjectModel3DCylinder, RotatedPose, ObjectModel3DRigidTrans)</l>
+<l>    get_object_model_3d_params(ObjectModel3DRigidTrans, 'primitive_pose', ObjPose2)</l>
+<l>    get_object_model_3d_params (ObjectModel3DRigidTrans, 'center', CenterPoint2)</l>
+<l>    CenterPose2 := [CenterPoint2[0],CenterPoint2[1],CenterPoint2[2], ObjPose2[3] , ObjPose2[4], ObjPose2[5],0]</l>
+<l>    rigid_trans_object_model_3d (OM3DToolOrigin, CenterPose2, Dummy2)</l>
+<l>    RotatedObjectModel3D_Arrow := [ObjectModel3DRigidTrans, Dummy2]</l>
+<c>    </c>
+<l>    dev_clear_window ()</l>
+<l>    disp_object_model_3d_safe (WindowHandle, RotatedObjectModel3D_Arrow, CamParam, DisplayPose, GenParNames, GenParValues)</l>
+<l>    disp_message (WindowHandle, 'Cylinder after transformation', 'window', 12, 12, 'black', 'true')</l>
+<l>    stop ()</l>
+<l>endfor</l>
+<c></c>
+</body>
+<docu id="main">
+<parameters/>
+</docu>
+</procedure>
+</hdevelop>
