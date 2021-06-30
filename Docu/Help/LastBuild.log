@@ -1,0 +1,328 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shfbBuild product="Sandcastle Help File Builder and Tools" version="2019.11.17.0" projectFile="C:\Users\ABC\Documents\PicknPlaceHLib\Docu\PicknPlaceHLibMerged0.1.6.shfbproj" started="2021-04-19 오후 1:29:34">
+<buildStep step="Initializing">
+Finding tools...
+The Sandcastle tools are located in &#39;C:\Program Files (x86)\EWSoftware\Sandcastle Help File Builder\&#39;
+Searching for HTML Help 1 compiler...
+Found HTML Help 1 compiler in &#39;C:\Program Files (x86)\HTML Help Workshop\&#39;
+Locating components in the following folder(s):
+    C:\Users\ABC\Documents\PicknPlaceHLib\Docu
+    C:\ProgramData\EWSoftware\Sandcastle Help File Builder\Components and Plug-Ins\
+    C:\Program Files (x86)\EWSoftware\Sandcastle Help File Builder\
+Using framework reflection data for &#39;.NET Framework 4.5&#39; located in &#39;C:\Program Files (x86)\EWSoftware\Sandcastle Help File Builder\Data\.NETFramework&#39;
+Using presentation style &#39;VS2013&#39; located in &#39;C:\Program Files (x86)\EWSoftware\Sandcastle Help File Builder\PresentationStyles\VS2013&#39;
+Loading and initializing plug-ins...
+Lightweight Website Style Version 2019.11.17.0
+Copyright &#169; 2006-2019, Eric Woodruff, All Rights Reserved
+Portions Copyright &#169; 2014, Sam Harwell, All Rights Reserved
+</buildStep>
+<buildStep step="ValidatingDocumentationSources">
+Validating and copying documentation source information
+Source: C:\Users\ABC\Documents\PicknPlaceHLib\Docu\PicknPlaceHLib.dll
+    Found assembly &#39;C:\Users\ABC\Documents\PicknPlaceHLib\Docu\PicknPlaceHLib.dll&#39;
+Source: C:\Users\ABC\Documents\PicknPlaceHLib\Docu\PicknPlaceHLib.xml
+
+References to include:
+    halcondotnet
+    hdevenginedotnet
+
+Copying XML comments files
+    C:\Users\ABC\Documents\PicknPlaceHLib\Docu\PicknPlaceHLib.XML -&gt; C:\Users\ABC\Documents\PicknPlaceHLib\Docu\Help\Working\PicknPlaceHLib.XML
+</buildStep>
+<buildStep step="GenerateSharedContent">
+Generating shared content files (ko-KR, 한국어 (대한민국))...
+SHFB: Warning BE0003: Sandcastle shared content for the &#39;ko-KR, 한국어 (대한민국)&#39; language could not be found.  Using &#39;en-US, English (US)&#39; defaults.
+<plugIn name="Lightweight Website Style" behavior="After" priority="1000">
+</plugIn>    Last step completed in 00:00:00.0130
+</buildStep>
+<buildStep step="GenerateApiFilter">
+Generating API filter for MRefBuilder...
+    Last step completed in 00:00:00.0070
+</buildStep>
+<buildStep step="GenerateReflectionInfo">
+Generating reflection information...
+[C:\Program Files (x86)\MSBuild\14.0\bin\amd64\MSBuild.exe - GenerateRefInfo.proj]
+빌드 시작: 2021-04-19 오후 1:29:35
+1 노드의 &quot;C:\Users\ABC\Documents\PicknPlaceHLib\Docu\Help\Working\GenerateRefInfo.proj&quot; 프로젝트(기본 대상)입니다.
+PrepareForBuild:
+  &quot;obj\Debug\&quot; 디렉터리를 만들고 있습니다.
+GenerateRefInfo:
+  MRefBuilder (v2019.11.17.0)
+  Copyright ⓒ 2006-2019, Microsoft Corporation, All Rights Reserved.
+  Portions Copyright ⓒ 2006-2019, Eric Woodruff, All Rights Reserved.
+  No source code context base path specified.  Source context information is unavailable.
+  Loaded 1 assemblies for reflection and 3 dependency assemblies.
+  Wrote information on 1 namespaces, 11 types, and 43 members
+  &quot;reflection.org&quot;에서 &quot;reflection.all&quot;(으)로 파일을 복사하고 있습니다.
+  XslTransform (v2019.11.17.0)
+  Copyright ⓒ 2006-2019, Microsoft Corporation, All Rights Reserved.
+  Portions Copyright ⓒ 2006-2019, Eric Woodruff, All Rights Reserved.
+  Applying XSL transformation &#39;C:\Program Files (x86)\EWSoftware\Sandcastle Help File Builder\ProductionTransforms\MergeDuplicates.xsl&#39;.
+&quot;C:\Users\ABC\Documents\PicknPlaceHLib\Docu\Help\Working\GenerateRefInfo.proj&quot; 프로젝트를 빌드했습니다(기본 대상).
+
+빌드했습니다.
+
+경과 시간: 00:00:00.54
+    Last step completed in 00:00:00.6544
+</buildStep>
+<buildStep step="TransformReflectionInfo">
+Transforming reflection output...
+[C:\Program Files (x86)\MSBuild\14.0\bin\amd64\MSBuild.exe - TransformManifest.proj]
+빌드 시작: 2021-04-19 오후 1:29:36
+1 노드의 &quot;C:\Users\ABC\Documents\PicknPlaceHLib\Docu\Help\Working\TransformManifest.proj&quot; 프로젝트(기본 대상)입니다.
+TransformManifest:
+  XslTransform (v2019.11.17.0)
+  Copyright ⓒ 2006-2019, Microsoft Corporation, All Rights Reserved.
+  Portions Copyright ⓒ 2006-2019, Eric Woodruff, All Rights Reserved.
+  Applying XSL transformation &#39;C:\Program Files (x86)\EWSoftware\Sandcastle Help File Builder\\ProductionTransforms\ApplyVSDocModel.xsl&#39;.
+  &quot;reflection.xml&quot;에서 &quot;reflection.nofilenames&quot;(으)로 파일을 복사하고 있습니다.
+  XslTransform (v2019.11.17.0)
+  Copyright ⓒ 2006-2019, Microsoft Corporation, All Rights Reserved.
+  Portions Copyright ⓒ 2006-2019, Eric Woodruff, All Rights Reserved.
+  Applying XSL transformation &#39;C:\Program Files (x86)\EWSoftware\Sandcastle Help File Builder\ProductionTransforms\AddFilenames.xsl&#39;.
+  XslTransform (v2019.11.17.0)
+  Copyright ⓒ 2006-2019, Microsoft Corporation, All Rights Reserved.
+  Portions Copyright ⓒ 2006-2019, Eric Woodruff, All Rights Reserved.
+  Applying XSL transformation &#39;C:\Program Files (x86)\EWSoftware\Sandcastle Help File Builder\ProductionTransforms\ReflectionToManifest.xsl&#39;.
+&quot;C:\Users\ABC\Documents\PicknPlaceHLib\Docu\Help\Working\TransformManifest.proj&quot; 프로젝트를 빌드했습니다(기본 대상).
+
+빌드했습니다.
+
+경과 시간: 00:00:00.36
+    Last step completed in 00:00:00.4634
+</buildStep>
+<buildStep step="GenerateNamespaceSummaries">
+Generating namespace summary information...
+    Last step completed in 00:00:00.1117
+</buildStep>
+<buildStep step="CopyAdditionalContent">
+Copying additional content files...
+No additional content to copy
+    Last step completed in 00:00:00.0010
+</buildStep>
+<buildStep step="MergeTablesOfContents">
+Merging conceptual and additional tables of contents...
+    Last step completed in 00:00:00.0000
+</buildStep>
+<buildStep step="GenerateIntermediateTableOfContents">
+Generating intermediate table of contents file...
+[C:\Program Files (x86)\MSBuild\14.0\bin\amd64\MSBuild.exe - GenerateIntermediateTOC.proj]
+빌드 시작: 2021-04-19 오후 1:29:36
+1 노드의 &quot;C:\Users\ABC\Documents\PicknPlaceHLib\Docu\Help\Working\GenerateIntermediateTOC.proj&quot; 프로젝트(기본 대상)입니다.
+GenerateIntermediateTOC:
+  XslTransform (v2019.11.17.0)
+  Copyright ⓒ 2006-2019, Microsoft Corporation, All Rights Reserved.
+  Portions Copyright ⓒ 2006-2019, Eric Woodruff, All Rights Reserved.
+  Applying XSL transformation &#39;C:\Program Files (x86)\EWSoftware\Sandcastle Help File Builder\\ProductionTransforms\CreateVSToc.xsl&#39;.
+&quot;C:\Users\ABC\Documents\PicknPlaceHLib\Docu\Help\Working\GenerateIntermediateTOC.proj&quot; 프로젝트를 빌드했습니다(기본 대상).
+
+빌드했습니다.
+
+경과 시간: 00:00:00.08
+Generating conceptual content intermediate TOC file...
+    Last step completed in 00:00:00.1847
+</buildStep>
+<buildStep step="CreateBuildAssemblerConfigs">
+Creating Sandcastle configuration files...
+    sandcastle.config
+    Last step completed in 00:00:00.1177
+</buildStep>
+<buildStep step="MergeCustomConfigs">
+Merging custom build component configurations
+C:\Users\ABC\Documents\PicknPlaceHLib\Docu\Help\Working\sandcastle.config
+  Updating reference topic configurations.
+  No conceptual content.  Removing conceptual content components.
+    Last step completed in 00:00:00.0249
+</buildStep>
+<buildStep step="BuildTopics">
+Building help topics...
+[C:\Program Files (x86)\MSBuild\14.0\bin\amd64\MSBuild.exe - BuildTopics.proj]
+빌드 시작: 2021-04-19 오후 1:29:37
+1 노드의 &quot;C:\Users\ABC\Documents\PicknPlaceHLib\Docu\Help\Working\BuildTopics.proj&quot; 프로젝트(기본 대상)입니다.
+BuildTopics:
+  BuildAssembler (v2019.11.17.0)
+  Copyright ⓒ 2006-2019, Microsoft Corporation, All Rights Reserved.
+  Portions Copyright ⓒ 2006-2019, Eric Woodruff, All Rights Reserved.
+  Loading configuration...
+  Processing topics...
+BuildAssembler : warning : ShowMissingComponent: [N:PicknPlaceHLib] Missing &lt;summary&gt; documentation [C:\Users\ABC\Documents\PicknPlaceHLib\Docu\Help\Working\BuildTopics.proj]
+BuildAssembler : warning : ShowMissingComponent: [T:PicknPlaceHLib.HLog] Missing &lt;summary&gt; documentation [C:\Users\ABC\Documents\PicknPlaceHLib\Docu\Help\Working\BuildTopics.proj]
+BuildAssembler : warning : ShowMissingComponent: [E:PicknPlaceHLib.HLog.LogEvent] Missing &lt;summary&gt; documentation [C:\Users\ABC\Documents\PicknPlaceHLib\Docu\Help\Working\BuildTopics.proj]
+BuildAssembler : warning : ShowMissingComponent: [M:PicknPlaceHLib.HLog.LogStr(System.String,System.String)] Missing &lt;summary&gt; documentation [C:\Users\ABC\Documents\PicknPlaceHLib\Docu\Help\Working\BuildTopics.proj]
+BuildAssembler : warning : ShowMissingComponent: [M:PicknPlaceHLib.HLog.LogStr(System.String,System.String)] Missing &lt;returns&gt; documentation [C:\Users\ABC\Documents\PicknPlaceHLib\Docu\Help\Working\BuildTopics.proj]
+BuildAssembler : warning : ShowMissingComponent: [M:PicknPlaceHLib.HLog.LogStr(System.String,System.String)] Missing &lt;param name=&quot;_strItem&quot;/&gt; documentation [C:\Users\ABC\Documents\PicknPlaceHLib\Docu\Help\Working\BuildTopics.proj]
+BuildAssembler : warning : ShowMissingComponent: [M:PicknPlaceHLib.HLog.LogStr(System.String,System.String)] Missing &lt;param name=&quot;_strMessage&quot;/&gt; documentation [C:\Users\ABC\Documents\PicknPlaceHLib\Docu\Help\Working\BuildTopics.proj]
+BuildAssembler : warning : ShowMissingComponent: [M:PicknPlaceHLib.HLog.SetSaveOption(System.Boolean)] Missing &lt;summary&gt; documentation [C:\Users\ABC\Documents\PicknPlaceHLib\Docu\Help\Working\BuildTopics.proj]
+BuildAssembler : warning : ShowMissingComponent: [M:PicknPlaceHLib.HLog.SetSaveOption(System.Boolean)] Missing &lt;param name=&quot;_bSaveEnable&quot;/&gt; documentation [C:\Users\ABC\Documents\PicknPlaceHLib\Docu\Help\Working\BuildTopics.proj]
+BuildAssembler : warning : ShowMissingComponent: [T:PicknPlaceHLib.HLogEventHandler] Missing &lt;summary&gt; documentation [C:\Users\ABC\Documents\PicknPlaceHLib\Docu\Help\Working\BuildTopics.proj]
+BuildAssembler : warning : ResolveReferenceLinksComponent: [M:PicknPlaceHLib.libDisp.getDisp(System.String,System.Int32,HalconDotNet.HWindow,HalconDotNet.HWindow)] Unknown reference link target &#39;T:HalconDotNet.HWindow&#39;. [C:\Users\ABC\Documents\PicknPlaceHLib\Docu\Help\Working\BuildTopics.proj]
+BuildAssembler : warning : ResolveReferenceLinksComponent: [M:PicknPlaceHLib.libDisp.getDisp(System.String,System.Int32,HalconDotNet.HWindow,HalconDotNet.HWindow)] Unknown reference link target &#39;T:HalconDotNet.HWindow&#39;. [C:\Users\ABC\Documents\PicknPlaceHLib\Docu\Help\Working\BuildTopics.proj]
+BuildAssembler : warning : ResolveReferenceLinksComponent: [M:PicknPlaceHLib.libModelCreate.ModelCreate(HalconDotNet.HWindow)] Unknown reference link target &#39;T:HalconDotNet.HWindow&#39;. [C:\Users\ABC\Documents\PicknPlaceHLib\Docu\Help\Working\BuildTopics.proj]
+BuildAssembler : warning : ShowMissingComponent: [P:PicknPlaceHLib.libModelUnion.HMODEL_STATE] Missing &lt;value&gt; documentation [C:\Users\ABC\Documents\PicknPlaceHLib\Docu\Help\Working\BuildTopics.proj]
+BuildAssembler : warning : ShowMissingComponent: [P:PicknPlaceHLib.libModelUnion.HPROCEDURE_STATE] Missing &lt;value&gt; documentation [C:\Users\ABC\Documents\PicknPlaceHLib\Docu\Help\Working\BuildTopics.proj]
+BuildAssembler : warning : ResolveReferenceLinksComponent: [M:PicknPlaceHLib.libModelUnion.ModelUnion(HalconDotNet.HWindow)] Unknown reference link target &#39;T:HalconDotNet.HWindow&#39;. [C:\Users\ABC\Documents\PicknPlaceHLib\Docu\Help\Working\BuildTopics.proj]
+BuildAssembler : warning : ShowMissingComponent: [M:PicknPlaceHLib.libModelUnion.saveUnionParam(System.Double,System.String,System.Int32,System.String,System.Double,System.Double,System.Int32,System.String,System.Double,System.Double)] Missing &lt;summary&gt; documentation [C:\Users\ABC\Documents\PicknPlaceHLib\Docu\Help\Working\BuildTopics.proj]
+BuildAssembler : warning : ShowMissingComponent: [M:PicknPlaceHLib.libModelUnion.saveUnionParam(System.Double,System.String,System.Int32,System.String,System.Double,System.Double,System.Int32,System.String,System.Double,System.Double)] Missing &lt;param name=&quot;smooth_mls_knncnt&quot;/&gt; documentation [C:\Users\ABC\Documents\PicknPlaceHLib\Docu\Help\Working\BuildTopics.proj]
+BuildAssembler : warning : ShowMissingComponent: [M:PicknPlaceHLib.libModelUnion.saveUnionParam(System.Double,System.String,System.Int32,System.String,System.Double,System.Double,System.Int32,System.String,System.Double,System.Double)] Missing &lt;param name=&quot;register_obj3d_Param&quot;/&gt; documentation [C:\Users\ABC\Documents\PicknPlaceHLib\Docu\Help\Working\BuildTopics.proj]
+BuildAssembler : warning : ShowMissingComponent: [M:PicknPlaceHLib.libModelUnion.saveUnionParam(System.Double,System.String,System.Int32,System.String,System.Double,System.Double,System.Int32,System.String,System.Double,System.Double)] Missing &lt;param name=&quot;triangulate_greedyKnnCnt&quot;/&gt; documentation [C:\Users\ABC\Documents\PicknPlaceHLib\Docu\Help\Working\BuildTopics.proj]
+BuildAssembler : warning : ShowMissingComponent: [M:PicknPlaceHLib.libModelUnion.saveUnionParam(System.Double,System.String,System.Int32,System.String,System.Double,System.Double,System.Int32,System.String,System.Double,System.Double)] Missing &lt;param name=&quot;triangulate_greedyKnnRadiusParam&quot;/&gt; documentation [C:\Users\ABC\Documents\PicknPlaceHLib\Docu\Help\Working\BuildTopics.proj]
+BuildAssembler : warning : ShowMissingComponent: [M:PicknPlaceHLib.libModelUnion.saveUnionParam(System.Double,System.String,System.Int32,System.String,System.Double,System.Double,System.Int32,System.String,System.Double,System.Double)] Missing &lt;param name=&quot;triangulate_greedyKnnRadiusValue&quot;/&gt; documentation [C:\Users\ABC\Documents\PicknPlaceHLib\Docu\Help\Working\BuildTopics.proj]
+BuildAssembler : warning : ShowMissingComponent: [M:PicknPlaceHLib.libModelUnion.saveUnionParam(System.Double,System.String,System.Int32,System.String,System.Double,System.Double,System.Int32,System.String,System.Double,System.Double)] Missing &lt;param name=&quot;triangulate_smallsurfaceremoveValue&quot;/&gt; documentation [C:\Users\ABC\Documents\PicknPlaceHLib\Docu\Help\Working\BuildTopics.proj]
+BuildAssembler : warning : ShowMissingComponent: [M:PicknPlaceHLib.libModelUnion.saveUnionParam(System.Double,System.String,System.Int32,System.String,System.Double,System.Double,System.Int32,System.String,System.Double,System.Double)] Missing &lt;param name=&quot;triangulate_greedy_mesh_dilationValue&quot;/&gt; documentation [C:\Users\ABC\Documents\PicknPlaceHLib\Docu\Help\Working\BuildTopics.proj]
+BuildAssembler : warning : ShowMissingComponent: [M:PicknPlaceHLib.libModelUnion.saveUnionParam(System.Double,System.String,System.Int32,System.String,System.Double,System.Double,System.Int32,System.String,System.Double,System.Double)] Missing &lt;param name=&quot;sampling_method&quot;/&gt; documentation [C:\Users\ABC\Documents\PicknPlaceHLib\Docu\Help\Working\BuildTopics.proj]
+BuildAssembler : warning : ShowMissingComponent: [M:PicknPlaceHLib.libModelUnion.saveUnionParam(System.Double,System.String,System.Int32,System.String,System.Double,System.Double,System.Int32,System.String,System.Double,System.Double)] Missing &lt;param name=&quot;sampling_distance&quot;/&gt; documentation [C:\Users\ABC\Documents\PicknPlaceHLib\Docu\Help\Working\BuildTopics.proj]
+BuildAssembler : warning : ShowMissingComponent: [M:PicknPlaceHLib.libModelUnion.saveUnionParam(System.Double,System.String,System.Int32,System.String,System.Double,System.Double,System.Int32,System.String,System.Double,System.Double)] Missing &lt;param name=&quot;create_sfm_RelSampleDistance&quot;/&gt; documentation [C:\Users\ABC\Documents\PicknPlaceHLib\Docu\Help\Working\BuildTopics.proj]
+BuildAssembler : warning : ResolveReferenceLinksComponent: [M:PicknPlaceHLib.libSurfaceMatching.getResult2DDisp(HalconDotNet.HWindow)] Unknown reference link target &#39;T:HalconDotNet.HWindow&#39;. [C:\Users\ABC\Documents\PicknPlaceHLib\Docu\Help\Working\BuildTopics.proj]
+BuildAssembler : warning : ResolveReferenceLinksComponent: [M:PicknPlaceHLib.libSurfaceMatching.getResult3DDisp(System.Int32,HalconDotNet.HWindow)] Unknown reference link target &#39;T:HalconDotNet.HWindow&#39;. [C:\Users\ABC\Documents\PicknPlaceHLib\Docu\Help\Working\BuildTopics.proj]
+  Processed 61 topic(s)
+  29 warning(s)
+  CopyFromIndexComponent: &quot;reflection&quot; in-memory cache entries used: 2 of 15.
+  CopyFromIndexComponent: &quot;comments&quot; in-memory cache entries used: 2 of 30.
+&quot;C:\Users\ABC\Documents\PicknPlaceHLib\Docu\Help\Working\BuildTopics.proj&quot; 프로젝트를 빌드했습니다(기본 대상).
+
+빌드했습니다.
+
+경과 시간: 00:00:04.09
+    Last step completed in 00:00:04.2231
+</buildStep>
+<buildStep step="CombiningIntermediateTocFiles">
+Combining conceptual and API intermediate TOC files...
+    Last step completed in 00:00:00.0010
+</buildStep>
+<buildStep step="ExtractingHtmlInfo">
+Extracting HTML info for HTML Help 1 and/or website...
+[C:\Program Files (x86)\MSBuild\14.0\bin\amd64\MSBuild.exe - ExtractHtmlInfo.proj]
+Sandcastle Help File Builder and Tools, version 2019.11.17.0
+Copyright ⓒ 2006-2019, Eric Woodruff, All Rights Reserved
+E-Mail: Eric@EWoodruff.us
+
+Using LCID &#39;1042&#39;, code page &#39;949&#39;, encoding charset &#39;ks_c_5601-1987&#39;.
+
+Processing Help 1 files in C:\Users\ABC\Documents\PicknPlaceHLib\Docu\Help\Working\Output\HtmlHelp1
+Processed 61 HTML files
+Sorting keywords and generating See Also indices
+Saving HTML Help 1 keyword index to C:\Users\ABC\Documents\PicknPlaceHLib\Docu\Help\Working\Documentation.hhk
+Saving HTML Help 1 table of contents to C:\Users\ABC\Documents\PicknPlaceHLib\Docu\Help\Working\Documentation.hhc
+    Last step completed in 00:00:00.3291
+</buildStep>
+<buildStep step="CopyStandardHelpContent">
+Copying standard help content...
+C:\Program Files (x86)\EWSoftware\Sandcastle Help File Builder\PresentationStyles\VS2013\icons\AlertCaution.png -&gt; C:\Users\ABC\Documents\PicknPlaceHLib\Docu\Help\Working\Output\HtmlHelp1\icons\AlertCaution.png
+C:\Program Files (x86)\EWSoftware\Sandcastle Help File Builder\PresentationStyles\VS2013\icons\AlertNote.png -&gt; C:\Users\ABC\Documents\PicknPlaceHLib\Docu\Help\Working\Output\HtmlHelp1\icons\AlertNote.png
+C:\Program Files (x86)\EWSoftware\Sandcastle Help File Builder\PresentationStyles\VS2013\icons\AlertSecurity.png -&gt; C:\Users\ABC\Documents\PicknPlaceHLib\Docu\Help\Working\Output\HtmlHelp1\icons\AlertSecurity.png
+C:\Program Files (x86)\EWSoftware\Sandcastle Help File Builder\PresentationStyles\VS2013\icons\CFW.gif -&gt; C:\Users\ABC\Documents\PicknPlaceHLib\Docu\Help\Working\Output\HtmlHelp1\icons\CFW.gif
+C:\Program Files (x86)\EWSoftware\Sandcastle Help File Builder\PresentationStyles\VS2013\icons\CodeExample.png -&gt; C:\Users\ABC\Documents\PicknPlaceHLib\Docu\Help\Working\Output\HtmlHelp1\icons\CodeExample.png
+C:\Program Files (x86)\EWSoftware\Sandcastle Help File Builder\PresentationStyles\VS2013\icons\favicon.ico -&gt; C:\Users\ABC\Documents\PicknPlaceHLib\Docu\Help\Working\Output\HtmlHelp1\icons\favicon.ico
+C:\Program Files (x86)\EWSoftware\Sandcastle Help File Builder\PresentationStyles\VS2013\icons\privclass.gif -&gt; C:\Users\ABC\Documents\PicknPlaceHLib\Docu\Help\Working\Output\HtmlHelp1\icons\privclass.gif
+C:\Program Files (x86)\EWSoftware\Sandcastle Help File Builder\PresentationStyles\VS2013\icons\privdelegate.gif -&gt; C:\Users\ABC\Documents\PicknPlaceHLib\Docu\Help\Working\Output\HtmlHelp1\icons\privdelegate.gif
+C:\Program Files (x86)\EWSoftware\Sandcastle Help File Builder\PresentationStyles\VS2013\icons\privenumeration.gif -&gt; C:\Users\ABC\Documents\PicknPlaceHLib\Docu\Help\Working\Output\HtmlHelp1\icons\privenumeration.gif
+C:\Program Files (x86)\EWSoftware\Sandcastle Help File Builder\PresentationStyles\VS2013\icons\privevent.gif -&gt; C:\Users\ABC\Documents\PicknPlaceHLib\Docu\Help\Working\Output\HtmlHelp1\icons\privevent.gif
+C:\Program Files (x86)\EWSoftware\Sandcastle Help File Builder\PresentationStyles\VS2013\icons\privextension.gif -&gt; C:\Users\ABC\Documents\PicknPlaceHLib\Docu\Help\Working\Output\HtmlHelp1\icons\privextension.gif
+C:\Program Files (x86)\EWSoftware\Sandcastle Help File Builder\PresentationStyles\VS2013\icons\privfield.gif -&gt; C:\Users\ABC\Documents\PicknPlaceHLib\Docu\Help\Working\Output\HtmlHelp1\icons\privfield.gif
+C:\Program Files (x86)\EWSoftware\Sandcastle Help File Builder\PresentationStyles\VS2013\icons\privinterface.gif -&gt; C:\Users\ABC\Documents\PicknPlaceHLib\Docu\Help\Working\Output\HtmlHelp1\icons\privinterface.gif
+C:\Program Files (x86)\EWSoftware\Sandcastle Help File Builder\PresentationStyles\VS2013\icons\privmethod.gif -&gt; C:\Users\ABC\Documents\PicknPlaceHLib\Docu\Help\Working\Output\HtmlHelp1\icons\privmethod.gif
+C:\Program Files (x86)\EWSoftware\Sandcastle Help File Builder\PresentationStyles\VS2013\icons\privproperty.gif -&gt; C:\Users\ABC\Documents\PicknPlaceHLib\Docu\Help\Working\Output\HtmlHelp1\icons\privproperty.gif
+C:\Program Files (x86)\EWSoftware\Sandcastle Help File Builder\PresentationStyles\VS2013\icons\privstructure.gif -&gt; C:\Users\ABC\Documents\PicknPlaceHLib\Docu\Help\Working\Output\HtmlHelp1\icons\privstructure.gif
+C:\Program Files (x86)\EWSoftware\Sandcastle Help File Builder\PresentationStyles\VS2013\icons\protclass.gif -&gt; C:\Users\ABC\Documents\PicknPlaceHLib\Docu\Help\Working\Output\HtmlHelp1\icons\protclass.gif
+C:\Program Files (x86)\EWSoftware\Sandcastle Help File Builder\PresentationStyles\VS2013\icons\protdelegate.gif -&gt; C:\Users\ABC\Documents\PicknPlaceHLib\Docu\Help\Working\Output\HtmlHelp1\icons\protdelegate.gif
+C:\Program Files (x86)\EWSoftware\Sandcastle Help File Builder\PresentationStyles\VS2013\icons\protenumeration.gif -&gt; C:\Users\ABC\Documents\PicknPlaceHLib\Docu\Help\Working\Output\HtmlHelp1\icons\protenumeration.gif
+C:\Program Files (x86)\EWSoftware\Sandcastle Help File Builder\PresentationStyles\VS2013\icons\protevent.gif -&gt; C:\Users\ABC\Documents\PicknPlaceHLib\Docu\Help\Working\Output\HtmlHelp1\icons\protevent.gif
+C:\Program Files (x86)\EWSoftware\Sandcastle Help File Builder\PresentationStyles\VS2013\icons\protextension.gif -&gt; C:\Users\ABC\Documents\PicknPlaceHLib\Docu\Help\Working\Output\HtmlHelp1\icons\protextension.gif
+C:\Program Files (x86)\EWSoftware\Sandcastle Help File Builder\PresentationStyles\VS2013\icons\protfield.gif -&gt; C:\Users\ABC\Documents\PicknPlaceHLib\Docu\Help\Working\Output\HtmlHelp1\icons\protfield.gif
+C:\Program Files (x86)\EWSoftware\Sandcastle Help File Builder\PresentationStyles\VS2013\icons\protinterface.gif -&gt; C:\Users\ABC\Documents\PicknPlaceHLib\Docu\Help\Working\Output\HtmlHelp1\icons\protinterface.gif
+C:\Program Files (x86)\EWSoftware\Sandcastle Help File Builder\PresentationStyles\VS2013\icons\protmethod.gif -&gt; C:\Users\ABC\Documents\PicknPlaceHLib\Docu\Help\Working\Output\HtmlHelp1\icons\protmethod.gif
+C:\Program Files (x86)\EWSoftware\Sandcastle Help File Builder\PresentationStyles\VS2013\icons\protoperator.gif -&gt; C:\Users\ABC\Documents\PicknPlaceHLib\Docu\Help\Working\Output\HtmlHelp1\icons\protoperator.gif
+C:\Program Files (x86)\EWSoftware\Sandcastle Help File Builder\PresentationStyles\VS2013\icons\protproperty.gif -&gt; C:\Users\ABC\Documents\PicknPlaceHLib\Docu\Help\Working\Output\HtmlHelp1\icons\protproperty.gif
+C:\Program Files (x86)\EWSoftware\Sandcastle Help File Builder\PresentationStyles\VS2013\icons\protstructure.gif -&gt; C:\Users\ABC\Documents\PicknPlaceHLib\Docu\Help\Working\Output\HtmlHelp1\icons\protstructure.gif
+C:\Program Files (x86)\EWSoftware\Sandcastle Help File Builder\PresentationStyles\VS2013\icons\pubclass.gif -&gt; C:\Users\ABC\Documents\PicknPlaceHLib\Docu\Help\Working\Output\HtmlHelp1\icons\pubclass.gif
+C:\Program Files (x86)\EWSoftware\Sandcastle Help File Builder\PresentationStyles\VS2013\icons\pubdelegate.gif -&gt; C:\Users\ABC\Documents\PicknPlaceHLib\Docu\Help\Working\Output\HtmlHelp1\icons\pubdelegate.gif
+C:\Program Files (x86)\EWSoftware\Sandcastle Help File Builder\PresentationStyles\VS2013\icons\pubenumeration.gif -&gt; C:\Users\ABC\Documents\PicknPlaceHLib\Docu\Help\Working\Output\HtmlHelp1\icons\pubenumeration.gif
+C:\Program Files (x86)\EWSoftware\Sandcastle Help File Builder\PresentationStyles\VS2013\icons\pubevent.gif -&gt; C:\Users\ABC\Documents\PicknPlaceHLib\Docu\Help\Working\Output\HtmlHelp1\icons\pubevent.gif
+C:\Program Files (x86)\EWSoftware\Sandcastle Help File Builder\PresentationStyles\VS2013\icons\pubextension.gif -&gt; C:\Users\ABC\Documents\PicknPlaceHLib\Docu\Help\Working\Output\HtmlHelp1\icons\pubextension.gif
+C:\Program Files (x86)\EWSoftware\Sandcastle Help File Builder\PresentationStyles\VS2013\icons\pubfield.gif -&gt; C:\Users\ABC\Documents\PicknPlaceHLib\Docu\Help\Working\Output\HtmlHelp1\icons\pubfield.gif
+C:\Program Files (x86)\EWSoftware\Sandcastle Help File Builder\PresentationStyles\VS2013\icons\pubinterface.gif -&gt; C:\Users\ABC\Documents\PicknPlaceHLib\Docu\Help\Working\Output\HtmlHelp1\icons\pubinterface.gif
+C:\Program Files (x86)\EWSoftware\Sandcastle Help File Builder\PresentationStyles\VS2013\icons\pubmethod.gif -&gt; C:\Users\ABC\Documents\PicknPlaceHLib\Docu\Help\Working\Output\HtmlHelp1\icons\pubmethod.gif
+C:\Program Files (x86)\EWSoftware\Sandcastle Help File Builder\PresentationStyles\VS2013\icons\puboperator.gif -&gt; C:\Users\ABC\Documents\PicknPlaceHLib\Docu\Help\Working\Output\HtmlHelp1\icons\puboperator.gif
+C:\Program Files (x86)\EWSoftware\Sandcastle Help File Builder\PresentationStyles\VS2013\icons\pubproperty.gif -&gt; C:\Users\ABC\Documents\PicknPlaceHLib\Docu\Help\Working\Output\HtmlHelp1\icons\pubproperty.gif
+C:\Program Files (x86)\EWSoftware\Sandcastle Help File Builder\PresentationStyles\VS2013\icons\pubstructure.gif -&gt; C:\Users\ABC\Documents\PicknPlaceHLib\Docu\Help\Working\Output\HtmlHelp1\icons\pubstructure.gif
+C:\Program Files (x86)\EWSoftware\Sandcastle Help File Builder\PresentationStyles\VS2013\icons\SectionCollapsed.png -&gt; C:\Users\ABC\Documents\PicknPlaceHLib\Docu\Help\Working\Output\HtmlHelp1\icons\SectionCollapsed.png
+C:\Program Files (x86)\EWSoftware\Sandcastle Help File Builder\PresentationStyles\VS2013\icons\SectionExpanded.png -&gt; C:\Users\ABC\Documents\PicknPlaceHLib\Docu\Help\Working\Output\HtmlHelp1\icons\SectionExpanded.png
+C:\Program Files (x86)\EWSoftware\Sandcastle Help File Builder\PresentationStyles\VS2013\icons\slMobile.gif -&gt; C:\Users\ABC\Documents\PicknPlaceHLib\Docu\Help\Working\Output\HtmlHelp1\icons\slMobile.gif
+C:\Program Files (x86)\EWSoftware\Sandcastle Help File Builder\PresentationStyles\VS2013\icons\static.gif -&gt; C:\Users\ABC\Documents\PicknPlaceHLib\Docu\Help\Working\Output\HtmlHelp1\icons\static.gif
+C:\Program Files (x86)\EWSoftware\Sandcastle Help File Builder\PresentationStyles\VS2013\icons\xna.gif -&gt; C:\Users\ABC\Documents\PicknPlaceHLib\Docu\Help\Working\Output\HtmlHelp1\icons\xna.gif
+C:\Program Files (x86)\EWSoftware\Sandcastle Help File Builder\PresentationStyles\VS2013\scripts\branding.js -&gt; C:\Users\ABC\Documents\PicknPlaceHLib\Docu\Help\Working\Output\HtmlHelp1\scripts\branding.js
+C:\Program Files (x86)\EWSoftware\Sandcastle Help File Builder\PresentationStyles\VS2013\styles\branding-cs-CZ.css -&gt; C:\Users\ABC\Documents\PicknPlaceHLib\Docu\Help\Working\Output\HtmlHelp1\styles\branding-cs-CZ.css
+C:\Program Files (x86)\EWSoftware\Sandcastle Help File Builder\PresentationStyles\VS2013\styles\branding-de-DE.css -&gt; C:\Users\ABC\Documents\PicknPlaceHLib\Docu\Help\Working\Output\HtmlHelp1\styles\branding-de-DE.css
+C:\Program Files (x86)\EWSoftware\Sandcastle Help File Builder\PresentationStyles\VS2013\styles\branding-en-US.css -&gt; C:\Users\ABC\Documents\PicknPlaceHLib\Docu\Help\Working\Output\HtmlHelp1\styles\branding-en-US.css
+C:\Program Files (x86)\EWSoftware\Sandcastle Help File Builder\PresentationStyles\VS2013\styles\branding-es-ES.css -&gt; C:\Users\ABC\Documents\PicknPlaceHLib\Docu\Help\Working\Output\HtmlHelp1\styles\branding-es-ES.css
+C:\Program Files (x86)\EWSoftware\Sandcastle Help File Builder\PresentationStyles\VS2013\styles\branding-fr-FR.css -&gt; C:\Users\ABC\Documents\PicknPlaceHLib\Docu\Help\Working\Output\HtmlHelp1\styles\branding-fr-FR.css
+C:\Program Files (x86)\EWSoftware\Sandcastle Help File Builder\PresentationStyles\VS2013\styles\branding-Help1.css -&gt; C:\Users\ABC\Documents\PicknPlaceHLib\Docu\Help\Working\Output\HtmlHelp1\styles\branding-Help1.css
+C:\Program Files (x86)\EWSoftware\Sandcastle Help File Builder\PresentationStyles\VS2013\styles\branding-HelpViewer.css -&gt; C:\Users\ABC\Documents\PicknPlaceHLib\Docu\Help\Working\Output\HtmlHelp1\styles\branding-HelpViewer.css
+C:\Program Files (x86)\EWSoftware\Sandcastle Help File Builder\PresentationStyles\VS2013\styles\branding-it-IT.css -&gt; C:\Users\ABC\Documents\PicknPlaceHLib\Docu\Help\Working\Output\HtmlHelp1\styles\branding-it-IT.css
+C:\Program Files (x86)\EWSoftware\Sandcastle Help File Builder\PresentationStyles\VS2013\styles\branding-ja-JP.css -&gt; C:\Users\ABC\Documents\PicknPlaceHLib\Docu\Help\Working\Output\HtmlHelp1\styles\branding-ja-JP.css
+C:\Program Files (x86)\EWSoftware\Sandcastle Help File Builder\PresentationStyles\VS2013\styles\branding-ko-KR.css -&gt; C:\Users\ABC\Documents\PicknPlaceHLib\Docu\Help\Working\Output\HtmlHelp1\styles\branding-ko-KR.css
+C:\Program Files (x86)\EWSoftware\Sandcastle Help File Builder\PresentationStyles\VS2013\styles\branding-pl-PL.css -&gt; C:\Users\ABC\Documents\PicknPlaceHLib\Docu\Help\Working\Output\HtmlHelp1\styles\branding-pl-PL.css
+C:\Program Files (x86)\EWSoftware\Sandcastle Help File Builder\PresentationStyles\VS2013\styles\branding-pt-BR.css -&gt; C:\Users\ABC\Documents\PicknPlaceHLib\Docu\Help\Working\Output\HtmlHelp1\styles\branding-pt-BR.css
+C:\Program Files (x86)\EWSoftware\Sandcastle Help File Builder\PresentationStyles\VS2013\styles\branding-ru-RU.css -&gt; C:\Users\ABC\Documents\PicknPlaceHLib\Docu\Help\Working\Output\HtmlHelp1\styles\branding-ru-RU.css
+C:\Program Files (x86)\EWSoftware\Sandcastle Help File Builder\PresentationStyles\VS2013\styles\branding-tr-TR.css -&gt; C:\Users\ABC\Documents\PicknPlaceHLib\Docu\Help\Working\Output\HtmlHelp1\styles\branding-tr-TR.css
+C:\Program Files (x86)\EWSoftware\Sandcastle Help File Builder\PresentationStyles\VS2013\styles\branding-Website.css -&gt; C:\Users\ABC\Documents\PicknPlaceHLib\Docu\Help\Working\Output\HtmlHelp1\styles\branding-Website.css
+C:\Program Files (x86)\EWSoftware\Sandcastle Help File Builder\PresentationStyles\VS2013\styles\branding-zh-CN.css -&gt; C:\Users\ABC\Documents\PicknPlaceHLib\Docu\Help\Working\Output\HtmlHelp1\styles\branding-zh-CN.css
+C:\Program Files (x86)\EWSoftware\Sandcastle Help File Builder\PresentationStyles\VS2013\styles\branding-zh-TW.css -&gt; C:\Users\ABC\Documents\PicknPlaceHLib\Docu\Help\Working\Output\HtmlHelp1\styles\branding-zh-TW.css
+C:\Program Files (x86)\EWSoftware\Sandcastle Help File Builder\PresentationStyles\VS2013\styles\branding.css -&gt; C:\Users\ABC\Documents\PicknPlaceHLib\Docu\Help\Working\Output\HtmlHelp1\styles\branding.css
+    Last step completed in 00:00:00.0419
+</buildStep>
+<buildStep step="GenerateHelpFormatTableOfContents">
+Generating HTML Help 1 table of contents file...
+    Last step completed in 00:00:00.0000
+</buildStep>
+<buildStep step="GenerateHelpFileIndex">
+Generating HTML Help 1 index file...
+    Last step completed in 00:00:00.0000
+</buildStep>
+<buildStep step="GenerateHelpProject">
+Generating HTML Help 1 project file...
+    Last step completed in 00:00:00.0030
+</buildStep>
+<buildStep step="CompilingHelpFile">
+Compiling HTML Help 1 file...
+[C:\Program Files (x86)\MSBuild\14.0\bin\amd64\MSBuild.exe - Build1xHelpFile.proj]
+  Microsoft HTML Help Compiler 4.74.8702
+  
+  
+  
+  Compiling c:\Users\ABC\Documents\PicknPlaceHLib\Docu\Help\Working\Output\HtmlHelp1\Documentation.chm
+  
+  
+  
+  
+  
+  Compile time: 0 minutes, 1 second
+  
+  63	Topics
+  
+  593	Local links
+  
+  0	Internet links
+  
+  0	Graphics
+  
+  
+  
+  
+  
+  Created c:\Users\ABC\Documents\PicknPlaceHLib\Docu\Help\Working\Output\HtmlHelp1\Documentation.chm, 127,003 bytes
+  
+  Compression decreased file by 401,447 bytes.
+  
+    Last step completed in 00:00:01.3917
+</buildStep>
+<buildStep step="CleanIntermediates">
+Removing intermediate files...
+    Last step completed in 00:00:00.0189
+</buildStep>
+<buildStep step="Completed">
+
+Build completed successfully at 2021-04-19 오후 1:29:43.  Total time: 00:00:08.2018
+
+</buildStep>
+</shfbBuild>
