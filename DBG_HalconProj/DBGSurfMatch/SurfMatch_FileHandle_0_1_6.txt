@@ -1,0 +1,32 @@
+plyfileName C:\ANG\bin\OriScene.ply
+sfmfileName C:\ANG\AirConn1.sfm, C:\ANG\AirConn2.sfm, C:\ANG\AirConn3.sfm, C:\ANG\Connector1.sfm, C:\ANG\Connector2.sfm
+om3fileName C:\ANG\AirConn1.om3, C:\ANG\AirConn2.om3, C:\ANG\AirConn3.om3, C:\ANG\Connector1.om3, C:\ANG\Connector2.om3
+RoiForm 3
+MatchForm 0
+ScanXArea 50
+ScanXOverwrap 25
+ROIXAreaMin -300
+ROIXAreaMax 300
+ROIYAreaMin -200
+ROIYAreaMax 200
+ROIZPlaneMinDepth 3
+ROIZPlaneMaxDepth 100
+sampling_method fast
+sampling_distance 0.03
+find_sfm_RelSamplingDistance 0.03, 0.03, 0.03, 0.03, 0.03
+find_sfm_KeyPointFraction 0.4, 0.4, 0.4, 0.5, 0.5
+find_sfm_MinScore 0.3, 0.4, 0.2, 0.1, 0.1
+find_sfm_NumMatch 5, 10, 5, 6, 6
+find_sfm_FindMethod fast
+find_sfm_ScoreType model_point_fraction
+find_sfm_max_overlap_dist_value 1
+AxisAlign 2
+find_sfm_max_overlap_dist_type max_overlap_dist_rel
+find_sfm_pose_ref_use_scene_normals_value false
+find_sfm_pose_ref_num_steps_value 1
+find_sfm_pose_ref_sub_sampling_value 1
+PickLimitDegree 90
+FindSurfModelTimeoutSec 30
+AutoRoiNOWPointN_BeforePointNDIFF 15
+MultiModelOverlapMatchingMode 2
+MultiModelOverlapMargin 11

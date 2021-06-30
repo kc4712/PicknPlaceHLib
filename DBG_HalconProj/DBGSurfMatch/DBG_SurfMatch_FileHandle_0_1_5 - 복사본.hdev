@@ -1,0 +1,2087 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hdevelop file_version="1.2" halcon_version="20.11.1.2">
+<procedure name="main">
+<interface/>
+<body>
+<l>dev_update_off ()</l>
+<l>SurfMatch_FileHandle_Params := 'SurfMatch_FileHandle_0_1_5.txt'</l>
+<l>open_file(SurfMatch_FileHandle_Params, 'input', FileHandleIn)</l>
+<l>IsEOF1 := 0</l>
+<l>while (IsEOF1 != 1)</l>
+<l>  fread_line (FileHandleIn, OutLine, IsEOF1)</l>
+<c>  </c>
+<l>  tuple_strstr(OutLine, 'plyfileName', Position)</l>
+<l>  if(Position == 0)</l>
+<l>      tuple_split(OutLine, '\\', strSplit)</l>
+<l>      tuple_length(strSplit, strSplitLength)</l>
+<l>      plyfileName_buf := strSplit[strSplitLength-1]</l>
+<l>      tuple_strlen(plyfileName_buf, strLength)</l>
+<l>      tuple_str_first_n(plyfileName_buf, strLength-2, plyFilename)</l>
+<l>      Postion := -1</l>
+<l>  endif</l>
+<c>  </c>
+<l>  tuple_strstr(OutLine, 'sfmfileName', Position)</l>
+<l>  if(Position == 0) </l>
+<l>      tuple_split(OutLine, '\\', strSplit)</l>
+<l>      tuple_length(strSplit, strSplitLength)</l>
+<l>      sfmFileName_buf := strSplit[strSplitLength-1]</l>
+<l>      tuple_strlen(sfmFileName_buf, strLength)</l>
+<l>      tuple_str_first_n(sfmFileName_buf, strLength-2, sfmFileName)</l>
+<l>      Postion := -1</l>
+<l>  endif</l>
+<c>  </c>
+<l>  tuple_strstr(OutLine, 'om3fileName', Position)</l>
+<l>  if(Position == 0)</l>
+<l>      tuple_split(OutLine, '\\', strSplit)</l>
+<l>      tuple_length(strSplit, strSplitLength)</l>
+<l>      om3FileName_buf := strSplit[strSplitLength-1]</l>
+<l>      tuple_strlen(om3FileName_buf, strLength)</l>
+<l>      tuple_str_first_n(om3FileName_buf, strLength-2, om3FileName)</l>
+<l>      Postion := -1</l>
+<l>  endif</l>
+<c>  </c>
+<l>  tuple_strstr(OutLine, 'SimpleObjMatch', Position)</l>
+<l>  if(Position == 0)</l>
+<l>      tuple_split(OutLine, ' ', strSplit)</l>
+<l>      tuple_length(strSplit, strSplitLength)</l>
+<l>      SimpleObjMatch_buf := strSplit[strSplitLength-1]</l>
+<l>      tuple_strlen(SimpleObjMatch_buf, strLength)</l>
+<l>      tuple_str_first_n(SimpleObjMatch_buf, strLength-2, SimpleObjMatch)</l>
+<l>      tuple_number(SimpleObjMatch, SimpleObjMatch)</l>
+<l>      Postion := -1</l>
+<l>  endif</l>
+<c>  </c>
+<l>  tuple_strstr(OutLine, 'BOXLengthX', Position)</l>
+<l>  if(Position == 0)</l>
+<l>      tuple_split(OutLine, ' ', strSplit)</l>
+<l>      tuple_length(strSplit, strSplitLength)</l>
+<l>      BOXLengthX_buf := strSplit[strSplitLength-1]</l>
+<l>      tuple_strlen(BOXLengthX_buf, strLength)</l>
+<l>      tuple_str_first_n(BOXLengthX_buf, strLength-2, BOXLengthX)</l>
+<l>      tuple_number(BOXLengthX, BOXLengthX)</l>
+<l>      Postion := -1</l>
+<l>  endif</l>
+<c>  </c>
+<l>  tuple_strstr(OutLine, 'BOXLengthY', Position)</l>
+<l>  if(Position == 0)</l>
+<l>      tuple_split(OutLine, ' ', strSplit)</l>
+<l>      tuple_length(strSplit, strSplitLength)</l>
+<l>      BOXLengthY_buf := strSplit[strSplitLength-1]</l>
+<l>      tuple_strlen(BOXLengthY_buf, strLength)</l>
+<l>      tuple_str_first_n(BOXLengthY_buf, strLength-2, BOXLengthY)</l>
+<l>      tuple_number(BOXLengthY, BOXLengthY)</l>
+<l>      Postion := -1</l>
+<l>  endif</l>
+<c>  </c>
+<l>  tuple_strstr(OutLine, 'BOXLengthZ', Position)</l>
+<l>  if(Position == 0)</l>
+<l>      tuple_split(OutLine, ' ', strSplit)</l>
+<l>      tuple_length(strSplit, strSplitLength)</l>
+<l>      BOXLengthZ_buf := strSplit[strSplitLength-1]</l>
+<l>      tuple_strlen(BOXLengthZ_buf, strLength)</l>
+<l>      tuple_str_first_n(BOXLengthZ_buf, strLength-2, BOXLengthZ)</l>
+<l>      tuple_number(BOXLengthZ, BOXLengthZ)</l>
+<l>      Postion := -1</l>
+<l>  endif</l>
+<c>  </c>
+<l>  tuple_strstr(OutLine, 'SphereRadius', Position)</l>
+<l>  if(Position == 0)</l>
+<l>      tuple_split(OutLine, ' ', strSplit)</l>
+<l>      tuple_length(strSplit, strSplitLength)</l>
+<l>      SphereRadius_buf := strSplit[strSplitLength-1]</l>
+<l>      tuple_strlen(SphereRadius_buf, strLength)</l>
+<l>      tuple_str_first_n(SphereRadius_buf, strLength-2, SphereRadius)</l>
+<l>      tuple_number(SphereRadius, SphereRadius)</l>
+<l>      Postion := -1</l>
+<l>  endif</l>
+<c>  </c>
+<l>  tuple_strstr(OutLine, 'CylinderRadius', Position)</l>
+<l>  if(Position == 0)</l>
+<l>      tuple_split(OutLine, ' ', strSplit)</l>
+<l>      tuple_length(strSplit, strSplitLength)</l>
+<l>      CylinderRadius_buf := strSplit[strSplitLength-1]</l>
+<l>      tuple_strlen(CylinderRadius_buf, strLength)</l>
+<l>      tuple_str_first_n(CylinderRadius_buf, strLength-2, CylinderRadius)</l>
+<l>      tuple_number(CylinderRadius, CylinderRadius)</l>
+<l>      Postion := -1</l>
+<l>  endif</l>
+<c>  </c>
+<l>  tuple_strstr(OutLine, 'CylinderZMinExt', Position)</l>
+<l>  if(Position == 0)</l>
+<l>      tuple_split(OutLine, ' ', strSplit)</l>
+<l>      tuple_length(strSplit, strSplitLength)</l>
+<l>      CylinderZMinExt_buf := strSplit[strSplitLength-1]</l>
+<l>      tuple_strlen(CylinderZMinExt_buf, strLength)</l>
+<l>      tuple_str_first_n(CylinderZMinExt_buf, strLength-2, CylinderZMinExt)</l>
+<l>      tuple_number(CylinderZMinExt, CylinderZMinExt)</l>
+<l>      Postion := -1</l>
+<l>  endif</l>
+<c>  </c>
+<l>  tuple_strstr(OutLine, 'CylinderZMaxExt', Position)</l>
+<l>  if(Position == 0)</l>
+<l>      tuple_split(OutLine, ' ', strSplit)</l>
+<l>      tuple_length(strSplit, strSplitLength)</l>
+<l>      CylinderZMaxExt_buf := strSplit[strSplitLength-1]</l>
+<l>      tuple_strlen(CylinderZMaxExt_buf, strLength)</l>
+<l>      tuple_str_first_n(CylinderZMaxExt_buf, strLength-2, CylinderZMaxExt)</l>
+<l>      tuple_number(CylinderZMaxExt, CylinderZMaxExt)</l>
+<l>      Postion := -1</l>
+<l>  endif</l>
+<c>  </c>
+<l>  tuple_strstr(OutLine, 'SimpleModelSampleVal', Position)</l>
+<l>  if(Position == 0)</l>
+<l>      tuple_split(OutLine, ' ', strSplit)</l>
+<l>      tuple_length(strSplit, strSplitLength)</l>
+<l>      SimpleModelSampleVal_buf := strSplit[strSplitLength-1]</l>
+<l>      tuple_strlen(SimpleModelSampleVal_buf, strLength)</l>
+<l>      tuple_str_first_n(SimpleModelSampleVal_buf, strLength-2, SimpleModelSampleVal)</l>
+<l>      tuple_number(SimpleModelSampleVal, SimpleModelSampleVal)</l>
+<l>      Postion := -1</l>
+<l>  endif</l>
+<c>  </c>
+<l>  tuple_strstr(OutLine, 'CreateSFMSampleVal', Position)</l>
+<l>  if(Position == 0)</l>
+<l>      tuple_split(OutLine, ' ', strSplit)</l>
+<l>      tuple_length(strSplit, strSplitLength)</l>
+<l>      CreateSFMSampleVal_buf := strSplit[strSplitLength-1]</l>
+<l>      tuple_strlen(CreateSFMSampleVal_buf, strLength)</l>
+<l>      tuple_str_first_n(CreateSFMSampleVal_buf, strLength-2, CreateSFMSampleVal)</l>
+<l>      tuple_number(CreateSFMSampleVal, CreateSFMSampleVal)</l>
+<l>      Postion := -1</l>
+<l>  endif</l>
+<c>    </c>
+<l>  tuple_strstr(OutLine, 'RoiForm', Position)</l>
+<l>  if(Position == 0)</l>
+<l>      tuple_split(OutLine, ' ', strSplit)</l>
+<l>      tuple_length(strSplit, strSplitLength)</l>
+<l>      RoiForm_buf := strSplit[strSplitLength-1]</l>
+<l>      tuple_strlen(RoiForm_buf, strLength)</l>
+<l>      tuple_str_first_n(RoiForm_buf, strLength-2, RoiForm)</l>
+<l>      tuple_number(RoiForm, RoiForm)</l>
+<l>      Postion := -1</l>
+<l>  endif</l>
+<c>  </c>
+<l>  tuple_strstr(OutLine, 'MatchForm', Position)</l>
+<l>  if(Position == 0)</l>
+<l>      tuple_split(OutLine, ' ', strSplit)</l>
+<l>      tuple_length(strSplit, strSplitLength)</l>
+<l>      MatchForm_buf := strSplit[strSplitLength-1]</l>
+<l>      tuple_strlen(MatchForm_buf, strLength)</l>
+<l>      tuple_str_first_n(MatchForm_buf, strLength-2, MatchForm)</l>
+<l>      tuple_number(MatchForm, MatchForm)</l>
+<l>      Postion := -1</l>
+<l>  endif</l>
+<c>  </c>
+<l>  tuple_strstr(OutLine, 'ScanXArea', Position)</l>
+<l>  if(Position == 0)</l>
+<l>      tuple_split(OutLine, ' ', strSplit)</l>
+<l>      tuple_length(strSplit, strSplitLength)</l>
+<l>      ScanXArea_buf := strSplit[strSplitLength-1]</l>
+<l>      tuple_strlen(ScanXArea_buf, strLength)</l>
+<l>      tuple_str_first_n(ScanXArea_buf, strLength-2, ScanXArea)</l>
+<l>      tuple_number(ScanXArea, ScanXArea)</l>
+<l>      Postion := -1</l>
+<l>  endif</l>
+<c>  </c>
+<l>  tuple_strstr(OutLine, 'ScanXOverwrap', Position)</l>
+<l>  if(Position == 0)</l>
+<l>      tuple_split(OutLine, ' ', strSplit)</l>
+<l>      tuple_length(strSplit, strSplitLength)</l>
+<l>      ScanXOverwrap_buf := strSplit[strSplitLength-1]</l>
+<l>      tuple_strlen(ScanXOverwrap_buf, strLength)</l>
+<l>      tuple_str_first_n(ScanXOverwrap_buf, strLength-2, ScanXOverwrap)</l>
+<l>      tuple_number(ScanXOverwrap, ScanXOverwrap)</l>
+<l>      Postion := -1</l>
+<l>  endif</l>
+<c>  </c>
+<l>  tuple_strstr(OutLine, 'ROIXAreaMin', Position)</l>
+<l>  if(Position == 0)</l>
+<l>      tuple_split(OutLine, ' ', strSplit)</l>
+<l>      tuple_length(strSplit, strSplitLength)</l>
+<l>      ROIXAreaMin_buf := strSplit[strSplitLength-1]</l>
+<l>      tuple_strlen(ROIXAreaMin_buf, strLength)</l>
+<l>      tuple_str_first_n(ROIXAreaMin_buf, strLength-2, ROIXAreaMin)</l>
+<l>      tuple_number(ROIXAreaMin, ROIXAreaMin)</l>
+<l>      Postion := -1</l>
+<l>  endif</l>
+<c>  </c>
+<l>  tuple_strstr(OutLine, 'ROIXAreaMax', Position)</l>
+<l>  if(Position == 0)</l>
+<l>      tuple_split(OutLine, ' ', strSplit)</l>
+<l>      tuple_length(strSplit, strSplitLength)</l>
+<l>      ROIXAreaMax_buf := strSplit[strSplitLength-1]</l>
+<l>      tuple_strlen(ROIXAreaMax_buf, strLength)</l>
+<l>      tuple_str_first_n(ROIXAreaMax_buf, strLength-2, ROIXAreaMax)</l>
+<l>      tuple_number(ROIXAreaMax, ROIXAreaMax)</l>
+<l>      Postion := -1</l>
+<l>  endif</l>
+<c>  </c>
+<l>  tuple_strstr(OutLine, 'ROIYAreaMin', Position)</l>
+<l>  if(Position == 0)</l>
+<l>      tuple_split(OutLine, ' ', strSplit)</l>
+<l>      tuple_length(strSplit, strSplitLength)</l>
+<l>      ROIYAreaMin_buf := strSplit[strSplitLength-1]</l>
+<l>      tuple_strlen(ROIYAreaMin_buf, strLength)</l>
+<l>      tuple_str_first_n(ROIYAreaMin_buf, strLength-2, ROIYAreaMin)</l>
+<l>      tuple_number(ROIYAreaMin, ROIYAreaMin)</l>
+<l>      Postion := -1</l>
+<l>  endif</l>
+<c>  </c>
+<l>  tuple_strstr(OutLine, 'ROIYAreaMax', Position)</l>
+<l>  if(Position == 0)</l>
+<l>      tuple_split(OutLine, ' ', strSplit)</l>
+<l>      tuple_length(strSplit, strSplitLength)</l>
+<l>      ROIYAreaMax_buf := strSplit[strSplitLength-1]</l>
+<l>      tuple_strlen(ROIYAreaMax_buf, strLength)</l>
+<l>      tuple_str_first_n(ROIYAreaMax_buf, strLength-2, ROIYAreaMax)</l>
+<l>      tuple_number(ROIYAreaMax, ROIYAreaMax)</l>
+<l>      Postion := -1</l>
+<l>  endif</l>
+<c>  </c>
+<l>  tuple_strstr(OutLine, 'ROIZPlaneMinDepth', Position)</l>
+<l>  if(Position == 0)</l>
+<l>      tuple_split(OutLine, ' ', strSplit)</l>
+<l>      tuple_length(strSplit, strSplitLength)</l>
+<l>      ROIZPlaneMinDepth_buf := strSplit[strSplitLength-1]</l>
+<l>      tuple_strlen(ROIZPlaneMinDepth_buf, strLength)</l>
+<l>      tuple_str_first_n(ROIZPlaneMinDepth_buf, strLength-2, ROIZPlaneMinDepth)</l>
+<l>      tuple_number(ROIZPlaneMinDepth, ROIZPlaneMinDepth)</l>
+<l>      Postion := -1</l>
+<l>  endif</l>
+<c>  </c>
+<l>  tuple_strstr(OutLine, 'ROIZPlaneMaxDepth', Position)</l>
+<l>  if(Position == 0)</l>
+<l>      tuple_split(OutLine, ' ', strSplit)</l>
+<l>      tuple_length(strSplit, strSplitLength)</l>
+<l>      ROIZPlaneMaxDepth_buf := strSplit[strSplitLength-1]</l>
+<l>      tuple_strlen(ROIZPlaneMaxDepth_buf, strLength)</l>
+<l>      tuple_str_first_n(ROIZPlaneMaxDepth_buf, strLength-2, ROIZPlaneMaxDepth)</l>
+<l>      tuple_number(ROIZPlaneMaxDepth, ROIZPlaneMaxDepth)</l>
+<l>      Postion := -1</l>
+<l>  endif</l>
+<c>  </c>
+<l>  tuple_strstr(OutLine, 'sampling_method', Position)</l>
+<l>  if(Position == 0)</l>
+<l>      tuple_split(OutLine, ' ', strSplit)</l>
+<l>      tuple_length(strSplit, strSplitLength)</l>
+<l>      sampling_method_buf := strSplit[strSplitLength-1]</l>
+<l>      tuple_strlen(sampling_method_buf, strLength)</l>
+<l>      tuple_str_first_n(sampling_method_buf, strLength-2, sampling_method)</l>
+<l>      Postion := -1</l>
+<l>  endif</l>
+<c>  </c>
+<l>  tuple_strstr(OutLine, 'sampling_distance', Position)</l>
+<l>  if(Position == 0)</l>
+<l>      tuple_split(OutLine, ' ', strSplit)</l>
+<l>      tuple_length(strSplit, strSplitLength)</l>
+<l>      sampling_distance_buf := strSplit[strSplitLength-1]</l>
+<l>      tuple_strlen(sampling_distance_buf, strLength)</l>
+<l>      tuple_str_first_n(sampling_distance_buf, strLength-2, sampling_distance)</l>
+<l>      tuple_number(sampling_distance, sampling_distance)</l>
+<l>      Postion := -1</l>
+<l>  endif</l>
+<c>  </c>
+<l>  tuple_strstr(OutLine, 'find_sfm_RelSamplingDistance', Position)</l>
+<l>  if(Position == 0)</l>
+<l>      tuple_split(OutLine, ' ', strSplit)</l>
+<l>      tuple_length(strSplit, strSplitLength)</l>
+<l>      find_sfm_RelSamplingDistance_buf := strSplit[strSplitLength-1]</l>
+<l>      tuple_strlen(find_sfm_RelSamplingDistance_buf, strLength)</l>
+<l>      tuple_str_first_n(find_sfm_RelSamplingDistance_buf, strLength-2, find_sfm_RelSamplingDistance)</l>
+<l>      tuple_number(find_sfm_RelSamplingDistance, find_sfm_RelSamplingDistance)</l>
+<l>      Postion := -1</l>
+<l>  endif</l>
+<c>  </c>
+<l>  tuple_strstr(OutLine, 'find_sfm_KeyPointFraction', Position)</l>
+<l>  if(Position == 0)</l>
+<l>      tuple_split(OutLine, ' ', strSplit)</l>
+<l>      tuple_length(strSplit, strSplitLength)</l>
+<l>      find_sfm_KeyPointFraction_buf := strSplit[strSplitLength-1]</l>
+<l>      tuple_strlen(find_sfm_KeyPointFraction_buf, strLength)</l>
+<l>      tuple_str_first_n(find_sfm_KeyPointFraction_buf, strLength-2, find_sfm_KeyPointFraction)</l>
+<l>      tuple_number(find_sfm_KeyPointFraction, find_sfm_KeyPointFraction)</l>
+<l>      Postion := -1</l>
+<l>  endif</l>
+<c>  </c>
+<l>  tuple_strstr(OutLine, 'find_sfm_MinScore', Position)</l>
+<l>  if(Position == 0)</l>
+<l>      tuple_split(OutLine, ' ', strSplit)</l>
+<l>      tuple_length(strSplit, strSplitLength)</l>
+<l>      find_sfm_MinScore_buf := strSplit[strSplitLength-1]</l>
+<l>      tuple_strlen(find_sfm_MinScore_buf, strLength)</l>
+<l>      tuple_str_first_n(find_sfm_MinScore_buf, strLength-2, find_sfm_MinScore)</l>
+<l>      tuple_number(find_sfm_MinScore, find_sfm_MinScore)</l>
+<l>      Postion := -1</l>
+<l>  endif</l>
+<c>  </c>
+<l>  tuple_strstr(OutLine, 'find_sfm_NumMatch', Position)</l>
+<l>  if(Position == 0)</l>
+<l>      tuple_split(OutLine, ' ', strSplit)</l>
+<l>      tuple_length(strSplit, strSplitLength)</l>
+<l>      find_sfm_NumMatch_buf := strSplit[strSplitLength-1]</l>
+<l>      tuple_strlen(find_sfm_NumMatch_buf, strLength)</l>
+<l>      tuple_str_first_n(find_sfm_NumMatch_buf, strLength-2, find_sfm_NumMatch)</l>
+<l>      tuple_number(find_sfm_NumMatch,find_sfm_NumMatch)</l>
+<l>      Postion := -1</l>
+<l>  endif</l>
+<c>  </c>
+<l>  tuple_strstr(OutLine, 'find_sfm_FindMethod', Position)</l>
+<l>  if(Position == 0)</l>
+<l>      tuple_split(OutLine, ' ', strSplit)</l>
+<l>      tuple_length(strSplit, strSplitLength)</l>
+<l>      find_sfm_FindMethod_buf := strSplit[strSplitLength-1]</l>
+<l>      tuple_strlen(find_sfm_FindMethod_buf, strLength)</l>
+<l>      tuple_str_first_n(find_sfm_FindMethod_buf, strLength-2, find_sfm_FindMethod)</l>
+<l>      Postion := -1</l>
+<l>  endif</l>
+<c>  </c>
+<l>  tuple_strstr(OutLine, 'find_sfm_ScoreType', Position)</l>
+<l>  if(Position == 0)</l>
+<l>      tuple_split(OutLine, ' ', strSplit)</l>
+<l>      tuple_length(strSplit, strSplitLength)</l>
+<l>      find_sfm_ScoreType_buf := strSplit[strSplitLength-1]</l>
+<l>      tuple_strlen(find_sfm_ScoreType_buf, strLength)</l>
+<l>      tuple_str_first_n(find_sfm_ScoreType_buf, strLength-2, find_sfm_ScoreType)</l>
+<l>      Postion := -1</l>
+<l>  endif</l>
+<c>  </c>
+<l>  tuple_strstr(OutLine, 'find_sfm_max_overlap_dist_value', Position)</l>
+<l>  if(Position == 0)</l>
+<l>      tuple_split(OutLine, ' ', strSplit)</l>
+<l>      tuple_length(strSplit, strSplitLength)</l>
+<l>      find_sfm_max_overlap_dist_value_buf := strSplit[strSplitLength-1]</l>
+<l>      tuple_strlen(find_sfm_max_overlap_dist_value_buf, strLength)</l>
+<l>      tuple_str_first_n(find_sfm_max_overlap_dist_value_buf, strLength-2, find_sfm_max_overlap_dist_value)</l>
+<l>      tuple_number(find_sfm_max_overlap_dist_value, find_sfm_max_overlap_dist_value)</l>
+<l>      Postion := -1</l>
+<l>  endif</l>
+<c>  </c>
+<l>  tuple_strstr(OutLine, 'AxisAlign', Position)</l>
+<l>  if(Position == 0)</l>
+<l>      tuple_split(OutLine, ' ', strSplit)</l>
+<l>      tuple_length(strSplit, strSplitLength)</l>
+<l>      AxisAlign_buf := strSplit[strSplitLength-1]</l>
+<l>      tuple_strlen(AxisAlign_buf, strLength)</l>
+<l>      tuple_str_first_n(AxisAlign_buf, strLength-2, AxisAlign)</l>
+<l>      tuple_number(AxisAlign, AxisAlign)</l>
+<l>      Postion := -1</l>
+<l>  endif</l>
+<c>  </c>
+<l>  tuple_strstr(OutLine, 'find_sfm_max_overlap_dist_type', Position)</l>
+<l>  if(Position == 0)</l>
+<l>      tuple_split(OutLine, ' ', strSplit)</l>
+<l>      tuple_length(strSplit, strSplitLength)</l>
+<l>      find_sfm_max_overlap_dist_type_buf := strSplit[strSplitLength-1]</l>
+<l>      tuple_strlen(find_sfm_max_overlap_dist_type_buf, strLength)</l>
+<l>      tuple_str_first_n(find_sfm_max_overlap_dist_type_buf, strLength-2, find_sfm_max_overlap_dist_type)</l>
+<l>      Postion := -1</l>
+<l>  endif</l>
+<c>  </c>
+<l>  tuple_strstr(OutLine, 'find_sfm_pose_ref_use_scene_normals_value', Position)</l>
+<l>  if(Position == 0)</l>
+<l>      tuple_split(OutLine, ' ', strSplit)</l>
+<l>      tuple_length(strSplit, strSplitLength)</l>
+<l>      find_sfm_pose_ref_use_scene_normals_value_buf := strSplit[strSplitLength-1]</l>
+<l>      tuple_strlen(find_sfm_pose_ref_use_scene_normals_value_buf, strLength)</l>
+<l>      tuple_str_first_n(find_sfm_pose_ref_use_scene_normals_value_buf, strLength-2, find_sfm_pose_ref_use_scene_normals_value)</l>
+<l>      Postion := -1</l>
+<l>  endif</l>
+<c>  </c>
+<l>  tuple_strstr(OutLine, 'find_sfm_pose_ref_num_steps_value', Position)</l>
+<l>  if(Position == 0)</l>
+<l>      tuple_split(OutLine, ' ', strSplit)</l>
+<l>      tuple_length(strSplit, strSplitLength)</l>
+<l>      find_sfm_pose_ref_num_steps_value_buf := strSplit[strSplitLength-1]</l>
+<l>      tuple_strlen(find_sfm_pose_ref_num_steps_value_buf, strLength)</l>
+<l>      tuple_str_first_n(find_sfm_pose_ref_num_steps_value_buf, strLength-2, find_sfm_pose_ref_num_steps_value)</l>
+<l>      tuple_number(find_sfm_pose_ref_num_steps_value,find_sfm_pose_ref_num_steps_value)</l>
+<l>      Postion := -1</l>
+<l>  endif</l>
+<c>  </c>
+<l>  tuple_strstr(OutLine, 'find_sfm_pose_ref_sub_sampling_value', Position)</l>
+<l>  if(Position == 0)</l>
+<l>      tuple_split(OutLine, ' ', strSplit)</l>
+<l>      tuple_length(strSplit, strSplitLength)</l>
+<l>      find_sfm_pose_ref_sub_sampling_value_buf := strSplit[strSplitLength-1]</l>
+<l>      tuple_strlen(find_sfm_pose_ref_sub_sampling_value_buf, strLength)</l>
+<l>      tuple_str_first_n(find_sfm_pose_ref_sub_sampling_value_buf, strLength-2, find_sfm_pose_ref_sub_sampling_value)</l>
+<l>      tuple_number(find_sfm_pose_ref_sub_sampling_value,find_sfm_pose_ref_sub_sampling_value)</l>
+<l>      Postion := -1</l>
+<l>  endif</l>
+<c>  </c>
+<l>  tuple_strstr(OutLine, 'PickLimitDegree', Position)</l>
+<l>  if(Position == 0)</l>
+<l>      tuple_split(OutLine, ' ', strSplit)</l>
+<l>      tuple_length(strSplit, strSplitLength)</l>
+<l>      PickLimitDegree_buf := strSplit[strSplitLength-1]</l>
+<l>      tuple_strlen(PickLimitDegree_buf, strLength)</l>
+<l>      tuple_str_first_n(PickLimitDegree_buf, strLength-2, PickLimitDegree)</l>
+<l>      tuple_number(PickLimitDegree, PickLimitDegree)</l>
+<l>  endif</l>
+<c>  </c>
+<l>  tuple_strstr(OutLine, 'FindSurfModelTimeoutSec', Position)</l>
+<l>  if(Position == 0)</l>
+<l>      tuple_split(OutLine, ' ', strSplit)</l>
+<l>      tuple_length(strSplit, strSplitLength)</l>
+<l>      FindSurfModelTimeoutSec_buf := strSplit[strSplitLength-1]</l>
+<l>      tuple_strlen(FindSurfModelTimeoutSec_buf, strLength)</l>
+<l>      tuple_str_first_n(FindSurfModelTimeoutSec_buf, strLength-2, FindSurfModelTimeoutSec)</l>
+<l>      tuple_number(FindSurfModelTimeoutSec, FindSurfModelTimeoutSec)</l>
+<l>  endif</l>
+<c>  </c>
+<l>  tuple_strstr(OutLine, 'AutoRoiNOWPointN_BebforePointNDIFF', Position)</l>
+<l>  if(Position == 0)</l>
+<l>      tuple_split(OutLine, ' ', strSplit)</l>
+<l>      tuple_length(strSplit, strSplitLength)</l>
+<l>      AutoRoiNOWPointN_BebforePointNDIFF_buf := strSplit[strSplitLength-1]</l>
+<l>      tuple_strlen(AutoRoiNOWPointN_BebforePointNDIFF_buf, strLength)</l>
+<l>      tuple_str_first_n(AutoRoiNOWPointN_BebforePointNDIFF_buf, strLength-2, AutoRoiNOWPointN_BebforePointNDIFF)</l>
+<l>      tuple_number(AutoRoiNOWPointN_BebforePointNDIFF, AutoRoiNOWPointN_BebforePointNDIFF)</l>
+<l>  endif</l>
+<c>  </c>
+<c>  </c>
+<l>endwhile</l>
+<l>close_file(FileHandleIn)</l>
+<l>ArrowLength := 80</l>
+<l>ArrowThickness := 3</l>
+<c></c>
+<c>*SIMPLEOBJ_MATCH == 0.....</c>
+<l>tuple_add (sfmFileName, '', SFMFilename)</l>
+<l>read_surface_model (SFMFilename, SFM)</l>
+<c></c>
+<c>* Loading the HALCON 3D object model (used for visualization purpose)</c>
+<l>tuple_add (om3FileName, '', ObjectModel3DFilename)</l>
+<l>read_object_model_3d (ObjectModel3DFilename, 'm', [], [], ObjectModel3D, Status)</l>
+<l>get_surface_model_param(SFM, 'sampled_model', SFMModel)</l>
+<c></c>
+<c>* Computing 3D object model normals, which is necessary for surface-based 3D matching</c>
+<l>count_seconds (T0)</l>
+<l>tuple_add(plyFilename,'', SceneFilename)</l>
+<l>read_object_model_3d (SceneFilename, 'm', ['xyz_map_width'], [1920], ObjectModel_Scene, Status)</l>
+<c></c>
+<l>get_object_model_3d_params (ObjectModel_Scene, 'red', red)</l>
+<l>get_object_model_3d_params (ObjectModel_Scene, 'green', green)</l>
+<l>get_object_model_3d_params (ObjectModel_Scene, 'blue', blue)</l>
+<l>set_object_model_3d_attrib (ObjectModel_Scene, '&amp;red', 'points', red, ObjectModel_Scene)</l>
+<l>set_object_model_3d_attrib (ObjectModel_Scene, '&amp;green', 'points', green, ObjectModel_Scene)</l>
+<l>set_object_model_3d_attrib (ObjectModel_Scene, '&amp;blue', 'points', blue, ObjectModel_Scene)</l>
+<c></c>
+<l>object_model_3d_to_xyz( X, Y, Z, ObjectModel_Scene, 'from_xyz_map', [], [])  </l>
+<l>get_image_size (X, Width, Height)</l>
+<l>gen_image_const (R, 'real', Width, Height)</l>
+<l>gen_image_const (G, 'real', Width, Height)</l>
+<l>gen_image_const (B, 'real', Width, Height)</l>
+<l>get_domain (R, Domain)</l>
+<l>get_region_points (Domain, Rows, Columns)</l>
+<l>set_grayval (R, Rows, Columns, red)</l>
+<l>set_grayval (G, Rows, Columns, green)</l>
+<l>set_grayval (B, Rows, Columns, blue)</l>
+<l>compose3 (R, G, B, RGBA)</l>
+<l>xyz_to_object_model_3d (X, Y, Z, ObjectModel_Scene)</l>
+<c></c>
+<l>if (RoiForm == 1)</l>
+<l>    for Index1 := ROIXAreaMin to ROIXAreaMax by ScanXOverwrap</l>
+<l>        if(Index1+ScanXArea &gt; ROIXAreaMax )</l>
+<l>            RGB_Scene := RGBA</l>
+<l>            ObjectModel_Scene := ObjectModel_Scene</l>
+<l>            ObjectModel3D_Result := ObjectModel_Scene</l>
+<l>            ObjectModel3D_ResultArrow := ObjectModel_Scene</l>
+<l>            ObjectModel3D_ResultRoI := ObjectModel_Scene</l>
+<l>            MatchResult := 'Failed'</l>
+<l>            break</l>
+<l>        endif</l>
+<c>        </c>
+<l>        if (MatchForm == 1)</l>
+<l>            xyz_to_object_model_3d (X, Y, Z, ObjectModel_Scene)</l>
+<l>            sample_object_model_3d (ObjectModel_Scene, sampling_method, sampling_distance, [], [], ObjectModel_Scene)</l>
+<l>            select_points_object_model_3d (ObjectModel_Scene, 'point_coord_x', Index1, Index1+ScanXArea, ObjectModel_SceneSampled)</l>
+<l>            triangulate_object_model_3d (ObjectModel_SceneSampled, 'xyz_mapping', [], [], TriangulatedObjectModel3D1, Information)</l>
+<l>            fit_primitives_object_model_3d (TriangulatedObjectModel3D1, 'primitive_type', 'plane', ObjectModel3DOut)</l>
+<l>            get_object_model_3d_params (ObjectModel3DOut, 'primitive_parameter_pose', Pose_primitive_plane)</l>
+<l>            pose_invert (Pose_primitive_plane, PoseInvert_primitive_plane)</l>
+<l>            SampleSceneCenterZ := PoseInvert_primitive_plane</l>
+<l>            pose_to_hom_mat3d (PoseInvert_primitive_plane, HomMat3D_invert)</l>
+<l>            affine_trans_object_model_3d (ObjectModel_SceneSampled, HomMat3D_invert, Triangulated_ObjectModel3DAffineTrans)</l>
+<l>            select_points_object_model_3d (Triangulated_ObjectModel3DAffineTrans, 'point_coord_z', ROIZPlaneMinDepth, ROIZPlaneMaxDepth, ObjectModel3DThresholded2)</l>
+<l>            pose_to_hom_mat3d (Pose_primitive_plane, HomMat3D)</l>
+<l>            affine_trans_object_model_3d (ObjectModel3DThresholded2, HomMat3D, ObjectModel3DAffineTrans)</l>
+<l>            ObjectModel_SceneSampled := ObjectModel3DAffineTrans</l>
+<l>        elseif(MatchForm == 2)</l>
+<l>            xyz_to_object_model_3d (X, Y, Z, ObjectModel_Scene)</l>
+<l>            sample_object_model_3d (ObjectModel_Scene, sampling_method, sampling_distance, [], [], ObjectModel_Scene)</l>
+<l>            select_points_object_model_3d (ObjectModel_Scene, 'point_coord_x', Index1, Index1+ScanXArea, ObjectModel_SceneSampled)</l>
+<l>            fit_primitives_object_model_3d (ObjectModel_SceneSampled, 'primitive_type', 'plane', ObjectModel3DOut)</l>
+<l>            get_object_model_3d_params (ObjectModel3DOut, 'primitive_parameter_pose', Pose_primitive_plane)</l>
+<l>            pose_invert (Pose_primitive_plane, PoseInvert_primitive_plane)</l>
+<l>            SampleSceneCenterZ := PoseInvert_primitive_plane</l>
+<l>            pose_to_hom_mat3d (PoseInvert_primitive_plane, HomMat3D_invert)</l>
+<l>            affine_trans_object_model_3d (ObjectModel_SceneSampled, HomMat3D_invert, Triangulated_ObjectModel3DAffineTrans)</l>
+<l>            select_points_object_model_3d (Triangulated_ObjectModel3DAffineTrans, 'point_coord_z', ROIZPlaneMinDepth, ROIZPlaneMaxDepth, ObjectModel3DThresholded2)</l>
+<l>            get_object_model_3d_params (ObjectModel3DThresholded2, 'num_points', ObjectModel3DThresholded2_PointNum)</l>
+<l>            if(ObjectModel3DThresholded2_PointNum &lt; 1)</l>
+<l>                continue</l>
+<l>            endif</l>
+<l>            pose_to_hom_mat3d (Pose_primitive_plane, HomMat3D)</l>
+<l>            affine_trans_object_model_3d (ObjectModel3DThresholded2, HomMat3D, ObjectModel3DAffineTrans)</l>
+<l>            triangulate_object_model_3d (ObjectModel3DAffineTrans, 'greedy', [], [], TriangulatedObjectModel3D1, Information)</l>
+<l>            ObjectModel_SceneSampled := TriangulatedObjectModel3D1</l>
+<l>        else</l>
+<l>            xyz_to_object_model_3d (X, Y, Z, ObjectModel_Scene)</l>
+<l>            sample_object_model_3d (ObjectModel_Scene, sampling_method, sampling_distance, [], [], ObjectModel_Scene)</l>
+<l>            select_points_object_model_3d (ObjectModel_Scene, 'point_coord_x', Index1, Index1+ScanXArea, ObjectModel_SceneSampled)</l>
+<l>            fit_primitives_object_model_3d (ObjectModel_SceneSampled, 'primitive_type', 'plane', ObjectModel3DOut)</l>
+<l>            get_object_model_3d_params (ObjectModel3DOut, 'num_points', ObjectModel3DThresholded2_PointNum)</l>
+<l>            if(ObjectModel3DThresholded2_PointNum &lt; 1)</l>
+<l>                continue</l>
+<l>            endif</l>
+<l>            get_object_model_3d_params (ObjectModel3DOut, 'primitive_parameter_pose', Pose_primitive_plane)</l>
+<l>            pose_invert (Pose_primitive_plane, PoseInvert_primitive_plane)</l>
+<l>            SampleSceneCenterZ := PoseInvert_primitive_plane</l>
+<l>            pose_to_hom_mat3d (PoseInvert_primitive_plane, HomMat3D_invert)</l>
+<l>            affine_trans_object_model_3d (ObjectModel_SceneSampled, HomMat3D_invert, ObjectModel3DAffineTrans)</l>
+<l>            select_points_object_model_3d (ObjectModel3DAffineTrans, 'point_coord_z', ROIZPlaneMinDepth, ROIZPlaneMaxDepth, ObjectModel3DThresholded2)</l>
+<l>            pose_to_hom_mat3d (Pose_primitive_plane, HomMat3D)</l>
+<l>            affine_trans_object_model_3d (ObjectModel3DThresholded2, HomMat3D, ObjectModel3DAffineTrans)</l>
+<l>            ObjectModel_SceneSampled := ObjectModel3DAffineTrans</l>
+<l>        endif</l>
+<l>        get_object_model_3d_params (ObjectModel_SceneSampled, 'num_points', Scene_PointNum)</l>
+<c>        </c>
+<l>        if(Scene_PointNum &lt;= 0)</l>
+<l>            continue</l>
+<l>        endif</l>
+<l>        find_surface_model (SFM, ObjectModel_SceneSampled, find_sfm_RelSamplingDistance, find_sfm_KeyPointFraction, find_sfm_MinScore, 'true', ['num_matches', 'scene_normal_computation', 'score_type', 'max_overlap_dist_rel'], [find_sfm_NumMatch, find_sfm_FindMethod, find_sfm_ScoreType, find_sfm_max_overlap_dist_value], Pose, Score, SurfaceMatchingResultID)</l>
+<c></c>
+<l>        if (Score!=[])</l>
+<c>            * Preparing the result(s)</c>
+<l>            if (Score[0] &lt; find_sfm_MinScore)</l>
+<l>                RGB_Scene := RGBA</l>
+<l>                ObjectModel_Scene := ObjectModel_Scene</l>
+<l>                ObjectModel3D_Result := ObjectModel_Scene</l>
+<l>                ObjectModel3D_ResultArrow := ObjectModel_Scene</l>
+<l>                ObjectModel3D_ResultRoI := ObjectModel_Scene</l>
+<l>                MatchResult := 'Failed'</l>
+<l>                return ()</l>
+<l>            endif</l>
+<c>            </c>
+<l>            tuple_length(Score, SuccessNum)</l>
+<l>            VisRotationCenters := []</l>
+<l>            CPose := []</l>
+<l>            PoseIdxStartNUM := 0</l>
+<l>            PoseIdxEndNUM := 6</l>
+<l>            ObjectModel3D_Arrow := []</l>
+<l>            TransAxisCenterResultPoseArrUR := []</l>
+<l>            for Index := 0 to SuccessNum-1 by 1</l>
+<l>                CPose := Pose[PoseIdxStartNUM:PoseIdxEndNUM]</l>
+<l>                rigid_trans_object_model_3d (ObjectModel3D, CPose, ObjectModel3D_Result)</l>
+<l>                *visualize_object_model_3d (Window3D, [ObjectModel3D_Result[4]], [], [], [], [], [], [], [], PoseOut)</l>
+<l>                get_object_model_3d_params (ObjectModel3D_Result, 'center', VisRotationCenter)</l>
+<l>                VisRotationCenters := [VisRotationCenters,VisRotationCenter]</l>
+<l>                pose_invert( Pose[PoseIdxStartNUM:PoseIdxEndNUM], PoseLookInv)</l>
+<l>                TransAxisCenterResultPose := [VisRotationCenter[0],VisRotationCenter[1],VisRotationCenter[2], Pose[PoseIdxStartNUM+3] , Pose[PoseIdxStartNUM+4], Pose[PoseIdxStartNUM+5],0]</l>
+<c>                </c>
+<l>                ForLimit := 0</l>
+<l>                if(AxisAlign == 1)    </l>
+<l>                    RotateCheck := TransAxisCenterResultPose[0:6]</l>
+<l>                    ALIGN_FLAG := false</l>
+<l>                    while(ALIGN_FLAG == false)</l>
+<l>                        RotX90 := [0,0,0,-90,0,0,0]</l>
+<l>                        RotY90 := [0,0,0,0,-90,0,0]</l>
+<l>                        RotX180 := [0,0,0,-180,0,0,0]</l>
+<l>                        RotY180 := [0,0,0,0,-180,0,0]</l>
+<l>                        MinLimitDeg := (0 + (PickLimitDegree/2))</l>
+<l>                        MaxLimitDeg := (360 - (PickLimitDegree/2))</l>
+<l>                        if(TransAxisCenterResultPose[3] &gt; MinLimitDeg and TransAxisCenterResultPose[3] &lt; MaxLimitDeg or TransAxisCenterResultPose[4] &gt; MinLimitDeg and TransAxisCenterResultPose[4] &lt; MaxLimitDeg)</l>
+<l>                            pose_compose( TransAxisCenterResultPose,RotX90,TransAxisCenterResultPoseX90 )</l>
+<l>                            TransAxisCenterResultPose := TransAxisCenterResultPoseX90</l>
+<l>                        else</l>
+<l>                            ALIGN_FLAG := true</l>
+<l>                            break</l>
+<l>                        endif</l>
+<l>                        if(TransAxisCenterResultPose[3] &gt; MinLimitDeg and TransAxisCenterResultPose[3] &lt; MaxLimitDeg or TransAxisCenterResultPose[4] &gt; MinLimitDeg and TransAxisCenterResultPose[4] &lt; MaxLimitDeg)</l>
+<l>                            pose_compose( TransAxisCenterResultPose,RotY90,TransAxisCenterResultPoseY90 )</l>
+<l>                            TransAxisCenterResultPose := TransAxisCenterResultPoseY90</l>
+<l>                        else</l>
+<l>                            ALIGN_FLAG := true</l>
+<l>                            break</l>
+<l>                        endif</l>
+<l>*                         if(TransAxisCenterResultPose[3] &gt; MinLimitDeg and TransAxisCenterResultPose[3] &lt; MaxLimitDeg or TransAxisCenterResultPose[4] &gt; MinLimitDeg and TransAxisCenterResultPose[4] &lt; MaxLimitDeg)</l>
+<l>*                             pose_compose( TransAxisCenterResultPose,RotX180,TransAxisCenterResultPoseX180 )</l>
+<l>*                             TransAxisCenterResultPose := TransAxisCenterResultPoseX180</l>
+<l>*                         else</l>
+<l>*                             ALIGN_FLAG := true</l>
+<l>*                             break</l>
+<l>*                         endif</l>
+<l>*                         if(TransAxisCenterResultPose[3] &gt; MinLimitDeg and TransAxisCenterResultPose[3] &lt; MaxLimitDeg or TransAxisCenterResultPose[4] &gt; MinLimitDeg and TransAxisCenterResultPose[4] &lt; MaxLimitDeg)</l>
+<l>*                             pose_compose( TransAxisCenterResultPose,RotY180,TransAxisCenterResultPoseY180 )</l>
+<l>*                             TransAxisCenterResultPose := TransAxisCenterResultPoseY180</l>
+<l>*                         else</l>
+<l>*                             ALIGN_FLAG := true</l>
+<l>*                             break</l>
+<l>*                         endif</l>
+<l>                        ForLimit := ForLimit + 1 </l>
+<l>                        if (ForLimit % 10 == 0)</l>
+<l>                            PickLimitDegree := PickLimitDegree + 1</l>
+<l>                        endif</l>
+<l>                    endwhile</l>
+<l>                    ALIGN_FLAG := false</l>
+<l>                    ForLimit := 0</l>
+<l>                    TransAxisCenterResultPoseBack := TransAxisCenterResultPose</l>
+<l>                endif</l>
+<c>        </c>
+<l>                create_pose (0, 0, 0, 0, 0, 0, 'Rp+T', 'gba', 'point', IdentityPose)</l>
+<c>                * </c>
+<c>                * 3D model for the tool.</c>
+<l>                create_pose (ArrowLength, 0, 0, 0, 0, 0, 'Rp+T', 'gba', 'point', TransXPose)</l>
+<l>                gen_arrow_object_model_3d (ArrowThickness, IdentityPose, TransXPose, OM3DToolXOrigin)</l>
+<l>                create_pose (0, ArrowLength, 0, 0, 0, 0, 'Rp+T', 'gba', 'point', TransYPose)</l>
+<l>                gen_arrow_object_model_3d (ArrowThickness, IdentityPose, TransYPose, OM3DToolYOrigin)</l>
+<l>                create_pose (0, 0, ArrowLength, 0, 0, 0, 'Rp+T', 'gba', 'point', TransZPose)</l>
+<l>                gen_arrow_object_model_3d (ArrowThickness, IdentityPose, TransZPose, OM3DToolZOrigin)</l>
+<l>                OM3DToolOrigin := [OM3DToolXOrigin,OM3DToolYOrigin,OM3DToolZOrigin]</l>
+<l>                rigid_trans_object_model_3d (OM3DToolOrigin, Pose[PoseIdxStartNUM:PoseIdxEndNUM], Dummy)</l>
+<l>                ObjectModel3D_Arrow := [ObjectModel3D_Arrow, Dummy]</l>
+<c>                </c>
+<l>                PoseIdxStartNUM := PoseIdxStartNUM + 7</l>
+<l>                PoseIdxEndNUM := PoseIdxEndNUM + 7</l>
+<l>            endfor</l>
+<l>            rigid_trans_object_model_3d (ObjectModel3D, Pose, ObjectModel3D_ResultImg)</l>
+<l>            get_object_model_3d_params (ObjectModel_Scene, 'bounding_box1', SceneBoundingBox)</l>
+<l>            get_object_model_3d_params (ObjectModel_SceneSampled, 'center', SceneCenters)</l>
+<l>            *fit_primitives_object_model_3d (ObjectModel_Scene, 'primitive_type', 'plane', ObjectModel3DOut)</l>
+<c>            </c>
+<l>            *get_object_model_3d_params (ObjectModel3DOut, 'primitive_parameter_pose', ROIPOSE)</l>
+<l>            *gen_box_object_model_3d ([SceneCenter[0],SceneCenter[1],SceneCenter[2],0,0,0,0], 300 + 300 * 0.001, 200 + 200 * 0.001, 1 + 50, ObjectModel3DROI)</l>
+<l>             ROIPOSE := Pose_primitive_plane</l>
+<l>            tuple_abs(ROIZPlaneMinDepth, adjustROIZPlaneMinDepth)</l>
+<l>            tuple_abs(ROIZPlaneMaxDepth, adjustROIZPlaneMaxDepth)</l>
+<l>             if(ROIZPlaneMinDepth &lt; 0)</l>
+<l>                ZAdjustTmp := (adjustROIZPlaneMinDepth + adjustROIZPlaneMaxDepth)</l>
+<l>            else</l>
+<l>                ZAdjustTmp := (adjustROIZPlaneMaxDepth - adjustROIZPlaneMinDepth)</l>
+<l>            endif</l>
+<l>            ZAdjust := SampleSceneCenterZ[2] - (ZAdjustTmp/2) - 1</l>
+<l>            *ROIPOSE[0] := SceneCenters[0]</l>
+<l>            *ROIPOSE[1] := SceneCenters[1]</l>
+<l>            ROIPOSE[0] := Index1+ScanXArea</l>
+<l>            ROIPOSE[1] := 0</l>
+<l>            ROIPOSE[2] := ZAdjust</l>
+<c>             </c>
+<l>            tuple_abs(Index1 , absROIXAreaMin)</l>
+<l>            tuple_abs(Index1+ScanXArea, absROIXAreaMax)</l>
+<l>            tuple_abs(SceneBoundingBox[1], absROIYAreaMin)</l>
+<l>            tuple_abs(SceneBoundingBox[4], absROIYAreaMax)</l>
+<l>            tuple_abs(ROIZPlaneMinDepth, absROIZPlaneMinDepth)</l>
+<l>            tuple_abs(ROIZPlaneMaxDepth, absROIZPlaneMaxDepth)</l>
+<l>            if(Index1 &lt; 0)</l>
+<l>                *genBoxX := (absROIXAreaMin + absROIXAreaMax)</l>
+<l>            else</l>
+<l>                *genBoxX := (absROIXAreaMax - absROIXAreaMin)     </l>
+<l>            endif</l>
+<l>            genBoxX := ScanXArea</l>
+<c>            </c>
+<l>            if(SceneBoundingBox[1] &lt; 0)</l>
+<l>                genBoxY := (absROIYAreaMin + absROIYAreaMax)</l>
+<l>            else</l>
+<l>                genBoxY := (absROIYAreaMax - absROIYAreaMin)</l>
+<l>            endif</l>
+<c>            </c>
+<l>            if(ROIZPlaneMinDepth &lt; 0)</l>
+<l>                genBoxZ := (absROIZPlaneMinDepth + absROIZPlaneMaxDepth)</l>
+<l>            else</l>
+<l>                genBoxZ := (absROIZPlaneMaxDepth - absROIZPlaneMinDepth)</l>
+<l>            endif</l>
+<l>            gen_box_object_model_3d (ROIPOSE, genBoxX, genBoxY, genBoxZ, ObjectModel3DROI)</l>
+<c>               </c>
+<l>            RGB_Scene := RGBA</l>
+<l>            ObjectModel_Scene := ObjectModel_Scene</l>
+<l>            ObjectModel3D_Result := ObjectModel3D_ResultImg</l>
+<l>            ObjectModel3D_ResultArrow := ObjectModel3D_Arrow</l>
+<l>            ObjectModel3D_ResultArrow := ObjectModel3D_Arrow</l>
+<l>            ObjectModel3D_ResultRoI := ObjectModel3DROI</l>
+<c>            </c>
+<c>            </c>
+<l>            *Pose := [VisRotationCenters[VisStart], VisRotationCenters[VisStart+1], VisRotationCenters[VisStart+2], Pose[PoseStart], Pose[PoseStart+1], Pose[PoseStart+1] ,0]</l>
+<l>            convert_pose_type (TransAxisCenterResultPose, 'Rp+T', 'rodriguez', 'point', TransAxisCenterResultPoseRodriguez)</l>
+<l>            RodLeng := sqrt(sum(TransAxisCenterResultPoseRodriguez[3:5]*TransAxisCenterResultPoseRodriguez[3:5]))</l>
+<l>            AngleInRad := 2*atan(RodLeng)</l>
+<l>            UnitAxisOfRotation := TransAxisCenterResultPoseRodriguez[3:5]/RodLeng</l>
+<l>            OrientationVector := UnitAxisOfRotation*AngleInRad</l>
+<l>            TransAxisCenterResultPoseUR := [TransAxisCenterResultPoseRodriguez[0:2], OrientationVector]</l>
+<l>            TransAxisCenterResultPoseArrUR := [TransAxisCenterResultPoseArrUR, TransAxisCenterResultPoseUR]</l>
+<c></c>
+<l>            PoseIdxStart := 0</l>
+<l>            RTVal := []</l>
+<l>            for Index := 0 to SuccessNum-1 by 1</l>
+<l>                strMerged := Index+','+ \
+                         Score[Index]+','+ \
+                         TransAxisCenterResultPoseArrUR[PoseIdxStart]+','+ \ 
+                         TransAxisCenterResultPoseArrUR[PoseIdxStart+1]+','+ \
+                         TransAxisCenterResultPoseArrUR[PoseIdxStart+2]+','+ \
+                         TransAxisCenterResultPoseArrUR[PoseIdxStart+3]+','+ \
+                         TransAxisCenterResultPoseArrUR[PoseIdxStart+4]+','+ \
+                         TransAxisCenterResultPoseArrUR[PoseIdxStart+5]</l>
+<l>                RTVal := [RTVal, strMerged]</l>
+<l>                PoseIdxStart:= PoseIdxStart + 7</l>
+<l>            endfor</l>
+<l>            MatchResult := RTVal</l>
+<c>            </c>
+<c>            * Halcon3DVis_0_0_2.hdvp</c>
+<l>            create_pose (0.0, 0.0, 1000, 0, 0, 0, 'Rp+T', 'gba', 'point', Pose)</l>
+<l>            gen_cam_par_area_scan_division (0.025, 0, 1.1e-05, 1.1e-05, 960.0, 600.0, 1920, 1200, CameraParam)</l>
+<l>            *tuple_length(ObjectModel3D_Scene[1], NumResult)</l>
+<l>            *Message1 := 'Scene: ' + Index</l>
+<l>            Message1 := 'Found ' + |ObjectModel3D_Result| + ' object(s) '</l>
+<l>            *ScoreString := sum(Score$'.2f' + ' / ')</l>
+<l>            *Message1[2] := 'Score(s): ' + ScoreString{0:strlen(ScoreString) - 4}</l>
+<l>            NumResult := |ObjectModel3D_Result|</l>
+<l>            ArrowLength := |ObjectModel3D_ResultArrow|</l>
+<c>        </c>
+<c>            </c>
+<l>            tuple_gen_const (ArrowLength, 'light gray', Colors)</l>
+<l>            tuple_gen_const (ArrowLength+1, 1.0, Alphas)</l>
+<l>            tuple_gen_const (ArrowLength+1, 1.0, PointSizes)</l>
+<l>            for Index1 := 0 to 1 by 1</l>
+<l>                if(Index1 == 0)</l>
+<l>                    Alphas[Index1] := 0.1</l>
+<l>                else</l>
+<l>                *    Alphas[Index1] := 0.2</l>
+<l>                endif</l>
+<l>            endfor</l>
+<c>        </c>
+<l>            for Index2 := 0 to ArrowLength by 3</l>
+<l>                if(ArrowLength &lt;= Index2)</l>
+<l>                    break</l>
+<l>                endif</l>
+<l>                Colors[Index2] := 'red'</l>
+<l>                Colors[Index2+1] := 'green'</l>
+<l>                Colors[Index2+2] := 'blue'</l>
+<l>            endfor</l>
+<c>            </c>
+<l>            for Index1 := 0 to 1 by 1</l>
+<l>                if(Index1 == 0)</l>
+<l>                    PointSizes[Index1] := 0.8</l>
+<l>                else</l>
+<l>                *    PointSizes[Index1] := 0.9</l>
+<l>                endif</l>
+<l>            endfor</l>
+<l>            Indices := [1:ArrowLength+1]</l>
+<l>            dev_clear_window ()</l>
+<l>            Instructions[0] := 'Rotate: Left button'</l>
+<l>            Instructions[1] := 'Zoom:   Shift + left button'</l>
+<l>            Instructions[2] := 'Move:   Ctrl  + left button'</l>
+<l>            dev_open_window(0,0,1920/2,1200/2,'black', Window3D)</l>
+<l>            dev_set_window(Window3D)</l>
+<l>            visualize_object_model_3d (Window3D, [ObjectModel_Scene, ObjectModel3D_ResultArrow, ObjectModel3DROI], [],[], ['color_' + [0,Indices],'point_size_'+[0,Indices], 'alpha_' + [0,Indices], 'disp_background'], ['light gray',Colors,'green',PointSizes, 0.2, Alphas, 0.2, 'true'], Message1, [], Instructions, PoseOut)</l>
+<l>            get_window_extents (Window3D, RowNotUsed, ColumnNotUsed, Width, Height)</l>
+<c>        </c>
+<l>            get_part (Window3D, WPRow1, WPColumn1, WPRow2, WPColumn2)</l>
+<l>            set_part (Window3D, 0, 0, Height - 1, Width - 1)</l>
+<l>             gen_cam_par_area_scan_division (0.06, 0, 8.5e-6, 8.5e-6, Width / 2, Height / 2, Width, Height, CamParam)</l>
+<l>            get_object_models_center ([ObjectModel_Scene, ObjectModel3D_ResultArrow], Center)</l>
+<l>            create_pose (-Center[0],-Center[1], -Center[2], 0, 0, 0, 'Rp+T', 'abg', 'point', PoseIn)</l>
+<l>            determine_optimum_pose_distance ([ObjectModel_Scene, ObjectModel3D_ResultArrow], CamParam, 2, PoseIn, PoseEstimated)</l>
+<l>            disp_object_model_3d(Window3D, [ObjectModel_Scene, ObjectModel3D_ResultArrow,ObjectModel3DROI], [], PoseEstimated, ['color_' + [0,Indices],'point_size_'+[0,Indices], 'alpha_' + [0,Indices]], ['light gray',Colors,'green',PointSizes, 0.2, Alphas, 0.2])</l>
+<l>            clear_object_model_3d([ObjectModel_Scene, ObjectModel3D_ResultArrow,ObjectModel3DROI, OM3DToolOrigin, Dummy])</l>
+<l>            break</l>
+<l>        else</l>
+<l>            RGB_Scene := RGBA</l>
+<l>            ObjectModel_Scene := ObjectModel_Scene</l>
+<l>            ObjectModel3D_Result := ObjectModel_Scene</l>
+<l>            ObjectModel3D_ResultArrow := ObjectModel_Scene</l>
+<l>            ObjectModel3D_ResultRoI := ObjectModel_Scene</l>
+<c>            </c>
+<l>            MatchResult := 'Failed'</l>
+<l>        endif</l>
+<l>    endfor</l>
+<l>elseif (RoiForm ==2)</l>
+<l>    if (MatchForm == 1)</l>
+<l>        RGB_Scene := RGBA</l>
+<l>        ObjectModel_Scene := ObjectModel_Scene</l>
+<l>        ObjectModel3D_Result := ObjectModel_Scene</l>
+<l>        xyz_to_object_model_3d (X, Y, Z, ObjectModel_Scene)</l>
+<l>        xyz_to_object_model_3d (X, Y, Z, ObjectModel_Scene_Origin)</l>
+<l>        sample_object_model_3d (ObjectModel_Scene, sampling_method, sampling_distance, [], [], ObjectModel_Scene)</l>
+<l>        triangulate_object_model_3d (ObjectModel_Scene, 'xyz_mapping', [], [], TriangulatedObjectModel3D1, Information)</l>
+<l>        fit_primitives_object_model_3d (TriangulatedObjectModel3D1, 'primitive_type', 'plane', ObjectModel3DOut)</l>
+<l>        get_object_model_3d_params (ObjectModel3DOut, 'primitive_parameter_pose', Pose_primitive_plane)</l>
+<l>        pose_invert (Pose_primitive_plane, PoseInvert_primitive_plane)</l>
+<l>        SampleSceneCenterZ := PoseInvert_primitive_plane</l>
+<l>        pose_to_hom_mat3d (PoseInvert_primitive_plane, HomMat3D_invert)</l>
+<l>        affine_trans_object_model_3d (TriangulatedObjectModel3D1, HomMat3D_invert, ObjectModel_SceneSampled)</l>
+<l>        select_points_object_model_3d (ObjectModel_SceneSampled, 'point_coord_z', ROIZPlaneMinDepth, ROIZPlaneMaxDepth, ObjectModel3DThresholded2)</l>
+<l>        pose_to_hom_mat3d (Pose_primitive_plane, HomMat3D)</l>
+<l>        affine_trans_object_model_3d (ObjectModel3DThresholded2, HomMat3D, ObjectModel_SceneSampled)</l>
+<l>        select_points_object_model_3d (ObjectModel_SceneSampled, 'point_coord_x', ROIXAreaMin, ROIXAreaMax, ObjectModel_SceneSampled)</l>
+<l>        select_points_object_model_3d (ObjectModel_SceneSampled, 'point_coord_y', ROIYAreaMin, ROIYAreaMax, ObjectModel_SceneSampled)</l>
+<l>    elseif(MatchForm == 2)</l>
+<l>        RGB_Scene := RGBA</l>
+<l>        ObjectModel_Scene := ObjectModel_Scene</l>
+<l>        ObjectModel3D_Result := ObjectModel_Scene</l>
+<l>        xyz_to_object_model_3d (X, Y, Z, ObjectModel_Scene)</l>
+<l>        sample_object_model_3d (ObjectModel_Scene, sampling_method, sampling_distance, [], [], ObjectModel_SceneSampled)</l>
+<l>        fit_primitives_object_model_3d (ObjectModel_SceneSampled, 'primitive_type', 'plane', ObjectModel3DOut)</l>
+<l>        get_object_model_3d_params (ObjectModel3DOut, 'primitive_parameter_pose', Pose_primitive_plane)</l>
+<l>        pose_invert (Pose_primitive_plane, PoseInvert_primitive_plane)</l>
+<l>        SampleSceneCenterZ := PoseInvert_primitive_plane</l>
+<l>        pose_to_hom_mat3d (PoseInvert_primitive_plane, HomMat3D_invert)</l>
+<l>        affine_trans_object_model_3d (ObjectModel_SceneSampled, HomMat3D_invert, ObjectModel_SceneSampled)</l>
+<l>        select_points_object_model_3d (ObjectModel_SceneSampled, 'point_coord_z', ROIZPlaneMinDepth, ROIZPlaneMaxDepth, ObjectModel3DThresholded2)</l>
+<l>        pose_to_hom_mat3d (Pose_primitive_plane, HomMat3D)</l>
+<l>        affine_trans_object_model_3d (ObjectModel3DThresholded2, HomMat3D, ObjectModel_SceneSampled)</l>
+<l>        select_points_object_model_3d (ObjectModel_SceneSampled, 'point_coord_x', ROIXAreaMin, ROIXAreaMax, ObjectModel_SceneSampled)</l>
+<l>        select_points_object_model_3d (ObjectModel_SceneSampled, 'point_coord_y', ROIYAreaMin, ROIYAreaMax, ObjectModel_SceneSampled)</l>
+<l>        triangulate_object_model_3d (ObjectModel_SceneSampled, 'greedy', [], [], ObjectModel_SceneSampled, Information)</l>
+<l>    else</l>
+<l>        RGB_Scene := RGBA</l>
+<l>        ObjectModel_Scene := ObjectModel_Scene</l>
+<l>        ObjectModel3D_Result := ObjectModel_Scene</l>
+<l>        xyz_to_object_model_3d (X, Y, Z, ObjectModel_Scene)</l>
+<l>        xyz_to_object_model_3d (X, Y, Z, ObjectModel_Scene_origin)</l>
+<l>        if(sampling_method == 'accurate_use_normals')</l>
+<l>            sample_object_model_3d (ObjectModel_Scene, 'fast_compute_normals', 0.1, [], [], ObjectModel_Scene)    </l>
+<l>        endif</l>
+<l>        sample_object_model_3d (ObjectModel_Scene, sampling_method, sampling_distance, [], [], ObjectModel_SceneSampled)</l>
+<l>        select_points_object_model_3d (ObjectModel_SceneSampled, 'point_coord_x', ROIXAreaMin, ROIXAreaMax, ObjectModel_SceneSampled)</l>
+<l>        select_points_object_model_3d (ObjectModel_SceneSampled, 'point_coord_y', ROIYAreaMin, ROIYAreaMax, ObjectModel_SceneSampled)</l>
+<l>        fit_primitives_object_model_3d (ObjectModel_SceneSampled, 'primitive_type', 'plane', ObjectModel3DOut)</l>
+<l>        get_object_model_3d_params (ObjectModel3DOut, 'primitive_parameter_pose', Pose_primitive_plane)</l>
+<l>        pose_invert (Pose_primitive_plane, PoseInvert_primitive_plane)</l>
+<l>        SampleSceneCenterZ := PoseInvert_primitive_plane</l>
+<l>        pose_to_hom_mat3d (PoseInvert_primitive_plane, HomMat3D_invert)</l>
+<l>        affine_trans_object_model_3d (ObjectModel_SceneSampled, HomMat3D_invert, ObjectModel_SceneSampled)</l>
+<l>        select_points_object_model_3d (ObjectModel_SceneSampled, 'point_coord_z', ROIZPlaneMinDepth, ROIZPlaneMaxDepth, ObjectModel3DThresholded2)</l>
+<l>        pose_to_hom_mat3d (Pose_primitive_plane, HomMat3D)</l>
+<l>        affine_trans_object_model_3d (ObjectModel3DThresholded2, HomMat3D, ObjectModel_SceneSampled)</l>
+<l>    endif</l>
+<l>elseif(RoiForm == 3)</l>
+<l>    if (MatchForm == 1)</l>
+<l>        RGB_Scene := RGBA</l>
+<l>        ObjectModel_Scene := ObjectModel_Scene</l>
+<l>        ObjectModel3D_Result := ObjectModel_Scene</l>
+<l>        xyz_to_object_model_3d (X, Y, Z, ObjectModel_Scene)</l>
+<l>        xyz_to_object_model_3d (X, Y, Z, ObjectModel_Scene_Origin)</l>
+<l>        sample_object_model_3d (ObjectModel_Scene, sampling_method, sampling_distance, [], [], ObjectModel_Scene)</l>
+<l>        triangulate_object_model_3d (ObjectModel_Scene, 'xyz_mapping', [], [], TriangulatedObjectModel3D1, Information)</l>
+<l>        fit_primitives_object_model_3d (TriangulatedObjectModel3D1, 'primitive_type', 'plane', ObjectModel3DOut)</l>
+<c>        </c>
+<l>        get_object_model_3d_params (ObjectModel3DOut, 'primitive_parameter_pose', Pose_primitive_plane)</l>
+<c>        </c>
+<l>        pose_invert (Pose_primitive_plane, PoseInvert_primitive_plane)</l>
+<l>        SampleSceneCenterZ := PoseInvert_primitive_plane</l>
+<l>        pose_to_hom_mat3d (PoseInvert_primitive_plane, HomMat3D_invert)</l>
+<l>        affine_trans_object_model_3d (TriangulatedObjectModel3D1, HomMat3D_invert, ObjectModel_SceneSampled)</l>
+<l>        get_object_model_3d_params (ObjectModel_SceneSampled, 'bounding_box1', Scene_BndBox)</l>
+<l>        PointZNumArr := []</l>
+<l>        PointZMin_Target := 0</l>
+<l>        tuple_int(Scene_BndBox[2], Scene_BndBox_Int_2)</l>
+<l>        forcounting := 0</l>
+<l>        for index := Scene_BndBox_Int_2 to Scene_BndBox[5] by 1</l>
+<l>            if(index == Scene_BndBox_Int_2)</l>
+<l>                select_points_object_model_3d (ObjectModel_SceneSampled, 'point_coord_z', Scene_BndBox_Int_2, index+1, ObjectModel_SceneSampled_Thres)    </l>
+<l>                get_object_model_3d_params (ObjectModel_SceneSampled_Thres, 'num_points', Scene_PointNum)</l>
+<l>                *get_object_model_3d_params (ObjectModel_SceneSampled_Thres, 'bounding_box1', XYboundBox)</l>
+<l>                PointZNumArr := Scene_PointNum</l>
+<l>                forcounting := forcounting + 1</l>
+<l>            else</l>
+<l>                select_points_object_model_3d (ObjectModel_SceneSampled, 'point_coord_z', index, index+1, ObjectModel_SceneSampled_Thres)</l>
+<l>                get_object_model_3d_params (ObjectModel_SceneSampled_Thres, 'num_points', Scene_PointNum)</l>
+<l>                *get_object_model_3d_params (ObjectModel_SceneSampled_Thres, 'bounding_box1', XYboundBox)</l>
+<l>                PointZNumArr := [PointZNumArr,Scene_PointNum]</l>
+<l>                diffbeforeNow := PointZNumArr[forcounting] - PointZNumArr[forcounting-1]</l>
+<l>                tuple_abs(diffbeforeNow, diffbeforeNow)</l>
+<l>                if(diffbeforeNow &lt; AutoRoiNOWPointN_BebforePointNDIFF and Scene_PointNum &gt; 100)</l>
+<l>                    PointZMin_Target := Scene_BndBox_Int_2+forcounting - 1 </l>
+<l>                    break</l>
+<l>                endif</l>
+<c>                </c>
+<l>                forcounting := forcounting + 1</l>
+<l>                if(Scene_PointNum == 0)</l>
+<l>                    break</l>
+<l>                endif</l>
+<l>            endif</l>
+<l>        endfor</l>
+<l>        get_object_model_3d_params (ObjectModel_SceneSampled, 'bounding_box1', Scene_BndBox)</l>
+<l>        select_points_object_model_3d (ObjectModel_SceneSampled, 'point_coord_z', PointZMin_Target, Scene_BndBox[5], ObjectModel3DThresholded2)</l>
+<l>        pose_to_hom_mat3d (Pose_primitive_plane, HomMat3D)</l>
+<l>        affine_trans_object_model_3d (ObjectModel3DThresholded2, HomMat3D, ObjectModel_SceneSampled)</l>
+<l>        select_points_object_model_3d (ObjectModel_SceneSampled, 'point_coord_x', Scene_BndBox[0], Scene_BndBox[3], ObjectModel_SceneSampled)</l>
+<l>        select_points_object_model_3d (ObjectModel_SceneSampled, 'point_coord_y', Scene_BndBox[1], Scene_BndBox[4], ObjectModel_SceneSampled)</l>
+<c></c>
+<l>    elseif(MatchForm == 2)</l>
+<l>        RGB_Scene := RGBA</l>
+<l>        ObjectModel_Scene := ObjectModel_Scene</l>
+<l>        ObjectModel3D_Result := ObjectModel_Scene</l>
+<l>        xyz_to_object_model_3d (X, Y, Z, ObjectModel_Scene)</l>
+<l>        sample_object_model_3d (ObjectModel_Scene, sampling_method, sampling_distance, [], [], ObjectModel_SceneSampled)</l>
+<l>        fit_primitives_object_model_3d (ObjectModel_SceneSampled, 'primitive_type', 'plane', ObjectModel3DOut)</l>
+<l>        get_object_model_3d_params (ObjectModel3DOut, 'primitive_parameter_pose', Pose_primitive_plane)</l>
+<l>        pose_invert (Pose_primitive_plane, PoseInvert_primitive_plane)</l>
+<l>        SampleSceneCenterZ := PoseInvert_primitive_plane</l>
+<l>        pose_to_hom_mat3d (PoseInvert_primitive_plane, HomMat3D_invert)</l>
+<l>        affine_trans_object_model_3d (ObjectModel_SceneSampled, HomMat3D_invert, ObjectModel_SceneSampled)</l>
+<l>        get_object_model_3d_params (ObjectModel_SceneSampled, 'bounding_box1', Scene_BndBox)</l>
+<l>        PointZNumArr := []</l>
+<l>        PointZMin_Target := 0</l>
+<l>        tuple_int(Scene_BndBox[2], Scene_BndBox_Int_2)</l>
+<l>        forcounting := 0</l>
+<l>        for index := Scene_BndBox_Int_2 to Scene_BndBox[5] by 1</l>
+<l>            if(index == Scene_BndBox_Int_2)</l>
+<l>                select_points_object_model_3d (ObjectModel_SceneSampled, 'point_coord_z', Scene_BndBox_Int_2, index+1, ObjectModel_SceneSampled_Thres)    </l>
+<l>                get_object_model_3d_params (ObjectModel_SceneSampled_Thres, 'num_points', Scene_PointNum)</l>
+<l>                *get_object_model_3d_params (ObjectModel_SceneSampled_Thres, 'bounding_box1', XYboundBox)</l>
+<l>                PointZNumArr := Scene_PointNum</l>
+<l>                forcounting := forcounting + 1</l>
+<l>            else</l>
+<l>                select_points_object_model_3d (ObjectModel_SceneSampled, 'point_coord_z', index, index+1, ObjectModel_SceneSampled_Thres)</l>
+<l>                get_object_model_3d_params (ObjectModel_SceneSampled_Thres, 'num_points', Scene_PointNum)</l>
+<l>                *get_object_model_3d_params (ObjectModel_SceneSampled_Thres, 'bounding_box1', XYboundBox)</l>
+<l>                PointZNumArr := [PointZNumArr,Scene_PointNum]</l>
+<l>                diffbeforeNow := PointZNumArr[forcounting] - PointZNumArr[forcounting-1]</l>
+<l>                tuple_abs(diffbeforeNow, diffbeforeNow)</l>
+<l>                if(diffbeforeNow &lt; AutoRoiNOWPointN_BebforePointNDIFF and Scene_PointNum &gt; 100)</l>
+<l>                    PointZMin_Target := Scene_BndBox_Int_2+forcounting - 1 </l>
+<l>                    break</l>
+<l>                endif</l>
+<c>                </c>
+<l>                forcounting := forcounting + 1</l>
+<l>                if(Scene_PointNum == 0)</l>
+<l>                    break</l>
+<l>                endif</l>
+<l>            endif</l>
+<l>        endfor</l>
+<c></c>
+<l>        get_object_model_3d_params (ObjectModel_SceneSampled, 'bounding_box1', Scene_BndBox)</l>
+<l>        select_points_object_model_3d (ObjectModel_SceneSampled, 'point_coord_z', PointZMin_Target, Scene_BndBox[5], ObjectModel3DThresholded2)</l>
+<l>        select_points_object_model_3d (ObjectModel3DThresholded2, 'point_coord_x', Scene_BndBox[0], Scene_BndBox[3], ObjectModel3DThresholded2)</l>
+<l>        select_points_object_model_3d (ObjectModel3DThresholded2, 'point_coord_y', Scene_BndBox[1], Scene_BndBox[4], ObjectModel3DThresholded2)</l>
+<l>        pose_to_hom_mat3d (Pose_primitive_plane, HomMat3D)</l>
+<l>        get_object_model_3d_params (ObjectModel_SceneSampled, 'bounding_box1', Scene_BndBox)</l>
+<l>        select_points_object_model_3d (ObjectModel_SceneSampled, 'point_coord_z', PointZMin_Target, Scene_BndBox[5], ObjectModel3DThresholded2)</l>
+<c></c>
+<l>        pose_to_hom_mat3d (Pose_primitive_plane, HomMat3D)</l>
+<l>        affine_trans_object_model_3d (ObjectModel3DThresholded2, HomMat3D, ObjectModel_SceneSampled)</l>
+<l>        select_points_object_model_3d (ObjectModel_SceneSampled, 'point_coord_x', Scene_BndBox[0], Scene_BndBox[3], ObjectModel_SceneSampled)</l>
+<l>        select_points_object_model_3d (ObjectModel_SceneSampled, 'point_coord_y', Scene_BndBox[1], Scene_BndBox[4], ObjectModel_SceneSampled)</l>
+<l>        triangulate_object_model_3d (ObjectModel_SceneSampled, 'greedy', [], [], ObjectModel_SceneSampled, Information)</l>
+<l>    else </l>
+<l>        RGB_Scene := RGBA</l>
+<l>        ObjectModel_Scene := ObjectModel_Scene</l>
+<l>        ObjectModel3D_Result := ObjectModel_Scene</l>
+<l>        xyz_to_object_model_3d (X, Y, Z, ObjectModel_Scene)</l>
+<l>        if(sampling_method == 'accurate_use_normals')</l>
+<l>            sample_object_model_3d (ObjectModel_Scene, 'fast_compute_normals', 0.1, [], [], ObjectModel_Scene)    </l>
+<l>        endif</l>
+<l>        sample_object_model_3d (ObjectModel_Scene, sampling_method, sampling_distance, [], [], ObjectModel_SceneSampled)</l>
+<l>*         get_object_model_3d_params (ObjectModel_SceneSampled, 'bounding_box1', Scene_BndBox)</l>
+<l>*         select_points_object_model_3d (ObjectModel_SceneSampled, 'point_coord_x', Scene_BndBox[0], Scene_BndBox[3], ObjectModel_SceneSampled)</l>
+<l>*         select_points_object_model_3d (ObjectModel_SceneSampled, 'point_coord_y', Scene_BndBox[1], Scene_BndBox[4], ObjectModel_SceneSampled)</l>
+<c></c>
+<l>        fit_primitives_object_model_3d (ObjectModel_SceneSampled, 'primitive_type', 'plane', ObjectModel3DOut)</l>
+<c>        </c>
+<l>        get_object_model_3d_params (ObjectModel3DOut, 'primitive_parameter_pose', Pose_primitive_plane)</l>
+<l>        pose_invert (Pose_primitive_plane, PoseInvert_primitive_plane)</l>
+<l>        SampleSceneCenterZ := PoseInvert_primitive_plane</l>
+<l>        pose_to_hom_mat3d (PoseInvert_primitive_plane, HomMat3D_invert)</l>
+<l>        affine_trans_object_model_3d (ObjectModel_SceneSampled, HomMat3D_invert, ObjectModel_SceneSampled)</l>
+<c></c>
+<l>        get_object_model_3d_params (ObjectModel_SceneSampled, 'bounding_box1', Scene_BndBox)</l>
+<l>        PointZNumArr := []</l>
+<l>        PointZMin_Target := 0</l>
+<l>        tuple_int(Scene_BndBox[2], Scene_BndBox_Int_2)</l>
+<l>        forcounting := 0</l>
+<l>        for index := Scene_BndBox_Int_2 to Scene_BndBox[5] by 1</l>
+<l>            if(index == Scene_BndBox_Int_2)</l>
+<l>                select_points_object_model_3d (ObjectModel_SceneSampled, 'point_coord_z', Scene_BndBox_Int_2, index+1, ObjectModel_SceneSampled_Thres)    </l>
+<l>                get_object_model_3d_params (ObjectModel_SceneSampled_Thres, 'num_points', Scene_PointNum)</l>
+<l>                *get_object_model_3d_params (ObjectModel_SceneSampled_Thres, 'bounding_box1', XYboundBox)</l>
+<l>                PointZNumArr := Scene_PointNum</l>
+<l>                forcounting := forcounting + 1</l>
+<l>            else</l>
+<l>                select_points_object_model_3d (ObjectModel_SceneSampled, 'point_coord_z', index, index+1, ObjectModel_SceneSampled_Thres)</l>
+<l>                get_object_model_3d_params (ObjectModel_SceneSampled_Thres, 'num_points', Scene_PointNum)</l>
+<l>                *get_object_model_3d_params (ObjectModel_SceneSampled_Thres, 'bounding_box1', XYboundBox)</l>
+<l>                PointZNumArr := [PointZNumArr,Scene_PointNum]</l>
+<l>                diffbeforeNow := PointZNumArr[forcounting] - PointZNumArr[forcounting-1]</l>
+<l>                tuple_abs(diffbeforeNow, diffbeforeNow)</l>
+<l>                if(diffbeforeNow &lt; AutoRoiNOWPointN_BebforePointNDIFF and Scene_PointNum &gt; 100)</l>
+<l>                    PointZMin_Target := Scene_BndBox_Int_2+forcounting - 1 </l>
+<l>                    break</l>
+<l>                endif</l>
+<c>                </c>
+<l>                forcounting := forcounting + 1</l>
+<l>                if(Scene_PointNum == 0)</l>
+<l>                    break</l>
+<l>                endif</l>
+<l>            endif</l>
+<l>        endfor</l>
+<c></c>
+<l>        get_object_model_3d_params (ObjectModel_SceneSampled, 'bounding_box1', Scene_BndBox)</l>
+<l>        select_points_object_model_3d (ObjectModel_SceneSampled, 'point_coord_z', PointZMin_Target, Scene_BndBox[5], ObjectModel3DThresholded2)</l>
+<l>        select_points_object_model_3d (ObjectModel3DThresholded2, 'point_coord_x', Scene_BndBox[0], Scene_BndBox[3], ObjectModel3DThresholded2)</l>
+<l>        select_points_object_model_3d (ObjectModel3DThresholded2, 'point_coord_y', Scene_BndBox[1], Scene_BndBox[4], ObjectModel3DThresholded2)</l>
+<l>        pose_to_hom_mat3d (Pose_primitive_plane, HomMat3D)</l>
+<l>        affine_trans_object_model_3d (ObjectModel3DThresholded2, HomMat3D, ObjectModel_SceneSampled)</l>
+<l>    endif</l>
+<l>else</l>
+<l>    if (MatchForm == 1)</l>
+<l>        RGB_Scene := RGBA</l>
+<l>        ObjectModel_Scene := ObjectModel_Scene</l>
+<l>        ObjectModel3D_Result := ObjectModel_Scene</l>
+<l>        xyz_to_object_model_3d (X, Y, Z, ObjectModel_Scene)</l>
+<l>        smooth_object_model_3d (ObjectModel_Scene, 'mls', ['mls_kNN'], [60], ObjectModel_Scene)</l>
+<l>        sample_object_model_3d (ObjectModel_Scene, sampling_method, sampling_distance, [], [], ObjectModel_Scene)</l>
+<l>        triangulate_object_model_3d (ObjectModel_Scene, 'xyz_mapping', [], [], TriangulatedObjectModel3D1, Information)</l>
+<l>        ObjectModel_SceneSampled := TriangulatedObjectModel3D1</l>
+<l>    elseif(MatchForm == 2)</l>
+<l>        RGB_Scene := RGBA</l>
+<l>        ObjectModel_Scene := ObjectModel_Scene</l>
+<l>        ObjectModel3D_Result := ObjectModel_Scene</l>
+<l>        xyz_to_object_model_3d (X, Y, Z, ObjectModel_Scene)</l>
+<l>        sample_object_model_3d (ObjectModel_Scene, sampling_method, sampling_distance, [], [], ObjectModel_Scene)</l>
+<l>        triangulate_object_model_3d (ObjectModel_Scene, 'greedy', [], [], TriangulatedObjectModel3D1, Information)</l>
+<l>        ObjectModel_SceneSampled := TriangulatedObjectModel3D1</l>
+<l>    else</l>
+<l>        RGB_Scene := RGBA</l>
+<l>        ObjectModel_Scene := ObjectModel_Scene</l>
+<l>        ObjectModel3D_Result := ObjectModel_Scene</l>
+<l>        xyz_to_object_model_3d (X, Y, Z, ObjectModel_Scene)</l>
+<l>        sample_object_model_3d (ObjectModel_Scene, sampling_method, sampling_distance, [], [], ObjectModel_Scene)</l>
+<l>        ObjectModel_SceneSampled := ObjectModel_Scene</l>
+<l>    endif</l>
+<l>endif</l>
+<c></c>
+<l>if(RoiForm != 1)</l>
+<l>    get_object_model_3d_params (ObjectModel_SceneSampled, 'num_points', Scene_PointNum)</l>
+<c>        </c>
+<l>    if(Scene_PointNum &lt;= 0)</l>
+<l>        RGB_Scene := RGBA</l>
+<l>        ObjectModel_Scene := ObjectModel_Scene</l>
+<l>        ObjectModel3D_Result := ObjectModel_Scene</l>
+<l>        ObjectModel3D_ResultArrow := ObjectModel_Scene</l>
+<c>        </c>
+<l>        MatchResult := 'Faild, ' + Scene_PointNum</l>
+<l>        return()</l>
+<l>    endif</l>
+<l>    if(MatchForm == 1)</l>
+<l>        scale_image_max (RGBA, ImageScaleMax)</l>
+<l>        threshold (ImageScaleMax, Region, 0, 0)</l>
+<l>        get_domain (ImageScaleMax, Domain)</l>
+<l>        difference (Domain, Region, RegionDifference)</l>
+<l>        min_max_gray (RegionDifference, ImageScaleMax, 0, Min, Max, Range)</l>
+<l>        scale_image_range (ImageScaleMax, ImageScaled, Min, Max)</l>
+<l>        expand_domain_gray (ImageScaled, ExpandedImage, 10)            </l>
+<l>        read_cam_par ('./HCamParam.dat', CameraParam)</l>
+<l>        *read_pose ('final_pose_cam_base.dat', CamPose)</l>
+<l>        create_pose (0, 0, 0, 0, 0, 0, 'Rp+T', 'gba', 'point', CaPose)</l>
+<l>        set_surface_model_param (SFM, 'camera_parameter', CameraParam)</l>
+<l>        set_surface_model_param (SFM, 'camera_pose', CaPose)</l>
+<l>        find_surface_model_image(ExpandedImage, SFM, ObjectModel_SceneSampled, find_sfm_RelSamplingDistance, find_sfm_KeyPointFraction, find_sfm_MinScore, 'true',\
+                        ['num_matches', 'scene_normal_computation', 'score_type', find_sfm_max_overlap_dist_type, 'pose_ref_use_scene_normals', 'pose_ref_num_steps', 'pose_ref_sub_sampling'], \
+                        [find_sfm_NumMatch, find_sfm_FindMethod, find_sfm_ScoreType, find_sfm_max_overlap_dist_value, find_sfm_pose_ref_use_scene_normals_value, find_sfm_pose_ref_num_steps_value, find_sfm_pose_ref_sub_sampling_value], Pose, Score, SurfaceMatchingResultID)</l>
+<l>    else</l>
+<l>        *set_surface_model_param(SFM,'symmetry_axis_direction',[0,0,1])</l>
+<l>        find_surface_model (SFM, ObjectModel_SceneSampled, find_sfm_RelSamplingDistance, find_sfm_KeyPointFraction, find_sfm_MinScore, 'true',\
+                        ['num_matches', 'scene_normal_computation', 'score_type', find_sfm_max_overlap_dist_type, 'pose_ref_use_scene_normals', 'pose_ref_num_steps', 'pose_ref_sub_sampling'], \
+                        [find_sfm_NumMatch, find_sfm_FindMethod, find_sfm_ScoreType, find_sfm_max_overlap_dist_value, find_sfm_pose_ref_use_scene_normals_value, find_sfm_pose_ref_num_steps_value, find_sfm_pose_ref_sub_sampling_value], Pose, Score, SurfaceMatchingResultID)</l>
+<c>        </c>
+<l>    endif</l>
+<l>    *refine_surface_model_pose(SFM, ObjectModel_SceneSampled, Pose,0, 'true', [], [], Pose, Score, SurfaceMatchingResultID)</l>
+<l>    debug_find_surface_model (SFM, ObjectModel3D, ObjectModel_SceneSampled, SurfaceMatchingResultID, CreateNames, CreateValues, FindNames, FindValues)</l>
+<l>    get_surface_matching_result (SurfaceMatchingResultID, 'sampled_scene', 0, sampled_scene)</l>
+<l>    get_surface_matching_result (SurfaceMatchingResultID, 'key_points', 0, keypoint)</l>
+<l>    get_surface_matching_result (SurfaceMatchingResultID, 'refpt_rate', 0, KeyPointFraction)</l>
+<c>    </c>
+<c>    </c>
+<l>    if (Score!=[])</l>
+<l>        ObjectModel3D_Arrow := []</l>
+<l>        if (Score[0] &lt; find_sfm_MinScore)</l>
+<l>            RGB_Scene := RGBA</l>
+<l>            ObjectModel_Scene := ObjectModel_Scene</l>
+<l>            ObjectModel3D_Result := ObjectModel_Scene</l>
+<l>            ObjectModel3D_ResultArrow := ObjectModel_Scene</l>
+<l>            MatchResult := 'Faild'</l>
+<l>            return()</l>
+<l>        endif</l>
+<c>        </c>
+<l>        tuple_length(Score, SuccessNum)</l>
+<l>        VisRotationCenters := []</l>
+<l>        CPose := []</l>
+<l>        PoseIdxStartNUM := 0</l>
+<l>        PoseIdxEndNUM := 6</l>
+<l>        TransAxisCenterResultPoseArr := []</l>
+<l>        TransAxisCenterResultPoseURArr := []</l>
+<l>        for Index := 0 to SuccessNum-1 by 1</l>
+<l>            CPose := Pose[PoseIdxStartNUM:PoseIdxEndNUM]</l>
+<l>            rigid_trans_object_model_3d (ObjectModel3D, CPose, ObjectModel3D_Result)</l>
+<l>            rigid_trans_object_model_3d (ObjectModel3D, Pose, ObjectModel3D_ResultImg)</l>
+<l>            *visualize_object_model_3d (Window3D, [ObjectModel3D_Result[4]], [], [], [], [], [], [], [], PoseOut)</l>
+<l>            get_object_model_3d_params (ObjectModel3D_Result, 'center', VisRotationCenter)</l>
+<l>            VisRotationCenters := [VisRotationCenters,VisRotationCenter]</l>
+<l>*             pose_invert( Pose[StartNUM:EndNUM], PoseLookInv)</l>
+<l>*             TransAxisCenterResultPose := [0,0,0, Pose[StartNUM+3] , Pose[StartNUM+4], Pose[StartNUM+5],0]</l>
+<c>            </c>
+<l>            TransAxisCenterResultPose := [VisRotationCenter[0],VisRotationCenter[1],VisRotationCenter[2], Pose[PoseIdxStartNUM+3] , Pose[PoseIdxStartNUM+4], Pose[PoseIdxStartNUM+5],0]</l>
+<l>            TransAxisCenterResultPose_before := TransAxisCenterResultPose</l>
+<c>            </c>
+<c>** 최초 매칭된 결과 좌표의 Tz를 Scene의 바닥으로 향하게 회전 시킨 이후의 좌표를 표현하는 Trans 3축 화살표</c>
+<l>            ArrowLength := 80</l>
+<l>            ArrowThickness := 3</l>
+<l>            create_pose (0, 0, 0, 0, 0, 0, 'Rp+T', 'gba', 'point', IdentityPose)</l>
+<l>            create_pose (ArrowLength, 0, 0, 0, 0, 0, 'Rp+T', 'gba', 'point', TransXPose)</l>
+<l>            gen_arrow_object_model_3d (ArrowThickness, IdentityPose, TransXPose, OM3DToolXOrigin)</l>
+<l>            create_pose (0, ArrowLength, 0, 0, 0, 0, 'Rp+T', 'gba', 'point', TransYPose)</l>
+<l>            gen_arrow_object_model_3d (ArrowThickness, IdentityPose, TransYPose, OM3DToolYOrigin)</l>
+<l>            create_pose (0, 0, ArrowLength, 0, 0, 0, 'Rp+T', 'gba', 'point', TransZPose)</l>
+<l>            gen_arrow_object_model_3d (ArrowThickness, IdentityPose, TransZPose, OM3DToolZOrigin)</l>
+<l>            OM3DToolOrigin := [OM3DToolXOrigin,OM3DToolYOrigin,OM3DToolZOrigin]</l>
+<c>            </c>
+<l>            rigid_trans_object_model_3d (OM3DToolOrigin, TransAxisCenterResultPose, ResultTzAlignArrow)</l>
+<l>            rigid_trans_object_model_3d (ObjectModel3D, TransAxisCenterResultPose, DM)</l>
+<c>            </c>
+<c>            ** 최초 매칭후 결과 좌표를 표현하는 Trans 3축 화살표</c>
+<l>            ArrowLength := 60</l>
+<l>            ArrowThickness := 2</l>
+<l>            create_pose (0, 0, 0, 0, 0, 0, 'Rp+T', 'gba', 'point', IdentityPose)</l>
+<l>            create_pose (ArrowLength, 0, 0, 0, 0, 0, 'Rp+T', 'gba', 'point', TransXPose)</l>
+<l>            gen_arrow_object_model_3d (ArrowThickness, IdentityPose, TransXPose, OM3DToolXOrigin)</l>
+<l>            create_pose (0, ArrowLength, 0, 0, 0, 0, 'Rp+T', 'gba', 'point', TransYPose)</l>
+<l>            gen_arrow_object_model_3d (ArrowThickness, IdentityPose, TransYPose, OM3DToolYOrigin)</l>
+<l>            create_pose (0, 0, ArrowLength, 0, 0, 0, 'Rp+T', 'gba', 'point', TransZPose)</l>
+<l>            gen_arrow_object_model_3d (ArrowThickness, IdentityPose, TransZPose, OM3DToolZOrigin)</l>
+<l>            OM3DToolOrigin := [OM3DToolXOrigin,OM3DToolYOrigin,OM3DToolZOrigin]</l>
+<l>            rigid_trans_object_model_3d (OM3DToolOrigin, TransAxisCenterResultPose_before, Origins)</l>
+<c>            </c>
+<c>            ** Tz를 바닥으로 향하게 한 Trans화살표 X, Y, Z 마다 BoundBox각 축 Min Max의 차를 구함</c>
+<c>            ** 각 Trans화살표의 BoundBox 각각의 축 길이를 획득</c>
+<l>            get_object_model_3d_params (ResultTzAlignArrow, 'bounding_box1', ResultTzAlignArrowbndbox)</l>
+<l>            tuple_abs(ResultTzAlignArrowbndbox[0] - ResultTzAlignArrowbndbox[3], ResultTzAlignArrowbndboxXArrowTxDiff)</l>
+<l>            tuple_abs(ResultTzAlignArrowbndbox[1] - ResultTzAlignArrowbndbox[4], ResultTzAlignArrowbndboxXArrowTyDiff)</l>
+<l>            tuple_abs(ResultTzAlignArrowbndbox[2] - ResultTzAlignArrowbndbox[5], ResultTzAlignArrowbndboxXArrowTzDiff)</l>
+<c>            </c>
+<l>            tuple_abs(ResultTzAlignArrowbndbox[6] - ResultTzAlignArrowbndbox[9], ResultTzAlignArrowbndboxYArrowTxDiff)</l>
+<l>            tuple_abs(ResultTzAlignArrowbndbox[7] - ResultTzAlignArrowbndbox[10], ResultTzAlignArrowbndboxYArrowTyDiff)</l>
+<l>            tuple_abs(ResultTzAlignArrowbndbox[8] - ResultTzAlignArrowbndbox[11], ResultTzAlignArrowbndboxYArrowTzDiff)</l>
+<c>            </c>
+<l>            tuple_abs(ResultTzAlignArrowbndbox[12] - ResultTzAlignArrowbndbox[15], ResultTzAlignArrowbndboxZArrowTxDiff)</l>
+<l>            tuple_abs(ResultTzAlignArrowbndbox[13] - ResultTzAlignArrowbndbox[16], ResultTzAlignArrowbndboxZArrowTyDiff)</l>
+<l>            tuple_abs(ResultTzAlignArrowbndbox[14] - ResultTzAlignArrowbndbox[17], ResultTzAlignArrowbndboxZArrowTzDiff)</l>
+<c>            </c>
+<l>            ResultTzAlignXArrowXYZDiff := [ResultTzAlignArrowbndboxXArrowTxDiff, ResultTzAlignArrowbndboxXArrowTyDiff, ResultTzAlignArrowbndboxXArrowTzDiff]</l>
+<l>            ResultTzAlignYArrowXYZDiff := [ResultTzAlignArrowbndboxYArrowTxDiff, ResultTzAlignArrowbndboxYArrowTyDiff, ResultTzAlignArrowbndboxYArrowTzDiff]</l>
+<l>            ResultTzAlignZArrowXYZDiff := [ResultTzAlignArrowbndboxZArrowTxDiff, ResultTzAlignArrowbndboxZArrowTyDiff, ResultTzAlignArrowbndboxZArrowTzDiff]</l>
+<l>            get_object_model_3d_params (ResultTzAlignArrow, 'center', ResultTzAlignArrowCenters)</l>
+<c>            </c>
+<l>            rigid_trans_object_model_3d (OM3DToolOrigin, [0,0,0,TransAxisCenterResultPose_before[3],TransAxisCenterResultPose_before[4],TransAxisCenterResultPose_before[5],0], Origins1)</l>
+<l>            dev_open_window (0, 0, 640, 480, 'black', Window3D)</l>
+<l>            *disp_object_model_3d (Window3D, [ObjectModel_Scene,ObjectModel3D_Result,Dummy, Origins], [],[], ['color_0','color_1','color_2','color_3','color_4','color_5','color_6','color_7', 'point_size', 'alpha'], ['light gray', 'gray','red', 'green','blue', 'orange red', 'spring green','cornflower blue', 0.9, 0.3])</l>
+<c>             </c>
+<c>            </c>
+<l>            tuple_max(ResultTzAlignXArrowXYZDiff, XArrowMaxXYZElem)</l>
+<l>            tuple_max(ResultTzAlignYArrowXYZDiff, YArrowMaxXYZElem)</l>
+<l>            tuple_max(ResultTzAlignZArrowXYZDiff, ZArrowMaxXYZElem)</l>
+<c>            </c>
+<c>            </c>
+<c>            ** 최초 매칭된 피사체 PointCloud에 BoundBox를 씌움</c>
+<l>            get_object_model_3d_params (ObjectModel3D_Result, 'bounding_box1', ObjectModel3D_Result_BndBox)</l>
+<l>            get_object_model_3d_params (ObjectModel3D_Result, 'point_coord_x', ObjectModel3D_Result_BndBox_point_coord_x)</l>
+<c>            </c>
+<c>            ** BoundBox의 각 축 Min Max의 차를 구해 Bound박스의 Width, Height, Depth의 길이 획득</c>
+<l>            tuple_abs(ObjectModel3D_Result_BndBox[0] - ObjectModel3D_Result_BndBox[3], ObjectModel3D_Result_BndBoxXDiff)</l>
+<l>            tuple_abs(ObjectModel3D_Result_BndBox[1] - ObjectModel3D_Result_BndBox[4], ObjectModel3D_Result_BndBoxYDiff)</l>
+<l>            tuple_abs(ObjectModel3D_Result_BndBox[2] - ObjectModel3D_Result_BndBox[5], ObjectModel3D_Result_BndBoxZDiff)</l>
+<c>            </c>
+<l>            ObjectModel3D_Result_BndBoxXYZDiff := [ObjectModel3D_Result_BndBoxXDiff, ObjectModel3D_Result_BndBoxYDiff, ObjectModel3D_Result_BndBoxZDiff]</l>
+<c>            </c>
+<l>            smallest_bounding_box_object_model_3d (ObjectModel3D_Result, 'axis_aligned', smallest_BndPose_axis_aligned, Length1, Length2, Length3)</l>
+<l>            smallest_bounding_box_XYZLength_axis_aligned := [Length1, Length2, Length3]</l>
+<l>            tuple_abs(XArrowMaxXYZElem - ObjectModel3D_Result_BndBoxXDiff, LessXArrow)</l>
+<l>            tuple_abs(YArrowMaxXYZElem - ObjectModel3D_Result_BndBoxYDiff, LessYArrow)</l>
+<l>            tuple_abs(ZArrowMaxXYZElem - ObjectModel3D_Result_BndBoxZDiff, LessZArrow)</l>
+<c>            </c>
+<l>            gen_box_object_model_3d(smallest_BndPose_axis_aligned,Length1, Length2, Length3, BndPose_axis_aligned)</l>
+<c>            </c>
+<l>            smallest_bounding_box_object_model_3d (ObjectModel3D_Result, 'oriented', smallest_BndPose_oriented, Length1, Length2, Length3)</l>
+<l>            smallest_bounding_box_XYZLength_oriented := [Length1, Length2, Length3]</l>
+<c>            </c>
+<l>            LessXYZArrow := [LessXArrow, LessYArrow, LessZArrow]</l>
+<c>            </c>
+<l>            gen_box_object_model_3d(smallest_BndPose_oriented,Length1, Length2, Length3, BndPose_Oriented)</l>
+<c>            </c>
+<l>            RotateState(TransAxisCenterResultPose, TxState, TyState, TzState)</l>
+<l>            tuple_split(TxState, ',', TxState)</l>
+<l>            tuple_split(TyState, ',', TyState)</l>
+<l>            tuple_split(TzState, ',', TzState)</l>
+<l>            Instructions[0] := sum('X Arrow Status:' + TxState[0] + ',' + TxState[1] + ',' + TxState[2])</l>
+<l>            Instructions[1] := sum('Y Arrow Status:' + TyState[0] + ',' + TyState[1] + ',' + TyState[2])</l>
+<l>            Instructions[2] := sum('Z Arrow Status:' + TzState[0] + ',' + TzState[1] + ',' + TzState[2])</l>
+<l>            visualize_object_model_3d(Window3D, [ObjectModel_Scene,ObjectModel3D_Result,ResultTzAlignArrow, Origins], [],[], ['color_0','color_1','color_2','color_3','color_4','color_5','color_6','color_7', 'point_size', 'alpha'], ['light gray', 'gray','red', 'green','blue', 'orange red', 'spring green','turquoise', 0.9, 0.3], [], [],Instructions,PoseOut)</l>
+<c></c>
+<l>            ForLimit := 0</l>
+<l>            if(AxisAlign &gt; 0 and AxisAlign &lt;= 5)</l>
+<l>                RotateCheck := TransAxisCenterResultPose[0:6]</l>
+<l>                ALIGN_FLAG := false</l>
+<l>                if(AxisAlign == 3)</l>
+<l>                    TransAxisCenterResultPose[4] := 0</l>
+<l>                endif</l>
+<l>                if(AxisAlign == 4)</l>
+<l>                    TransAxisCenterResultPose[5] := 0</l>
+<l>                endif</l>
+<l>                if(AxisAlign == 5)</l>
+<l>                    TransAxisCenterResultPose[3] := 0</l>
+<l>                    TransAxisCenterResultPose[4] := 0</l>
+<l>                    TransAxisCenterResultPose[5] := 0</l>
+<l>                endif</l>
+<c>                </c>
+<l>            if(AxisAlign == 1)</l>
+<l>                while(ALIGN_FLAG == false)</l>
+<l>                    RotX90 := [0,0,0,-90,0,0,0]</l>
+<l>                    RotY90 := [0,0,0,0,-90,0,0]</l>
+<c>    **                     RotX180 := [0,0,0,180,0,0,0]</c>
+<c>    **                     RotY180 := [0,0,0,0,180,0,0]</c>
+<l>                    MinLimitDeg := (0 + (PickLimitDegree/2))</l>
+<l>                    MaxLimitDeg := (360 - (PickLimitDegree/2))</l>
+<l>                    if((TransAxisCenterResultPose[3] &lt; MinLimitDeg or TransAxisCenterResultPose[3] &gt; MaxLimitDeg) and (TransAxisCenterResultPose[4] &lt; MinLimitDeg or TransAxisCenterResultPose[4] &gt; MaxLimitDeg))</l>
+<l>                        ALIGN_FLAG := true</l>
+<l>                        break</l>
+<l>                    else</l>
+<c>                        </c>
+<l>                        pose_compose( TransAxisCenterResultPose,RotX90,TransAxisCenterResultPoseX90 )</l>
+<l>                        TransAxisCenterResultPose := TransAxisCenterResultPoseX90</l>
+<l>                    endif</l>
+<l>                    if((TransAxisCenterResultPose[3] &lt; MinLimitDeg or TransAxisCenterResultPose[3] &gt; MaxLimitDeg )and( TransAxisCenterResultPose[4] &lt; MinLimitDeg or TransAxisCenterResultPose[4] &gt; MaxLimitDeg))</l>
+<l>                        ALIGN_FLAG := true</l>
+<l>                        break</l>
+<l>                    else</l>
+<l>                        pose_compose( TransAxisCenterResultPose,RotY90,TransAxisCenterResultPoseY90 )</l>
+<l>                        TransAxisCenterResultPose := TransAxisCenterResultPoseY90</l>
+<l>                    endif</l>
+<l>                    ForLimit := ForLimit + 1 </l>
+<l>                    if (ForLimit % 20 == 0)</l>
+<l>                        PickLimitDegree := PickLimitDegree + 1</l>
+<l>                    endif</l>
+<l>                endwhile</l>
+<l>            elseif(AxisAlign ==2)</l>
+<l>                while(ALIGN_FLAG == false)</l>
+<l>                    RotX90 := [0,0,0,-90,0,0,0]</l>
+<l>                    RotY90 := [0,0,0,0,-90,0,0]</l>
+<l>                        RotX180 := [0,0,0,180,0,0,0]</l>
+<l>                         RotY180 := [0,0,0,0,180,0,0]</l>
+<l>                    TxState := []</l>
+<l>                    TyState := []</l>
+<l>                    TzState := []</l>
+<l>                    RotateState(TransAxisCenterResultPose, TxState, TyState, TzState)</l>
+<l>                    tuple_split(TxState, ',', TxState)</l>
+<l>                    tuple_split(TyState, ',', TyState)</l>
+<l>                    tuple_split(TzState, ',', TzState)</l>
+<l>                    if(TzState[2] == 'DOWN')</l>
+<l>                        ALIGN_FLAG := true</l>
+<l>                        break</l>
+<l>                    else</l>
+<l>                        pose_compose( TransAxisCenterResultPose,RotY180,TransAxisCenterResultPoseY180 )</l>
+<l>                        TransAxisCenterResultPose := TransAxisCenterResultPoseY180</l>
+<l>                    endif</l>
+<l>                    ForLimit := ForLimit + 1 </l>
+<l>                    if (ForLimit % 20 == 0)</l>
+<l>                        PickLimitDegree := PickLimitDegree + 1</l>
+<l>                    endif</l>
+<l>                endwhile</l>
+<c>                </c>
+<l>            endif</l>
+<c>            </c>
+<l>            ALIGN_FLAG := false</l>
+<l>            ForLimit := 0</l>
+<l>            TransAxisCenterResultPoseBack := TransAxisCenterResultPose</l>
+<c>            </c>
+<l>            ObjectModel3D_Result_after := ObjectModel3D_Result</l>
+<l>            TransAxisCenterResultPose_after := TransAxisCenterResultPose</l>
+<l>            rigid_trans_object_model_3d (ObjectModel3D_Result_after, TransAxisCenterResultPose_after, ObjectModel3D_Result_another)</l>
+<c>                </c>
+<c>            </c>
+<c>            ** PickIt Flexible orientation at pick point 중 그리퍼 틸팅 마진...</c>
+<l>            *TransAxisCenterResultPose_before := TransAxisCenterResultPose</l>
+<l>            *pose_compose(TransAxisCenterResultPose , [0,0,0,0,-30,0,0], TransAxisCenterResultPose)</l>
+<c>            </c>
+<c>                 </c>
+<c>            ** 최초 매칭된 결과 좌표의 Tz를 Scene의 바닥으로 향하게 회전 시킨 이후의 좌표를 표현하는 Trans 3축 화살표</c>
+<l>            ArrowLength := 80</l>
+<l>            ArrowThickness := 3</l>
+<l>            create_pose (0, 0, 0, 0, 0, 0, 'Rp+T', 'gba', 'point', IdentityPose)</l>
+<l>            create_pose (ArrowLength, 0, 0, 0, 0, 0, 'Rp+T', 'gba', 'point', TransXPose)</l>
+<l>            gen_arrow_object_model_3d (ArrowThickness, IdentityPose, TransXPose, OM3DToolXOrigin)</l>
+<l>            create_pose (0, ArrowLength, 0, 0, 0, 0, 'Rp+T', 'gba', 'point', TransYPose)</l>
+<l>            gen_arrow_object_model_3d (ArrowThickness, IdentityPose, TransYPose, OM3DToolYOrigin)</l>
+<l>            create_pose (0, 0, ArrowLength, 0, 0, 0, 'Rp+T', 'gba', 'point', TransZPose)</l>
+<l>            gen_arrow_object_model_3d (ArrowThickness, IdentityPose, TransZPose, OM3DToolZOrigin)</l>
+<l>            OM3DToolOrigin := [OM3DToolXOrigin,OM3DToolYOrigin,OM3DToolZOrigin]</l>
+<c>            </c>
+<l>            rigid_trans_object_model_3d (OM3DToolOrigin, TransAxisCenterResultPose, ResultTzAlignArrow)</l>
+<l>            rigid_trans_object_model_3d (ObjectModel3D, TransAxisCenterResultPose, DM)</l>
+<c>            </c>
+<c>            ** 최초 매칭후 결과 좌표를 표현하는 Trans 3축 화살표</c>
+<l>            ArrowLength := 60</l>
+<l>            ArrowThickness := 2</l>
+<l>            create_pose (0, 0, 0, 0, 0, 0, 'Rp+T', 'gba', 'point', IdentityPose)</l>
+<l>            create_pose (ArrowLength, 0, 0, 0, 0, 0, 'Rp+T', 'gba', 'point', TransXPose)</l>
+<l>            gen_arrow_object_model_3d (ArrowThickness, IdentityPose, TransXPose, OM3DToolXOrigin)</l>
+<l>            create_pose (0, ArrowLength, 0, 0, 0, 0, 'Rp+T', 'gba', 'point', TransYPose)</l>
+<l>            gen_arrow_object_model_3d (ArrowThickness, IdentityPose, TransYPose, OM3DToolYOrigin)</l>
+<l>            create_pose (0, 0, ArrowLength, 0, 0, 0, 'Rp+T', 'gba', 'point', TransZPose)</l>
+<l>            gen_arrow_object_model_3d (ArrowThickness, IdentityPose, TransZPose, OM3DToolZOrigin)</l>
+<l>            OM3DToolOrigin := [OM3DToolXOrigin,OM3DToolYOrigin,OM3DToolZOrigin]</l>
+<l>            rigid_trans_object_model_3d (OM3DToolOrigin, TransAxisCenterResultPose_before, Origins)</l>
+<c>            </c>
+<c>            </c>
+<c>            ** 최초 매칭된 피사체 PointCloud에 BoundBox를 씌움</c>
+<l>            get_object_model_3d_params (ObjectModel3D_Result, 'bounding_box1', ObjectModel3D_Result_BndBox)</l>
+<l>            get_object_model_3d_params (ObjectModel3D_Result, 'point_coord_x', ObjectModel3D_Result_BndBox_point_coord_x)</l>
+<c>            </c>
+<c>            ** BoundBox의 각 축 Min Max의 차를 구해 Bound박스의 Width, Height, Depth의 길이 획득</c>
+<l>            tuple_abs(ObjectModel3D_Result_BndBox[0] - ObjectModel3D_Result_BndBox[3], ObjectModel3D_Result_BndBoxXDiff)</l>
+<l>            tuple_abs(ObjectModel3D_Result_BndBox[1] - ObjectModel3D_Result_BndBox[4], ObjectModel3D_Result_BndBoxYDiff)</l>
+<l>            tuple_abs(ObjectModel3D_Result_BndBox[2] - ObjectModel3D_Result_BndBox[5], ObjectModel3D_Result_BndBoxZDiff)</l>
+<c>            </c>
+<l>            ObjectModel3D_Result_BndBoxXYZDiff := [ObjectModel3D_Result_BndBoxXDiff, ObjectModel3D_Result_BndBoxYDiff, ObjectModel3D_Result_BndBoxZDiff]</l>
+<c>            </c>
+<l>            smallest_bounding_box_object_model_3d (ObjectModel3D_Result, 'axis_aligned', smallest_BndPose_axis_aligned, Length1, Length2, Length3)</l>
+<l>            smallest_bounding_box_XYZLength_axis_aligned := [Length1, Length2, Length3]</l>
+<l>            tuple_abs(XArrowMaxXYZElem - ObjectModel3D_Result_BndBoxXDiff, LessXArrow)</l>
+<l>            tuple_abs(YArrowMaxXYZElem - ObjectModel3D_Result_BndBoxYDiff, LessYArrow)</l>
+<l>            tuple_abs(ZArrowMaxXYZElem - ObjectModel3D_Result_BndBoxZDiff, LessZArrow)</l>
+<c>            </c>
+<l>            gen_box_object_model_3d(smallest_BndPose_axis_aligned,Length1, Length2, Length3, BndPose_axis_aligned)</l>
+<c>            </c>
+<l>            smallest_bounding_box_object_model_3d (ObjectModel3D_Result, 'oriented', smallest_BndPose_oriented, Length1, Length2, Length3)</l>
+<l>            smallest_bounding_box_XYZLength_oriented := [Length1, Length2, Length3]</l>
+<c>            </c>
+<l>            LessXYZArrow := [LessXArrow, LessYArrow, LessZArrow]</l>
+<c>            </c>
+<l>            RotateState(TransAxisCenterResultPose, TxState, TyState, TzState)</l>
+<l>            tuple_split(TxState, ',', TxState)</l>
+<l>            tuple_split(TyState, ',', TyState)</l>
+<l>            tuple_split(TzState, ',', TzState)</l>
+<l>            Instructions[0] := sum('X Arrow Status:' + TxState[0] + ',' + TxState[1] + ',' + TxState[2])</l>
+<l>            Instructions[1] := sum('Y Arrow Status:' + TyState[0] + ',' + TyState[1] + ',' + TyState[2])</l>
+<l>            Instructions[2] := sum('Z Arrow Status:' + TzState[0] + ',' + TzState[1] + ',' + TzState[2])</l>
+<c>            </c>
+<l>            gen_box_object_model_3d(smallest_BndPose_oriented,Length1, Length2, Length3, BndPose_Oriented)</l>
+<l>            visualize_object_model_3d(Window3D, [ObjectModel_Scene,ObjectModel3D_Result,ResultTzAlignArrow, Origins], [],[], ['color_0','color_1','color_2','color_3','color_4','color_5','color_6','color_7', 'point_size', 'alpha'], ['light gray', 'gray','red', 'green','blue', 'orange red', 'spring green','turquoise', 0.9, 0.3], [], [],Instructions,PoseOut)</l>
+<c></c>
+<c>            ** 최초 매칭된 결과 좌표의 Tz를 Scene의 바닥으로 향하게 회전 시킨 이후의 좌표를 표현하는 Trans 3축 화살표</c>
+<l>            ArrowLength := 80</l>
+<l>            ArrowThickness := 3</l>
+<l>            create_pose (0, 0, 0, 0, 0, 0, 'Rp+T', 'gba', 'point', IdentityPose)</l>
+<l>            create_pose (ArrowLength, 0, 0, 0, 0, 0, 'Rp+T', 'gba', 'point', TransXPose)</l>
+<l>            gen_arrow_object_model_3d (ArrowThickness, IdentityPose, TransXPose, OM3DToolXOrigin)</l>
+<l>            create_pose (0, ArrowLength, 0, 0, 0, 0, 'Rp+T', 'gba', 'point', TransYPose)</l>
+<l>            gen_arrow_object_model_3d (ArrowThickness, IdentityPose, TransYPose, OM3DToolYOrigin)</l>
+<l>            create_pose (0, 0, ArrowLength, 0, 0, 0, 'Rp+T', 'gba', 'point', TransZPose)</l>
+<l>            gen_arrow_object_model_3d (ArrowThickness, IdentityPose, TransZPose, OM3DToolZOrigin)</l>
+<l>            OM3DToolOrigin := [OM3DToolXOrigin,OM3DToolYOrigin,OM3DToolZOrigin]</l>
+<c>            </c>
+<l>            rigid_trans_object_model_3d (OM3DToolOrigin, TransAxisCenterResultPose, ResultTzAlignArrow)</l>
+<l>            rigid_trans_object_model_3d (ObjectModel3D, TransAxisCenterResultPose, DM)</l>
+<c>            </c>
+<c>            ** 최초 매칭후 결과 좌표를 표현하는 Trans 3축 화살표</c>
+<l>            ArrowLength := 60</l>
+<l>            ArrowThickness := 2</l>
+<l>            create_pose (0, 0, 0, 0, 0, 0, 'Rp+T', 'gba', 'point', IdentityPose)</l>
+<l>            create_pose (ArrowLength, 0, 0, 0, 0, 0, 'Rp+T', 'gba', 'point', TransXPose)</l>
+<l>            gen_arrow_object_model_3d (ArrowThickness, IdentityPose, TransXPose, OM3DToolXOrigin)</l>
+<l>            create_pose (0, ArrowLength, 0, 0, 0, 0, 'Rp+T', 'gba', 'point', TransYPose)</l>
+<l>            gen_arrow_object_model_3d (ArrowThickness, IdentityPose, TransYPose, OM3DToolYOrigin)</l>
+<l>            create_pose (0, 0, ArrowLength, 0, 0, 0, 'Rp+T', 'gba', 'point', TransZPose)</l>
+<l>            gen_arrow_object_model_3d (ArrowThickness, IdentityPose, TransZPose, OM3DToolZOrigin)</l>
+<l>            OM3DToolOrigin := [OM3DToolXOrigin,OM3DToolYOrigin,OM3DToolZOrigin]</l>
+<l>            rigid_trans_object_model_3d (OM3DToolOrigin, TransAxisCenterResultPose_before, Origins)</l>
+<c>           </c>
+<c>            </c>
+<c>            ** 최초 매칭된 피사체 PointCloud에 BoundBox를 씌움</c>
+<l>            get_object_model_3d_params (ObjectModel3D_Result, 'bounding_box1', ObjectModel3D_Result_BndBox)</l>
+<l>            get_object_model_3d_params (ObjectModel3D_Result, 'point_coord_x', ObjectModel3D_Result_BndBox_point_coord_x)</l>
+<c>            </c>
+<c>            ** BoundBox의 각 축 Min Max의 차를 구해 Bound박스의 Width, Height, Depth의 길이 획득</c>
+<l>            tuple_abs(ObjectModel3D_Result_BndBox[0] - ObjectModel3D_Result_BndBox[3], ObjectModel3D_Result_BndBoxXDiff)</l>
+<l>            tuple_abs(ObjectModel3D_Result_BndBox[1] - ObjectModel3D_Result_BndBox[4], ObjectModel3D_Result_BndBoxYDiff)</l>
+<l>            tuple_abs(ObjectModel3D_Result_BndBox[2] - ObjectModel3D_Result_BndBox[5], ObjectModel3D_Result_BndBoxZDiff)</l>
+<c>            </c>
+<l>            ObjectModel3D_Result_BndBoxXYZDiff := [ObjectModel3D_Result_BndBoxXDiff, ObjectModel3D_Result_BndBoxYDiff, ObjectModel3D_Result_BndBoxZDiff]</l>
+<c>            </c>
+<l>            smallest_bounding_box_object_model_3d (ObjectModel3D_Result, 'axis_aligned', smallest_BndPose_axis_aligned, Length1, Length2, Length3)</l>
+<l>            smallest_bounding_box_XYZLength_axis_aligned := [Length1, Length2, Length3]</l>
+<l>            tuple_abs(XArrowMaxXYZElem - ObjectModel3D_Result_BndBoxXDiff, LessXArrow)</l>
+<l>            tuple_abs(YArrowMaxXYZElem - ObjectModel3D_Result_BndBoxYDiff, LessYArrow)</l>
+<l>            tuple_abs(ZArrowMaxXYZElem - ObjectModel3D_Result_BndBoxZDiff, LessZArrow)</l>
+<c>            </c>
+<l>            gen_box_object_model_3d(smallest_BndPose_axis_aligned,Length1, Length2, Length3, BndPose_axis_aligned)</l>
+<c>            </c>
+<l>            smallest_bounding_box_object_model_3d (ObjectModel3D_Result, 'oriented', smallest_BndPose_oriented, Length1, Length2, Length3)</l>
+<l>            smallest_bounding_box_XYZLength_oriented := [Length1, Length2, Length3]</l>
+<c>            </c>
+<l>            LessXYZArrow := [LessXArrow, LessYArrow, LessZArrow]</l>
+<c>            </c>
+<l>            gen_box_object_model_3d(smallest_BndPose_oriented,Length1, Length2, Length3, BndPose_Oriented)</l>
+<c>            </c>
+<c>            </c>
+<l>            RotateState(TransAxisCenterResultPose, TxState, TyState, TzState)</l>
+<l>            tuple_split(TxState, ',', TxState)</l>
+<l>            tuple_split(TyState, ',', TyState)</l>
+<l>            tuple_split(TzState, ',', TzState)</l>
+<l>            Instructions[0] := sum('X Arrow Status:' + TxState[0] + ',' + TxState[1] + ',' + TxState[2])</l>
+<l>            Instructions[1] := sum('Y Arrow Status:' + TyState[0] + ',' + TyState[1] + ',' + TyState[2])</l>
+<l>            Instructions[2] := sum('Z Arrow Status:' + TzState[0] + ',' + TzState[1] + ',' + TzState[2])</l>
+<l>            visualize_object_model_3d(Window3D, [ObjectModel_Scene,ObjectModel3D_Result,ResultTzAlignArrow, Origins], [],[], ['color_0','color_1','color_2','color_3','color_4','color_5','color_6','color_7', 'point_size', 'alpha'], ['light gray', 'gray','red', 'green','blue', 'orange red', 'spring green','turquoise', 0.9, 0.3], [], [],Instructions,PoseOut)</l>
+<c>                </c>
+<c>                </c>
+<c>            **********************************************************TEKNIX BOLT</c>
+<l>*             hom_mat3d_identity (HomMat3DIdentity1)</l>
+<l>*             hom_mat3d_rotate (HomMat3DIdentity1, rad(Pose[5]), 'z', 0, 0, 0, HomMat3DRotate1)</l>
+<l>*             hom_mat3d_rotate (HomMat3DRotate1, rad(Pose[4]), 'y', 0, 0, 0, HomMat3DRotate2)</l>
+<l>*             hom_mat3d_rotate (HomMat3DRotate2, rad(Pose[3]), 'x', 0, 0, 0, HomMat3DRotate3)</l>
+<l>*             hom_mat3d_translate (HomMat3DRotate3, VisRotationCenter[0],VisRotationCenter[1],VisRotationCenter[2], HomMat3DTranslate1)</l>
+<l>            *affine_trans_object_model_3d (OM3DToolOrigin, HomMat3DTranslate1, Dummy)</l>
+<c>            </c>
+<l>*             hom_mat3d_invert (HomMat3DTranslate1, HomMat3DInvert)</l>
+<l>            *affine_trans_object_model_3d (Dummy, HomMat3DInvert, ObjectModel3DAffineTrans)</l>
+<c>            </c>
+<l>*             hom_mat3d_rotate (HomMat3DInvert, -rad(Pose[4]), 'y', 0, 0, 0, HomMat3DRotate)</l>
+<c>            </c>
+<l>*             hom_mat3d_invert (HomMat3DRotate, TransAxisCenterResultPose)</l>
+<l>            *affine_trans_object_model_3d (ObjectModel3DAffineTrans, HomMat3DInvert1, Dummy1)</l>
+<c>            **********************************************************</c>
+<c>            </c>
+<c>            </c>
+<c>            </c>
+<c>            </c>
+<c>            </c>
+<l>*             if(RotateCheck[3] &gt; 90 and RotateCheck[3] &lt; 270)</l>
+<l>*                 pose_to_hom_mat3d (TransAxisCenterResultPose[0:6], camHwcs)</l>
+<l>*                 hom_mat3d_rotate_local (camHwcs, rad(180), 'x', camHwcs)</l>
+<l>*                 hom_mat3d_to_pose (camHwcs, PoseOfWCS)</l>
+<l>*                 TransAxisCenterResultPose[0:6] := PoseOfWCS</l>
+<l>*             elseif(RotateCheck[4] &gt; 90 and RotateCheck[4] &lt; 270)</l>
+<l>*                 pose_to_hom_mat3d (TransAxisCenterResultPose[0:6], camHwcs)</l>
+<l>*                 hom_mat3d_rotate_local (camHwcs, rad(180), 'y', camHwcs)</l>
+<l>*                 hom_mat3d_to_pose (camHwcs, PoseOfWCS)</l>
+<l>*                 TransAxisCenterResultPose[0:6] := PoseOfWCS</l>
+<l>*             endif </l>
+<l>            endif</l>
+<c>            </c>
+<l>            create_pose (0, 0, 0, 0, 0, 0, 'Rp+T', 'gba', 'point', IdentityPose)</l>
+<c>            * </c>
+<c>            * 3D model for the tool.</c>
+<l>            create_pose (ArrowLength, 0, 0, 0, 0, 0, 'Rp+T', 'gba', 'point', TransXPose)</l>
+<l>            gen_arrow_object_model_3d (ArrowThickness, IdentityPose, TransXPose, OM3DToolXOrigin)</l>
+<l>            create_pose (0, ArrowLength, 0, 0, 0, 0, 'Rp+T', 'gba', 'point', TransYPose)</l>
+<l>            gen_arrow_object_model_3d (ArrowThickness, IdentityPose, TransYPose, OM3DToolYOrigin)</l>
+<l>            create_pose (0, 0, ArrowLength, 0, 0, 0, 'Rp+T', 'gba', 'point', TransZPose)</l>
+<l>            gen_arrow_object_model_3d (ArrowThickness, IdentityPose, TransZPose, OM3DToolZOrigin)</l>
+<l>            OM3DToolOrigin := [OM3DToolXOrigin,OM3DToolYOrigin,OM3DToolZOrigin]</l>
+<l>            rigid_trans_object_model_3d (OM3DToolOrigin, TransAxisCenterResultPose, Dummy)</l>
+<l>            *affine_trans_object_model_3d (OM3DToolOrigin, TransAxisCenterResultPose, Dummy)</l>
+<l>            ObjectModel3D_Arrow := [ObjectModel3D_Arrow, Dummy]</l>
+<c>            </c>
+<c></c>
+<l>            pose_to_hom_mat3d(TransAxisCenterResultPose, Hom3D)</l>
+<l>            pose_to_quat(TransAxisCenterResultPose, Quat)</l>
+<l>            convert_pose_type (TransAxisCenterResultPose, 'Rp+T', 'rodriguez', 'point', TransAxisCenterResultPoseRodriguez)</l>
+<c></c>
+<l>            *PoseRodriguez := ZYXPoseRodriguez</l>
+<l>            RodLeng := sqrt(sum(TransAxisCenterResultPoseRodriguez[3:5]*TransAxisCenterResultPoseRodriguez[3:5]))</l>
+<l>            AngleInRad := 2*atan(RodLeng)</l>
+<l>            UnitAxisOfRotation := TransAxisCenterResultPoseRodriguez[3:5]/RodLeng</l>
+<l>            tuple_deg(UnitAxisOfRotation, UnitAxisOfRotationDeg)</l>
+<l>            OrientationVector := UnitAxisOfRotation*AngleInRad</l>
+<l>            TransAxisCenterResultPoseUR := [TransAxisCenterResultPoseRodriguez[0:2], OrientationVector] </l>
+<c>            </c>
+<c>            </c>
+<l>            transform_end_effector_to_camera := [[7.6775858178734779e-03, 9.3610394001007080e-01, -3.5163968801498413e-01, 1.0890910644531250e+03], \
+                                    [9.9979180097579956e-01, -5.3822970949113369e-04,    2.0396301522850990e-02, -6.9055953979492188e+01], \
+                                    [1.8903793767094612e-02, -3.5172307491302490e-01,     -9.3591320514678955e-01, 3.8437316894531250e+02] \
+            ]                        </l>
+<c>            *,[0., 0., 0., 1.]]</c>
+<l>            PoseUR[6] := 0</l>
+<l>            pose_to_hom_mat3d(PoseUR, PoseUR_hom_mat3d)</l>
+<l>            hom_mat3d_to_pose(transform_end_effector_to_camera, calPose)</l>
+<l>            hom_mat3d_compose(PoseUR_hom_mat3d, transform_end_effector_to_camera, convTRobot)</l>
+<l>            hom_mat3d_to_pose(convTRobot, PoseCamToRobot)</l>
+<c>           </c>
+<l>            pose_compose(TransAxisCenterResultPose, calPose, Robot)</l>
+<c>            </c>
+<c>             </c>
+<l>*             tuple_cos(SavePose[3], cosroll) </l>
+<l>*             tuple_sin(SavePose[3], sinroll) </l>
+<l>*             create_matrix(3,3,[[1,       0,        0], \
+                     [0, cosroll, (-sinroll)], \
+                     [0, sinroll,  cosroll]], RollMat)</l>
+<l>            *RollMat := [[1,       0,        0], \
+                     [0, cosroll, -sinroll], \
+                     [0, sinroll,  cosroll]]</l>
+<c>            </c>
+<l>*             tuple_cos(SavePose[4], cospitch) </l>
+<l>*             tuple_sin(SavePose[4], sinpitch) </l>
+<l>*             create_matrix(3,3, [[cospitch, 0, sinpitch], \
+                     [0,         1,        0], \
+                     [(-sinpitch), 0, cospitch]], PitchMat)</l>
+<c>            </c>
+<l>            *PitchMat := [[cospitch, 0, sinpitch], \
+                     [0,         1,        0], \
+                     [-sinpitch, 0, cospitch]]</l>
+<c>            </c>
+<l>*             tuple_cos(SavePose[4], cosyaw) </l>
+<l>*             tuple_sin(SavePose[4], sinyaw)</l>
+<l>*             create_matrix(3,3,[[cosyaw, (-sinyaw),      0], \
+                    [sinyaw,  cosyaw,      0], \
+                    [0,            0,      1]], YawMat)</l>
+<l>            *YawMat := [[cosyaw, -sinyaw,      0], \
+                    [sinyaw,  cosyaw,      0], \
+                    [0,            0,      1]]</l>
+<l>*             mult_matrix( PitchMat, RollMat,'AB', Ret1)</l>
+<l>*             mult_matrix( YawMat, Ret1, 'AB', Rot)</l>
+<l>*             get_value_matrix(Rot,0,0, M00)</l>
+<l>*             get_value_matrix(Rot,1,1, M11)</l>
+<l>*             get_value_matrix(Rot,2,2, M22)</l>
+<c>            </c>
+<l>*             rotsum := M00 + M11 + M22 - 1</l>
+<l>*             tuple_acos(rotsum/2, alpha)</l>
+<l>*             theta := 0</l>
+<l>*             if(SavePose[3] &gt;= 0)</l>
+<l>*                 theta := alpha</l>
+<l>*             else</l>
+<l>*                 theta := 2 * 3.14 - alpha</l>
+<l>*             endif</l>
+<l>*             tuple_sin(theta, sintheta)</l>
+<l>*             my := 1.0 / 2 * sintheta</l>
+<l>*             get_value_matrix(Rot,2,1, M21)</l>
+<l>*             get_value_matrix(Rot,1,2, M12)</l>
+<l>*             get_value_matrix(Rot,0,2, M02)</l>
+<l>*             get_value_matrix(Rot,2,0, M20)</l>
+<l>*             get_value_matrix(Rot,1,0, M10)</l>
+<l>*             get_value_matrix(Rot,0,1, M01)</l>
+<c>            </c>
+<c>            </c>
+<l>*             rx := my * (M21-M12) * theta</l>
+<l>*             ry := my * (M02-M20) * theta</l>
+<l>*             rz := my * (M10-M01) * theta</l>
+<l>*             PoseUR := [SavePose[0], SavePose[1], SavePose[2], rx, ry, rz]</l>
+<c>            </c>
+<c>            </c>
+<l>*             tuple_cos(SavePose[3], cosroll) </l>
+<l>*             tuple_sin(SavePose[3], sinroll) </l>
+<l>*             create_matrix(3,3,[[cosroll, (-sinroll), 0], \
+                               [sinroll,    cosroll, 0], \
+                               [      0,          0, 1]], RollMat)</l>
+<l>            *RollMat := [[1,       0,        0], \
+                     [0, cosroll, -sinroll], \
+                     [0, sinroll,  cosroll]]</l>
+<c>            </c>
+<l>*             tuple_cos(SavePose[4], cospitch) </l>
+<l>*             tuple_sin(SavePose[4], sinpitch) </l>
+<l>*             create_matrix(3,3, [[cospitch, 0, sinpitch], \
+                                [0,         1,        0], \
+                                [(-sinpitch), 0, cospitch]], PitchMat)</l>
+<c>            </c>
+<l>            *PitchMat := [[cospitch, 0, sinpitch], \
+                     [0,         1,        0], \
+                     [-sinpitch, 0, cospitch]]</l>
+<c>            </c>
+<l>*             tuple_cos(SavePose[4], cosyaw) </l>
+<l>*             tuple_sin(SavePose[4], sinyaw)</l>
+<l>*             create_matrix(3,3,[[1,       0,        0], \
+                               [0,  cosyaw, (-sinyaw)], \
+                               [0,  sinyaw,   cosyaw]], YawMat)</l>
+<l>            *YawMat := [[cosyaw, -sinyaw,      0], \
+                    [sinyaw,  cosyaw,      0], \
+                    [0,            0,      1]]</l>
+<l>*             mult_matrix( PitchMat, RollMat,'AB', Ret1)</l>
+<l>*             mult_matrix( YawMat, Ret1, 'AB', Rot)</l>
+<l>*             get_value_matrix(Rot,0,0, M00)</l>
+<l>*             get_value_matrix(Rot,1,1, M11)</l>
+<l>*             get_value_matrix(Rot,2,2, M22)</l>
+<c>            </c>
+<l>*             rotsum := M00 + M11 + M22 - 1</l>
+<l>*             tuple_acos(rotsum/2, alpha)</l>
+<l>*             theta := 0</l>
+<l>*             if(SavePose[3] &gt;= 0)</l>
+<l>*                 theta := alpha</l>
+<l>*             else</l>
+<l>*                 theta := 2 * 3.14 - alpha</l>
+<l>*             endif</l>
+<l>*             tuple_sin(theta, sintheta)</l>
+<l>*             my := 1.0 / 2 * sintheta</l>
+<l>*             get_value_matrix(Rot,2,1, M21)</l>
+<l>*             get_value_matrix(Rot,1,2, M12)</l>
+<l>*             get_value_matrix(Rot,0,2, M02)</l>
+<l>*             get_value_matrix(Rot,2,0, M20)</l>
+<l>*             get_value_matrix(Rot,1,0, M10)</l>
+<l>*             get_value_matrix(Rot,0,1, M01)</l>
+<c>            </c>
+<c>            </c>
+<l>*             rx2 := my * (M21-M12) * theta</l>
+<l>*             ry2 := my * (M02-M20) * theta</l>
+<l>*             rz2 := my * (M10-M01) * theta</l>
+<l>*             PoseUR2 := [SavePose[0], SavePose[1], SavePose[2], rx2, ry2, rz2]</l>
+<c>            </c>
+<l>            TransAxisCenterResultPoseArr := [TransAxisCenterResultPoseArr, TransAxisCenterResultPose]</l>
+<l>            TransAxisCenterResultPoseURArr := [TransAxisCenterResultPoseURArr, TransAxisCenterResultPoseUR]</l>
+<l>            PoseIdxStartNUM := PoseIdxStartNUM + 7</l>
+<l>            PoseIdxEndNUM := PoseIdxEndNUM + 7</l>
+<l>        endfor</l>
+<c>        </c>
+<c>    </c>
+<l>        RGB_Scene := RGBA</l>
+<l>        ObjectModel_Scene := ObjectModel_Scene</l>
+<l>        ObjectModel3D_Result := ObjectModel3D_ResultImg</l>
+<l>        ObjectModel3D_ResultArrow := ObjectModel3D_Arrow</l>
+<c>        </c>
+<l>        PoseIdxStart := 0</l>
+<l>        RTVal := []</l>
+<l>        for Index := 0 to SuccessNum-1 by 1</l>
+<l>            strMerged := Index+','+ \
+                     Score[Index]+','+ \
+                     TransAxisCenterResultPoseURArr[PoseIdxStart]+','+ \ 
+                     TransAxisCenterResultPoseURArr[PoseIdxStart+1]+','+ \
+                     TransAxisCenterResultPoseURArr[PoseIdxStart+2]+','+ \
+                     TransAxisCenterResultPoseURArr[PoseIdxStart+3]+','+ \
+                     TransAxisCenterResultPoseURArr[PoseIdxStart+4]+','+ \
+                     TransAxisCenterResultPoseURArr[PoseIdxStart+5]</l>
+<l>            RTVal := [RTVal, strMerged]</l>
+<l>            PoseIdxStart := PoseIdxStart + 6</l>
+<l>        endfor</l>
+<l>        MatchResult := RTVal</l>
+<c>        </c>
+<c>        * Halcon3DVis_0_0_3.hdvp</c>
+<l>        *create_pose (0.0, 0.0, -1000, 0, 0, 0, 'Rp+T', 'gba', 'point', Pose)</l>
+<l>        *gen_cam_par_area_scan_division (0.025, 0, 1.1e-05, 1.1e-05, 960.0, 600.0, 1920, 1200, CameraParam)</l>
+<l>        *tuple_length(ObjectModel3D_Scene[1], NumResult)</l>
+<l>        *Message1 := 'Scene: ' + Index</l>
+<l>        Message1 := 'Found ' + |ObjectModel3D_Result| + ' object(s) '</l>
+<l>        *ScoreString := sum(Score$'.2f' + ' / ')</l>
+<l>        *Message1[2] := 'Score(s): ' + ScoreString{0:strlen(ScoreString) - 4}</l>
+<l>        NumResult := |ObjectModel3D_Result|</l>
+<l>        ArrowLength := |ObjectModel3D_ResultArrow|</l>
+<c>    </c>
+<c>        </c>
+<l>        tuple_gen_const (ArrowLength, 'green', Colors)</l>
+<l>        tuple_gen_const (ArrowLength+1, 1.0, Alphas)</l>
+<l>        tuple_gen_const (ArrowLength+1, 2.5, PointSizes)</l>
+<l>        for Index1 := 0 to 1 by 1</l>
+<l>            if(Index1 == 0)</l>
+<l>                Alphas[Index1] := 0.1</l>
+<l>            else</l>
+<l>            *    Alphas[Index1] := 0.2</l>
+<l>            endif</l>
+<l>        endfor</l>
+<c>    </c>
+<l>        for Index2 := 0 to ArrowLength by 3</l>
+<l>            if(ArrowLength &lt;= Index2)</l>
+<l>                break</l>
+<l>            endif</l>
+<l>            Colors[Index2] := 'red'</l>
+<l>            Colors[Index2+1] := 'green'</l>
+<l>            Colors[Index2+2] := 'blue'</l>
+<l>        endfor</l>
+<c>        </c>
+<l>        for Index1 := 0 to 1 by 1</l>
+<l>            if(Index1 == 0)</l>
+<l>                PointSizes[Index1] := 0.71</l>
+<l>            else</l>
+<l>            *    PointSizes[Index1] := 0.9</l>
+<l>            endif</l>
+<l>        endfor</l>
+<l>        if(RoiForm != 0)</l>
+<l>            Indices := [1:ArrowLength+1]</l>
+<l>        else</l>
+<l>            Indices := [1:ArrowLength]</l>
+<l>        endif</l>
+<l>        dev_clear_window ()</l>
+<l>        Instructions[0] := 'Rotate: Left button'</l>
+<l>        Instructions[1] := 'Zoom:   Shift + left button'</l>
+<l>        Instructions[2] := 'Move:   Ctrl  + left button'</l>
+<l>        dev_open_window(0,0,1920/2.5,1200/2.5,'black', Window3D)</l>
+<c></c>
+<l>        dev_set_window(Window3D)</l>
+<l>        ColorsTmp := 'color_' + [0,Indices]</l>
+<l>        PointSizeTmp := 'point_size_'+[0,Indices]</l>
+<l>        AlphaTmp := 'alpha_' + [0,Indices]</l>
+<c>        </c>
+<c>        </c>
+<l>        if(RoiForm == 2)</l>
+<l>            ROIPOSE := Pose_primitive_plane</l>
+<l>            *gen_box_object_model_3d ([SceneCenter[0],SceneCenter[1],SceneCenter[2],0,0,0,0], 300 + 300 * 0.001, 200 + 200 * 0.001, 1 + 50, ObjectModel3DROI)</l>
+<l>            tuple_abs(ROIZPlaneMinDepth, adjustROIZPlaneMinDepth)</l>
+<l>            tuple_abs(ROIZPlaneMaxDepth, adjustROIZPlaneMaxDepth)</l>
+<l>             if(ROIZPlaneMinDepth &lt; 0)</l>
+<l>                ZAdjustTmp := (adjustROIZPlaneMinDepth + adjustROIZPlaneMaxDepth)</l>
+<l>            else</l>
+<l>                ZAdjustTmp := (adjustROIZPlaneMaxDepth - adjustROIZPlaneMinDepth)</l>
+<l>            endif</l>
+<l>            ZAdjust := SampleSceneCenterZ[2] - (ZAdjustTmp/2)</l>
+<l>            tuple_mean([ROIXAreaMin,ROIXAreaMax], MeanX)</l>
+<l>            tuple_mean([ROIYAreaMin,ROIYAreaMax], MeanY)</l>
+<l>            ROIPOSE[0] := MeanX</l>
+<l>            ROIPOSE[1] := MeanY</l>
+<l>            ROIPOSE[2] := ZAdjust</l>
+<c>             </c>
+<l>            tuple_abs(ROIXAreaMin, absROIXAreaMin)</l>
+<c>            </c>
+<l>            tuple_abs(ROIXAreaMax, absROIXAreaMax)</l>
+<l>            tuple_abs(ROIYAreaMin, absROIYAreaMin)</l>
+<l>            tuple_abs(ROIYAreaMax, absROIYAreaMax)</l>
+<l>            tuple_abs(ROIZPlaneMinDepth, absROIZPlaneMinDepth)</l>
+<l>            tuple_abs(ROIZPlaneMaxDepth, absROIZPlaneMaxDepth)</l>
+<l>            if(ROIXAreaMin &lt; 0)</l>
+<l>                genBoxX := (absROIXAreaMin + absROIXAreaMax)</l>
+<l>            else</l>
+<l>                genBoxX := (absROIXAreaMax - absROIXAreaMin)</l>
+<l>            endif</l>
+<l>            if(ROIYAreaMin &lt; 0)</l>
+<l>                genBoxY := (absROIYAreaMin + absROIYAreaMax)</l>
+<l>            else</l>
+<l>                genBoxY := (absROIYAreaMax - absROIYAreaMin)</l>
+<l>            endif</l>
+<c>            </c>
+<l>            if(ROIZPlaneMinDepth &lt; 0)</l>
+<l>                genBoxZ := (absROIZPlaneMinDepth + absROIZPlaneMaxDepth)</l>
+<l>            else</l>
+<l>                genBoxZ := (absROIZPlaneMaxDepth - absROIZPlaneMinDepth)</l>
+<l>            endif</l>
+<l>             gen_box_object_model_3d (ROIPOSE, genBoxX, genBoxY, genBoxZ, ObjectModel3DROI)</l>
+<l>        elseif(RoiForm == 3)</l>
+<l>            ROIPOSE := Pose_primitive_plane</l>
+<l>            *gen_box_object_model_3d ([SceneCenter[0],SceneCenter[1],SceneCenter[2],0,0,0,0], 300 + 300 * 0.001, 200 + 200 * 0.001, 1 + 50, ObjectModel3DROI)</l>
+<c>    </c>
+<l>            tuple_abs(PointZMin_Target, adjustROIZPlaneMinDepth)</l>
+<l>            tuple_abs(Scene_BndBox[5], adjustROIZPlaneMaxDepth)</l>
+<l>             if(PointZMin_Target &lt; 0)</l>
+<l>                ZAdjustTmp := (adjustROIZPlaneMinDepth + adjustROIZPlaneMaxDepth)</l>
+<l>            else</l>
+<l>                ZAdjustTmp := (adjustROIZPlaneMaxDepth - adjustROIZPlaneMinDepth)</l>
+<l>            endif</l>
+<l>            ZAdjust := SampleSceneCenterZ[2] - (ZAdjustTmp/2)</l>
+<l>            tuple_mean([Scene_BndBox[0],Scene_BndBox[3]], MeanX)</l>
+<l>            tuple_mean([Scene_BndBox[1],Scene_BndBox[4]], MeanY)</l>
+<l>            ROIPOSE[0] := MeanX</l>
+<l>            ROIPOSE[1] := MeanY</l>
+<l>            ROIPOSE[2] := ZAdjust</l>
+<c>             </c>
+<l>            tuple_abs(Scene_BndBox[0], absROIXAreaMin)</l>
+<c>            </c>
+<l>            tuple_abs(Scene_BndBox[3], absROIXAreaMax)</l>
+<l>            tuple_abs(Scene_BndBox[1], absROIYAreaMin)</l>
+<l>            tuple_abs(Scene_BndBox[4], absROIYAreaMax)</l>
+<l>            tuple_abs(PointZMin_Target, absROIZPlaneMinDepth)</l>
+<l>            tuple_abs(Scene_BndBox[5], absROIZPlaneMaxDepth)</l>
+<l>            if(Scene_BndBox[0] &lt; 0)</l>
+<l>                genBoxX := (absROIXAreaMin + absROIXAreaMax)</l>
+<l>            else</l>
+<l>                genBoxX := (absROIXAreaMax - absROIXAreaMin)</l>
+<l>            endif</l>
+<l>            if(Scene_BndBox[1] &lt; 0)</l>
+<l>                genBoxY := (absROIYAreaMin + absROIYAreaMax)</l>
+<l>            else</l>
+<l>                genBoxY := (absROIYAreaMax - absROIYAreaMin)</l>
+<l>            endif</l>
+<c>            </c>
+<l>            if(PointZMin_Target &lt; 0)</l>
+<l>                genBoxZ := (absROIZPlaneMinDepth + absROIZPlaneMaxDepth)</l>
+<l>            else</l>
+<l>                genBoxZ := (absROIZPlaneMaxDepth - absROIZPlaneMinDepth)</l>
+<l>            endif</l>
+<l>            gen_box_object_model_3d (ROIPOSE, genBoxX, genBoxY, genBoxZ, ObjectModel3DROI)</l>
+<l>        endif</l>
+<c>        </c>
+<l>         if(RoiForm != 0)</l>
+<l>            dev_clear_window()</l>
+<l>            visualize_object_model_3d (Window3D, [ObjectModel_Scene, ObjectModel3D_ResultArrow, ObjectModel3DROI], [],[], ['color_' + [0,Indices],'point_size_'+[0,Indices], 'alpha_' + [0,Indices], 'disp_background'], ['light gray',Colors,'green',PointSizes, 0.1, Alphas, 0.1, 'true'], Message1, [], Instructions, PoseOut)</l>
+<l>            get_window_extents (Window3D, RowNotUsed, ColumnNotUsed, Width, Height)</l>
+<c>    </c>
+<l>            get_part (Window3D, WPRow1, WPColumn1, WPRow2, WPColumn2)</l>
+<l>            set_part (Window3D, 0, 0, Height - 1, Width - 1)</l>
+<l>            *gen_cam_par_area_scan_division (1.622452e-02, 0, 5.860000e-06, 5.860000e-06, Width / 2, Height / 2, Width, Height, CamParam)</l>
+<l>             gen_cam_par_area_scan_division (0.06, 0, 8.5e-6, 8.5e-6, Width / 2, Height / 2, Width, Height, CamParam)</l>
+<l>            get_object_models_center ([ObjectModel_Scene, ObjectModel3D_ResultArrow], Center)</l>
+<l>            create_pose (-Center[0],-Center[1], -Center[2], 0, 0, 0, 'Rp+T', 'gba', 'point', PoseIn)</l>
+<l>            determine_optimum_pose_distance ([ObjectModel_Scene, ObjectModel3D_ResultArrow,ObjectModel3DROI], CamParam, 2, PoseIn, PoseEstimated)</l>
+<l>            *PoseEstimated[2] := PoseEstimated[2] * 20</l>
+<l>            disp_object_model_3d(Window3D, [ObjectModel_Scene, ObjectModel3D_ResultArrow,ObjectModel3DROI], [], PoseEstimated, ['color_' + [0,Indices],'point_size_'+[0,Indices], 'alpha_' + [0,Indices]], ['gray',Colors,'green',PointSizes, 0.05, Alphas, 0.1])</l>
+<l>         else</l>
+<l>            visualize_object_model_3d (Window3D, [ObjectModel_Scene, ObjectModel3D_ResultArrow], [],[], ['color_' + [0,Indices],'point_size_'+[0,Indices], 'alpha_' + [0,Indices], 'disp_background'], ['gray',Colors,PointSizes, Alphas,  'true'], Message1, [], Instructions, PoseOut)</l>
+<l>            get_window_extents (Window3D, RowNotUsed, ColumnNotUsed, Width, Height)</l>
+<c>    </c>
+<l>            get_part (Window3D, WPRow1, WPColumn1, WPRow2, WPColumn2)</l>
+<l>            set_part (Window3D, 0, 0, Height - 1, Width - 1)</l>
+<l>            *gen_cam_par_area_scan_division (1.622452e-02, 0, 5.860000e-06, 5.860000e-06, Width / 2, Height / 2, Width, Height, CamParam)</l>
+<l>             gen_cam_par_area_scan_division (0.06, 0, 8.5e-6, 8.5e-6, Width / 2, Height / 2, Width, Height, CamParam)</l>
+<l>            get_object_models_center ([ObjectModel_Scene, ObjectModel3D_ResultArrow], Center)</l>
+<l>            create_pose (-Center[0],-Center[1], -Center[2], 0, 0, 0, 'Rp+T', 'gba', 'point', PoseIn)</l>
+<l>            determine_optimum_pose_distance ([ObjectModel_Scene, ObjectModel3D_ResultArrow], CamParam, 2, PoseIn, PoseEstimated)</l>
+<l>            *PoseEstimated[2] := PoseEstimated[2] * 20</l>
+<l>            disp_object_model_3d(Window3D, [ObjectModel_Scene, ObjectModel3D_ResultArrow], [], PoseEstimated, ['color_' + [0,Indices],'point_size_'+[0,Indices], 'alpha_' + [0,Indices]], ['light gray',Colors,PointSizes, Alphas])</l>
+<l>         endif</l>
+<l>    else</l>
+<l>        *Message1 := 'Found ' + |ObjectModel3D_Result| + ' object(s) '</l>
+<l>*        ScoreString := sum(Score$'.2f' + ' / ')</l>
+<l>*        Message1[2] := 'Score(s): ' + ScoreString{0:strlen(ScoreString) - 4}</l>
+<l>*         NumResult := |ObjectModel3D_Result|</l>
+<l>*         ArrowLength := |ObjectModel3D_ResultArrow|</l>
+<l>        NumResult := 1</l>
+<l>        ArrowLength :=1</l>
+<c></c>
+<l>        tuple_gen_const (ArrowLength, 'gray', Colors)</l>
+<l>        tuple_gen_const (ArrowLength, 1.0, Alphas)</l>
+<l>        tuple_gen_const (ArrowLength, 1.0, PointSizes)</l>
+<l>        Indices := [1:ArrowLength]</l>
+<l>        dev_clear_window ()</l>
+<l>        Instructions[0] := 'Rotate: Left button'</l>
+<l>        Instructions[1] := 'Zoom:   Shift + left button'</l>
+<l>        Instructions[2] := 'Move:   Ctrl  + left button'</l>
+<l>        dev_open_window(0,0,1920/2.5,1200/2.5,'black', Window3D)</l>
+<c></c>
+<l>        dev_set_window(Window3D)</l>
+<l>        RGB_Scene := RGBA</l>
+<l>        ObjectModel_Scene := ObjectModel_Scene</l>
+<l>        ObjectModel3D_Result := ObjectModel_Scene</l>
+<l>        ObjectModel3D_ResultArrow := ObjectModel_Scene</l>
+<l>        ZoomParam := 1.6</l>
+<l>        MatchResult := 'Failed'</l>
+<l>        visualize_object_model_3d (Window3D, [ObjectModel_Scene], [],[], ['color', 'point_size', 'alpha'], ['light gray', 0.9, 0.3], [], [], Instructions, PoseOut)</l>
+<l>        get_window_extents (Window3D, RowNotUsed, ColumnNotUsed, Width, Height)</l>
+<l>        get_part (Window3D, WPRow1, WPColumn1, WPRow2, WPColumn2)</l>
+<l>        set_part (Window3D, 0, 0, Height - 1, Width - 1)</l>
+<l>        *gen_cam_par_area_scan_division (1.622452e-02, 0, 5.860000e-06, 5.860000e-06, Width / 2 , Height / 2 , Width , Height, CamParam)</l>
+<l>         gen_cam_par_area_scan_division (0.06, 0, 8.5e-6, 8.5e-6, Width / 2, Height / 2, Width, Height, CamParam)</l>
+<l>        get_object_models_center ([ObjectModel_Scene], Center)</l>
+<l>        create_pose (-Center[0],-Center[1], -Center[2], 0, 0, 0, 'Rp+T', 'gba', 'point', PoseIn)</l>
+<l>        determine_optimum_pose_distance ([ObjectModel_Scene], CamParam, ZoomParam, PoseIn, PoseEstimated)</l>
+<l>        disp_object_model_3d(Window3D, [ObjectModel_Scene], [], PoseEstimated, ['color', 'point_size', 'alpha'], ['light gray', 0.9, 0.3])</l>
+<l>    endif</l>
+<l>endif</l>
+</body>
+<docu id="main">
+<parameters/>
+</docu>
+</procedure>
+<procedure name="RotateState">
+<interface>
+<ic>
+<par name="Pose" base_type="ctrl" dimension="0"/>
+</ic>
+<oc>
+<par name="TxState" base_type="ctrl" dimension="0"/>
+<par name="TyState" base_type="ctrl" dimension="0"/>
+<par name="TzState" base_type="ctrl" dimension="0"/>
+</oc>
+</interface>
+<body>
+<l>ArrowLength := 80</l>
+<l>ArrowThickness := 3</l>
+<l>create_pose (0, 0, 0, 0, 0, 0, 'Rp+T', 'gba', 'point', IdentityPose)</l>
+<l>create_pose (ArrowLength, 0, 0, 0, 0, 0, 'Rp+T', 'gba', 'point', TransXPose)</l>
+<l>gen_arrow_object_model_3d (ArrowThickness, IdentityPose, TransXPose, OM3DToolXOrigin)</l>
+<l>create_pose (0, ArrowLength, 0, 0, 0, 0, 'Rp+T', 'gba', 'point', TransYPose)</l>
+<l>gen_arrow_object_model_3d (ArrowThickness, IdentityPose, TransYPose, OM3DToolYOrigin)</l>
+<l>create_pose (0, 0, ArrowLength, 0, 0, 0, 'Rp+T', 'gba', 'point', TransZPose)</l>
+<l>gen_arrow_object_model_3d (ArrowThickness, IdentityPose, TransZPose, OM3DToolZOrigin)</l>
+<l>OM3DToolOrigin := [OM3DToolXOrigin,OM3DToolYOrigin,OM3DToolZOrigin]</l>
+<c></c>
+<l>rigid_trans_object_model_3d (OM3DToolOrigin, Pose, ResultTzAlignArrow)</l>
+<c></c>
+<c>** 최초 매칭후 결과 좌표를 표현하는 Trans 3축 화살표</c>
+<l>ArrowLength := 60</l>
+<l>ArrowThickness := 2</l>
+<l>create_pose (0, 0, 0, 0, 0, 0, 'Rp+T', 'gba', 'point', IdentityPose)</l>
+<l>create_pose (ArrowLength, 0, 0, 0, 0, 0, 'Rp+T', 'gba', 'point', TransXPose)</l>
+<l>gen_arrow_object_model_3d (ArrowThickness, IdentityPose, TransXPose, OM3DToolXOrigin)</l>
+<l>create_pose (0, ArrowLength, 0, 0, 0, 0, 'Rp+T', 'gba', 'point', TransYPose)</l>
+<l>gen_arrow_object_model_3d (ArrowThickness, IdentityPose, TransYPose, OM3DToolYOrigin)</l>
+<l>create_pose (0, 0, ArrowLength, 0, 0, 0, 'Rp+T', 'gba', 'point', TransZPose)</l>
+<l>gen_arrow_object_model_3d (ArrowThickness, IdentityPose, TransZPose, OM3DToolZOrigin)</l>
+<l>OM3DToolOrigin := [OM3DToolXOrigin,OM3DToolYOrigin,OM3DToolZOrigin]</l>
+<c></c>
+<c>** Tz를 바닥으로 향하게 한 Trans화살표 X, Y, Z 마다 BoundBox각 축 Min Max의 차를 구함</c>
+<c>** 각 Trans화살표의 BoundBox 각각의 축 길이를 획득</c>
+<l>get_object_model_3d_params (ResultTzAlignArrow, 'bounding_box1', ResultTzAlignArrowbndbox)</l>
+<l>tuple_abs(ResultTzAlignArrowbndbox[0] - ResultTzAlignArrowbndbox[3], ResultTzAlignArrowbndboxXArrowTxDiff)</l>
+<l>tuple_abs(ResultTzAlignArrowbndbox[1] - ResultTzAlignArrowbndbox[4], ResultTzAlignArrowbndboxXArrowTyDiff)</l>
+<l>tuple_abs(ResultTzAlignArrowbndbox[2] - ResultTzAlignArrowbndbox[5], ResultTzAlignArrowbndboxXArrowTzDiff)</l>
+<c></c>
+<l>tuple_abs(ResultTzAlignArrowbndbox[6] - ResultTzAlignArrowbndbox[9], ResultTzAlignArrowbndboxYArrowTxDiff)</l>
+<l>tuple_abs(ResultTzAlignArrowbndbox[7] - ResultTzAlignArrowbndbox[10], ResultTzAlignArrowbndboxYArrowTyDiff)</l>
+<l>tuple_abs(ResultTzAlignArrowbndbox[8] - ResultTzAlignArrowbndbox[11], ResultTzAlignArrowbndboxYArrowTzDiff)</l>
+<c></c>
+<l>tuple_abs(ResultTzAlignArrowbndbox[12] - ResultTzAlignArrowbndbox[15], ResultTzAlignArrowbndboxZArrowTxDiff)</l>
+<l>tuple_abs(ResultTzAlignArrowbndbox[13] - ResultTzAlignArrowbndbox[16], ResultTzAlignArrowbndboxZArrowTyDiff)</l>
+<l>tuple_abs(ResultTzAlignArrowbndbox[14] - ResultTzAlignArrowbndbox[17], ResultTzAlignArrowbndboxZArrowTzDiff)</l>
+<c></c>
+<l>ResultTzAlignXArrowXYZDiff := [ResultTzAlignArrowbndboxXArrowTxDiff, ResultTzAlignArrowbndboxXArrowTyDiff, ResultTzAlignArrowbndboxXArrowTzDiff]</l>
+<l>ResultTzAlignYArrowXYZDiff := [ResultTzAlignArrowbndboxYArrowTxDiff, ResultTzAlignArrowbndboxYArrowTyDiff, ResultTzAlignArrowbndboxYArrowTzDiff]</l>
+<l>ResultTzAlignZArrowXYZDiff := [ResultTzAlignArrowbndboxZArrowTxDiff, ResultTzAlignArrowbndboxZArrowTyDiff, ResultTzAlignArrowbndboxZArrowTzDiff]</l>
+<l>get_object_model_3d_params (ResultTzAlignArrow, 'center', ResultTzAlignArrowCenters)</l>
+<c></c>
+<l>*disp_object_model_3d (Window3D, [ObjectModel_Scene,ObjectModel3D_Result,Dummy, Origins], [],[], ['color_0','color_1','color_2','color_3','color_4','color_5','color_6','color_7', 'point_size', 'alpha'], ['light gray', 'gray','red', 'green','blue', 'orange red', 'spring green','cornflower blue', 0.9, 0.3])</l>
+<c>                 </c>
+<l>tuple_max(ResultTzAlignXArrowXYZDiff, XArrowMaxXYZElem)</l>
+<l>tuple_max(ResultTzAlignYArrowXYZDiff, YArrowMaxXYZElem)</l>
+<l>tuple_max(ResultTzAlignZArrowXYZDiff, ZArrowMaxXYZElem)</l>
+<l>XArrowT_XYZIdx := []</l>
+<l>YArrowT_XYZIdx := []</l>
+<l>ZArrowT_XYZIdx := []</l>
+<l>for Idx := 0 to 2 by 1</l>
+<l>    if(ResultTzAlignXArrowXYZDiff[Idx] == XArrowMaxXYZElem)</l>
+<l>        XArrowT_XYZIdx := Idx</l>
+<l>    endif</l>
+<l>    if(ResultTzAlignYArrowXYZDiff[Idx] == YArrowMaxXYZElem)</l>
+<l>        YArrowT_XYZIdx := Idx</l>
+<l>    endif</l>
+<l>    if(ResultTzAlignZArrowXYZDiff[Idx] == ZArrowMaxXYZElem)</l>
+<l>        ZArrowT_XYZIdx := Idx</l>
+<l>    endif</l>
+<l>endfor</l>
+<l>Str_Inform3DVisXStat := []</l>
+<l>Str_Inform3DVisYStat := []</l>
+<l>Str_Inform3DVisZStat := []</l>
+<l>Str_Monitor_Center_Horizon := []</l>
+<l>for Idx := 0 to 2 by 1</l>
+<c>   **X ARROW STAT</c>
+<l>   if(XArrowT_XYZIdx == Idx)</l>
+<l>       if(ResultTzAlignArrowbndbox[3] - ResultTzAlignArrowbndbox[0]  &lt; 30 )</l>
+<l>           Str_Inform3DVisXStat := [Str_Inform3DVisXStat , 'CENTER']</l>
+<l>           calcnum := ResultTzAlignArrowbndbox[3] - ResultTzAlignArrowbndbox[0]</l>
+<l>           Str_Monitor_Center_Horizon := [Str_Monitor_Center_Horizon, sum('XArrowTx:' + calcnum)]</l>
+<l>       elseif(Pose[0] &lt; ResultTzAlignArrowCenters[0] )</l>
+<l>           Str_Inform3DVisXStat := [Str_Inform3DVisXStat , 'RIGHT']</l>
+<l>       elseif(Pose[0] &gt; ResultTzAlignArrowCenters[0] )</l>
+<l>           Str_Inform3DVisXStat := [Str_Inform3DVisXStat , 'LEFT']</l>
+<l>       else</l>
+<l>           Str_Inform3DVisXStat := [Str_Inform3DVisXStat , 'UNKNOWN']</l>
+<l>       endif</l>
+<l>   endif</l>
+<l>   if(XArrowT_XYZIdx == Idx)</l>
+<l>       if(ResultTzAlignArrowbndbox[4] - ResultTzAlignArrowbndbox[1]  &lt; 30 )</l>
+<l>           Str_Inform3DVisXStat := [Str_Inform3DVisXStat , 'CENTER']</l>
+<l>           calcnum := ResultTzAlignArrowbndbox[4] - ResultTzAlignArrowbndbox[1]</l>
+<l>           Str_Monitor_Center_Horizon := [Str_Monitor_Center_Horizon, sum('XArrowTy:' + calcnum)]</l>
+<l>       elseif(Pose[1] &lt; ResultTzAlignArrowCenters[1] )</l>
+<l>           Str_Inform3DVisXStat := [Str_Inform3DVisXStat , 'FORWARD']</l>
+<l>       elseif(Pose[1] &gt; ResultTzAlignArrowCenters[1] )</l>
+<l>           Str_Inform3DVisXStat := [Str_Inform3DVisXStat , 'BACKWARD']</l>
+<l>       else</l>
+<l>           Str_Inform3DVisXStat := [Str_Inform3DVisXStat , 'UNKNOWN']</l>
+<l>       endif</l>
+<l>   endif</l>
+<l>   if(XArrowT_XYZIdx == Idx)</l>
+<l>       if(ResultTzAlignArrowbndbox[5] - ResultTzAlignArrowbndbox[2]  &lt; 30 )</l>
+<l>           Str_Inform3DVisXStat := [Str_Inform3DVisXStat , 'HORRIZON']</l>
+<l>           calcnum := ResultTzAlignArrowbndbox[5] - ResultTzAlignArrowbndbox[2]</l>
+<l>           Str_Monitor_Center_Horizon := [Str_Monitor_Center_Horizon, sum('XArrowTz:' + calcnum)]</l>
+<l>       elseif(Pose[2] &lt; ResultTzAlignArrowCenters[2])</l>
+<l>           Str_Inform3DVisXStat := [Str_Inform3DVisXStat , 'DOWN']</l>
+<l>       elseif(Pose[2] &gt; ResultTzAlignArrowCenters[2])</l>
+<l>           Str_Inform3DVisXStat := [Str_Inform3DVisXStat , 'UP']</l>
+<l>       else</l>
+<l>           Str_Inform3DVisXStat := [Str_Inform3DVisXStat , 'UNKNOWN']</l>
+<l>       endif</l>
+<l>   endif</l>
+<c>   </c>
+<c>   **Y ARROW STAT</c>
+<l>   if(YArrowT_XYZIdx == Idx)</l>
+<l>       if(ResultTzAlignArrowbndbox[9] - ResultTzAlignArrowbndbox[6]  &lt; 30 )</l>
+<l>           Str_Inform3DVisYStat := [Str_Inform3DVisYStat , 'CENTER']</l>
+<l>           calcnum := ResultTzAlignArrowbndbox[9] - ResultTzAlignArrowbndbox[6]</l>
+<l>           Str_Monitor_Center_Horizon := [Str_Monitor_Center_Horizon, sum('YArrowTx:' + calcnum)]</l>
+<l>       elseif(Pose[0] &lt; ResultTzAlignArrowCenters[3] )</l>
+<l>           Str_Inform3DVisYStat := [Str_Inform3DVisYStat , 'RIGHT']</l>
+<l>       elseif(Pose[0] &gt; ResultTzAlignArrowCenters[3] )</l>
+<l>           Str_Inform3DVisYStat := [Str_Inform3DVisYStat , 'LEFT']</l>
+<l>       else</l>
+<l>           Str_Inform3DVisYStat := [Str_Inform3DVisYStat , 'UNKNOWN']</l>
+<l>       endif</l>
+<l>   endif</l>
+<l>   if(YArrowT_XYZIdx == Idx)</l>
+<l>       if(ResultTzAlignArrowbndbox[10] - ResultTzAlignArrowbndbox[7]  &lt; 30 )</l>
+<l>           Str_Inform3DVisYStat := [Str_Inform3DVisYStat , 'CENTER']</l>
+<l>           calcnum := ResultTzAlignArrowbndbox[10] - ResultTzAlignArrowbndbox[7]</l>
+<l>           Str_Monitor_Center_Horizon := [Str_Monitor_Center_Horizon, sum('YArrowTy:' + calcnum)]</l>
+<l>       elseif(Pose[1] &lt; ResultTzAlignArrowCenters[4] )</l>
+<l>           Str_Inform3DVisYStat := [Str_Inform3DVisYStat , 'FORWARD']</l>
+<l>       elseif(Pose[1] &gt; ResultTzAlignArrowCenters[4] )</l>
+<l>           Str_Inform3DVisYStat := [Str_Inform3DVisYStat , 'BACKWARD']</l>
+<l>       else</l>
+<l>           Str_Inform3DVisYStat := [Str_Inform3DVisYStat , 'UNKNOWN']</l>
+<l>       endif</l>
+<l>   endif</l>
+<l>   if(YArrowT_XYZIdx == Idx)</l>
+<l>       if(ResultTzAlignArrowbndbox[11] - ResultTzAlignArrowbndbox[8]  &lt; 30 )</l>
+<l>           Str_Inform3DVisYStat := [Str_Inform3DVisYStat , 'HORRIZON']</l>
+<l>           calcnum := ResultTzAlignArrowbndbox[11] - ResultTzAlignArrowbndbox[8]</l>
+<l>           Str_Monitor_Center_Horizon := [Str_Monitor_Center_Horizon, sum('YArrowTz:' + calcnum)]</l>
+<l>       elseif(Pose[2] &lt; ResultTzAlignArrowCenters[5])</l>
+<l>           Str_Inform3DVisYStat := [Str_Inform3DVisYStat , 'DOWN']</l>
+<l>       elseif(Pose[2] &gt; ResultTzAlignArrowCenters[5])</l>
+<l>           Str_Inform3DVisYStat := [Str_Inform3DVisYStat , 'UP']</l>
+<l>       else</l>
+<l>           Str_Inform3DVisYStat := [Str_Inform3DVisYStat , 'UNKNOWN']</l>
+<l>       endif</l>
+<l>    endif</l>
+<c>   </c>
+<c>   **Z ARROW STAT</c>
+<l>   if(ZArrowT_XYZIdx == Idx)</l>
+<l>       if(ResultTzAlignArrowbndbox[15] - ResultTzAlignArrowbndbox[12] &lt; 30 )</l>
+<l>           Str_Inform3DVisZStat := [Str_Inform3DVisZStat , 'CENTER']</l>
+<l>           calcnum := ResultTzAlignArrowbndbox[15] - ResultTzAlignArrowbndbox[12]</l>
+<l>           Str_Monitor_Center_Horizon := [Str_Monitor_Center_Horizon, sum('ZArrowTx:' + calcnum)]</l>
+<l>       elseif(Pose[0] &lt; ResultTzAlignArrowCenters[6] )</l>
+<l>           Str_Inform3DVisZStat := [Str_Inform3DVisZStat , 'RIGHT']</l>
+<l>       elseif(Pose[0] &gt; ResultTzAlignArrowCenters[6] )</l>
+<l>           Str_Inform3DVisZStat := [Str_Inform3DVisZStat , 'LEFT']</l>
+<l>       else</l>
+<l>           Str_Inform3DVisZStat := [Str_Inform3DVisZStat , 'UNKNOWN']</l>
+<l>       endif</l>
+<l>   endif</l>
+<l>   if(ZArrowT_XYZIdx == Idx)</l>
+<l>       if(ResultTzAlignArrowbndbox[16] - ResultTzAlignArrowbndbox[13] &lt; 30 )</l>
+<l>           Str_Inform3DVisZStat := [Str_Inform3DVisZStat , 'CENTER']</l>
+<l>           calcnum := ResultTzAlignArrowbndbox[16] - ResultTzAlignArrowbndbox[13]</l>
+<l>           Str_Monitor_Center_Horizon := [Str_Monitor_Center_Horizon, sum('ZArrowTy:' + calcnum)]</l>
+<l>       elseif(Pose[1] &lt; ResultTzAlignArrowCenters[7] )</l>
+<l>           Str_Inform3DVisZStat := [Str_Inform3DVisZStat , 'FORWARD']</l>
+<l>       elseif(Pose[1] &gt; ResultTzAlignArrowCenters[7] )</l>
+<l>           Str_Inform3DVisZStat := [Str_Inform3DVisZStat , 'BACKWARD']</l>
+<l>       else</l>
+<l>           Str_Inform3DVisZStat := [Str_Inform3DVisZStat , 'UNKNOWN']</l>
+<l>       endif</l>
+<l>   endif</l>
+<l>   if(ZArrowT_XYZIdx == Idx)</l>
+<l>       if(ResultTzAlignArrowbndbox[17] - ResultTzAlignArrowbndbox[14] &lt; 30 )</l>
+<l>           Str_Inform3DVisZStat := [Str_Inform3DVisZStat , 'HORRIZON']</l>
+<l>           calcnum := ResultTzAlignArrowbndbox[17] - ResultTzAlignArrowbndbox[14]</l>
+<l>           Str_Monitor_Center_Horizon := [Str_Monitor_Center_Horizon, sum('ZArrowTz:' + calcnum)]</l>
+<l>       elseif(Pose[2] &lt; ResultTzAlignArrowCenters[8])</l>
+<l>           Str_Inform3DVisZStat := [Str_Inform3DVisZStat , 'DOWN']</l>
+<l>       elseif(Pose[2] &gt; ResultTzAlignArrowCenters[8])</l>
+<l>           Str_Inform3DVisZStat := [Str_Inform3DVisZStat , 'UP']</l>
+<l>       else</l>
+<l>           Str_Inform3DVisZStat := [Str_Inform3DVisZStat , 'UNKNOWN']</l>
+<l>       endif</l>
+<l>   endif</l>
+<l>endfor</l>
+<c></c>
+<l>Instructions[0] := sum('X Arrow Status:' + Str_Inform3DVisXStat[0] + ',' + Str_Inform3DVisXStat[1] + ',' + Str_Inform3DVisXStat[2])</l>
+<l>Instructions[1] := sum('Y Arrow Status:' + Str_Inform3DVisYStat[0] + ',' + Str_Inform3DVisYStat[1] + ',' + Str_Inform3DVisYStat[2])</l>
+<l>Instructions[2] := sum('Z Arrow Status:' + Str_Inform3DVisZStat[0] + ',' + Str_Inform3DVisZStat[1] + ',' + Str_Inform3DVisZStat[2])</l>
+<l>TxState := sum(Str_Inform3DVisXStat[0] + ',' + Str_Inform3DVisXStat[1] + ',' + Str_Inform3DVisXStat[2])</l>
+<l>TyState := sum(Str_Inform3DVisYStat[0] + ',' + Str_Inform3DVisYStat[1] + ',' + Str_Inform3DVisYStat[2])</l>
+<l>TzState := sum(Str_Inform3DVisZStat[0] + ',' + Str_Inform3DVisZStat[1] + ',' + Str_Inform3DVisZStat[2])</l>
+<c></c>
+<l>return ()</l>
+</body>
+<docu id="RotateState">
+<parameters>
+<parameter id="Pose"/>
+<parameter id="TxState"/>
+<parameter id="TyState"/>
+<parameter id="TzState"/>
+</parameters>
+</docu>
+</procedure>
+</hdevelop>
