@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<shfbBuild product="Sandcastle Help File Builder and Tools" version="2019.11.17.0" projectFile="C:\Users\ABC\Documents\PicknPlaceHLib\Docu\PicknPlaceHLibMerged0.1.6.shfbproj" started="2021-04-19 오후 1:29:34">
+<shfbBuild product="Sandcastle Help File Builder and Tools" version="2019.11.17.0" projectFile="C:\Users\ABC\Documents\PicknPlaceHLib\Docu\PicknPlaceHLibMerged0.1.7.shfbproj" started="2021-07-01 오전 10:48:33">
 <buildStep step="Initializing">
 Finding tools...
 The Sandcastle tools are located in &#39;C:\Program Files (x86)\EWSoftware\Sandcastle Help File Builder\&#39;
@@ -33,16 +33,16 @@ Copying XML comments files
 Generating shared content files (ko-KR, 한국어 (대한민국))...
 SHFB: Warning BE0003: Sandcastle shared content for the &#39;ko-KR, 한국어 (대한민국)&#39; language could not be found.  Using &#39;en-US, English (US)&#39; defaults.
 <plugIn name="Lightweight Website Style" behavior="After" priority="1000">
-</plugIn>    Last step completed in 00:00:00.0130
+</plugIn>    Last step completed in 00:00:00.0429
 </buildStep>
 <buildStep step="GenerateApiFilter">
 Generating API filter for MRefBuilder...
-    Last step completed in 00:00:00.0070
+    Last step completed in 00:00:00.0080
 </buildStep>
 <buildStep step="GenerateReflectionInfo">
 Generating reflection information...
 [C:\Program Files (x86)\MSBuild\14.0\bin\amd64\MSBuild.exe - GenerateRefInfo.proj]
-빌드 시작: 2021-04-19 오후 1:29:35
+빌드 시작: 2021-07-01 오전 10:48:34
 1 노드의 &quot;C:\Users\ABC\Documents\PicknPlaceHLib\Docu\Help\Working\GenerateRefInfo.proj&quot; 프로젝트(기본 대상)입니다.
 PrepareForBuild:
   &quot;obj\Debug\&quot; 디렉터리를 만들고 있습니다.
@@ -62,13 +62,13 @@ GenerateRefInfo:
 
 빌드했습니다.
 
-경과 시간: 00:00:00.54
-    Last step completed in 00:00:00.6544
+경과 시간: 00:00:00.62
+    Last step completed in 00:00:00.9614
 </buildStep>
 <buildStep step="TransformReflectionInfo">
 Transforming reflection output...
 [C:\Program Files (x86)\MSBuild\14.0\bin\amd64\MSBuild.exe - TransformManifest.proj]
-빌드 시작: 2021-04-19 오후 1:29:36
+빌드 시작: 2021-07-01 오전 10:48:35
 1 노드의 &quot;C:\Users\ABC\Documents\PicknPlaceHLib\Docu\Help\Working\TransformManifest.proj&quot; 프로젝트(기본 대상)입니다.
 TransformManifest:
   XslTransform (v2019.11.17.0)
@@ -88,17 +88,17 @@ TransformManifest:
 
 빌드했습니다.
 
-경과 시간: 00:00:00.36
-    Last step completed in 00:00:00.4634
+경과 시간: 00:00:00.45
+    Last step completed in 00:00:00.5745
 </buildStep>
 <buildStep step="GenerateNamespaceSummaries">
 Generating namespace summary information...
-    Last step completed in 00:00:00.1117
+    Last step completed in 00:00:00.1686
 </buildStep>
 <buildStep step="CopyAdditionalContent">
 Copying additional content files...
 No additional content to copy
-    Last step completed in 00:00:00.0010
+    Last step completed in 00:00:00.0020
 </buildStep>
 <buildStep step="MergeTablesOfContents">
 Merging conceptual and additional tables of contents...
@@ -107,7 +107,7 @@ Merging conceptual and additional tables of contents...
 <buildStep step="GenerateIntermediateTableOfContents">
 Generating intermediate table of contents file...
 [C:\Program Files (x86)\MSBuild\14.0\bin\amd64\MSBuild.exe - GenerateIntermediateTOC.proj]
-빌드 시작: 2021-04-19 오후 1:29:36
+빌드 시작: 2021-07-01 오전 10:48:36
 1 노드의 &quot;C:\Users\ABC\Documents\PicknPlaceHLib\Docu\Help\Working\GenerateIntermediateTOC.proj&quot; 프로젝트(기본 대상)입니다.
 GenerateIntermediateTOC:
   XslTransform (v2019.11.17.0)
@@ -118,26 +118,26 @@ GenerateIntermediateTOC:
 
 빌드했습니다.
 
-경과 시간: 00:00:00.08
+경과 시간: 00:00:00.09
 Generating conceptual content intermediate TOC file...
-    Last step completed in 00:00:00.1847
+    Last step completed in 00:00:00.2164
 </buildStep>
 <buildStep step="CreateBuildAssemblerConfigs">
 Creating Sandcastle configuration files...
     sandcastle.config
-    Last step completed in 00:00:00.1177
+    Last step completed in 00:00:00.2613
 </buildStep>
 <buildStep step="MergeCustomConfigs">
 Merging custom build component configurations
 C:\Users\ABC\Documents\PicknPlaceHLib\Docu\Help\Working\sandcastle.config
   Updating reference topic configurations.
   No conceptual content.  Removing conceptual content components.
-    Last step completed in 00:00:00.0249
+    Last step completed in 00:00:00.0240
 </buildStep>
 <buildStep step="BuildTopics">
 Building help topics...
 [C:\Program Files (x86)\MSBuild\14.0\bin\amd64\MSBuild.exe - BuildTopics.proj]
-빌드 시작: 2021-04-19 오후 1:29:37
+빌드 시작: 2021-07-01 오전 10:48:36
 1 노드의 &quot;C:\Users\ABC\Documents\PicknPlaceHLib\Docu\Help\Working\BuildTopics.proj&quot; 프로젝트(기본 대상)입니다.
 BuildTopics:
   BuildAssembler (v2019.11.17.0)
@@ -157,33 +157,23 @@ BuildAssembler : warning : ShowMissingComponent: [M:PicknPlaceHLib.HLog.SetSaveO
 BuildAssembler : warning : ShowMissingComponent: [T:PicknPlaceHLib.HLogEventHandler] Missing &lt;summary&gt; documentation [C:\Users\ABC\Documents\PicknPlaceHLib\Docu\Help\Working\BuildTopics.proj]
 BuildAssembler : warning : ResolveReferenceLinksComponent: [M:PicknPlaceHLib.libDisp.getDisp(System.String,System.Int32,HalconDotNet.HWindow,HalconDotNet.HWindow)] Unknown reference link target &#39;T:HalconDotNet.HWindow&#39;. [C:\Users\ABC\Documents\PicknPlaceHLib\Docu\Help\Working\BuildTopics.proj]
 BuildAssembler : warning : ResolveReferenceLinksComponent: [M:PicknPlaceHLib.libDisp.getDisp(System.String,System.Int32,HalconDotNet.HWindow,HalconDotNet.HWindow)] Unknown reference link target &#39;T:HalconDotNet.HWindow&#39;. [C:\Users\ABC\Documents\PicknPlaceHLib\Docu\Help\Working\BuildTopics.proj]
+BuildAssembler : warning : ShowMissingComponent: [P:PicknPlaceHLib.libModelCreate.GetInstance] Missing &lt;value&gt; documentation [C:\Users\ABC\Documents\PicknPlaceHLib\Docu\Help\Working\BuildTopics.proj]
 BuildAssembler : warning : ResolveReferenceLinksComponent: [M:PicknPlaceHLib.libModelCreate.ModelCreate(HalconDotNet.HWindow)] Unknown reference link target &#39;T:HalconDotNet.HWindow&#39;. [C:\Users\ABC\Documents\PicknPlaceHLib\Docu\Help\Working\BuildTopics.proj]
 BuildAssembler : warning : ShowMissingComponent: [P:PicknPlaceHLib.libModelUnion.HMODEL_STATE] Missing &lt;value&gt; documentation [C:\Users\ABC\Documents\PicknPlaceHLib\Docu\Help\Working\BuildTopics.proj]
 BuildAssembler : warning : ShowMissingComponent: [P:PicknPlaceHLib.libModelUnion.HPROCEDURE_STATE] Missing &lt;value&gt; documentation [C:\Users\ABC\Documents\PicknPlaceHLib\Docu\Help\Working\BuildTopics.proj]
 BuildAssembler : warning : ResolveReferenceLinksComponent: [M:PicknPlaceHLib.libModelUnion.ModelUnion(HalconDotNet.HWindow)] Unknown reference link target &#39;T:HalconDotNet.HWindow&#39;. [C:\Users\ABC\Documents\PicknPlaceHLib\Docu\Help\Working\BuildTopics.proj]
-BuildAssembler : warning : ShowMissingComponent: [M:PicknPlaceHLib.libModelUnion.saveUnionParam(System.Double,System.String,System.Int32,System.String,System.Double,System.Double,System.Int32,System.String,System.Double,System.Double)] Missing &lt;summary&gt; documentation [C:\Users\ABC\Documents\PicknPlaceHLib\Docu\Help\Working\BuildTopics.proj]
-BuildAssembler : warning : ShowMissingComponent: [M:PicknPlaceHLib.libModelUnion.saveUnionParam(System.Double,System.String,System.Int32,System.String,System.Double,System.Double,System.Int32,System.String,System.Double,System.Double)] Missing &lt;param name=&quot;smooth_mls_knncnt&quot;/&gt; documentation [C:\Users\ABC\Documents\PicknPlaceHLib\Docu\Help\Working\BuildTopics.proj]
-BuildAssembler : warning : ShowMissingComponent: [M:PicknPlaceHLib.libModelUnion.saveUnionParam(System.Double,System.String,System.Int32,System.String,System.Double,System.Double,System.Int32,System.String,System.Double,System.Double)] Missing &lt;param name=&quot;register_obj3d_Param&quot;/&gt; documentation [C:\Users\ABC\Documents\PicknPlaceHLib\Docu\Help\Working\BuildTopics.proj]
-BuildAssembler : warning : ShowMissingComponent: [M:PicknPlaceHLib.libModelUnion.saveUnionParam(System.Double,System.String,System.Int32,System.String,System.Double,System.Double,System.Int32,System.String,System.Double,System.Double)] Missing &lt;param name=&quot;triangulate_greedyKnnCnt&quot;/&gt; documentation [C:\Users\ABC\Documents\PicknPlaceHLib\Docu\Help\Working\BuildTopics.proj]
-BuildAssembler : warning : ShowMissingComponent: [M:PicknPlaceHLib.libModelUnion.saveUnionParam(System.Double,System.String,System.Int32,System.String,System.Double,System.Double,System.Int32,System.String,System.Double,System.Double)] Missing &lt;param name=&quot;triangulate_greedyKnnRadiusParam&quot;/&gt; documentation [C:\Users\ABC\Documents\PicknPlaceHLib\Docu\Help\Working\BuildTopics.proj]
-BuildAssembler : warning : ShowMissingComponent: [M:PicknPlaceHLib.libModelUnion.saveUnionParam(System.Double,System.String,System.Int32,System.String,System.Double,System.Double,System.Int32,System.String,System.Double,System.Double)] Missing &lt;param name=&quot;triangulate_greedyKnnRadiusValue&quot;/&gt; documentation [C:\Users\ABC\Documents\PicknPlaceHLib\Docu\Help\Working\BuildTopics.proj]
-BuildAssembler : warning : ShowMissingComponent: [M:PicknPlaceHLib.libModelUnion.saveUnionParam(System.Double,System.String,System.Int32,System.String,System.Double,System.Double,System.Int32,System.String,System.Double,System.Double)] Missing &lt;param name=&quot;triangulate_smallsurfaceremoveValue&quot;/&gt; documentation [C:\Users\ABC\Documents\PicknPlaceHLib\Docu\Help\Working\BuildTopics.proj]
-BuildAssembler : warning : ShowMissingComponent: [M:PicknPlaceHLib.libModelUnion.saveUnionParam(System.Double,System.String,System.Int32,System.String,System.Double,System.Double,System.Int32,System.String,System.Double,System.Double)] Missing &lt;param name=&quot;triangulate_greedy_mesh_dilationValue&quot;/&gt; documentation [C:\Users\ABC\Documents\PicknPlaceHLib\Docu\Help\Working\BuildTopics.proj]
-BuildAssembler : warning : ShowMissingComponent: [M:PicknPlaceHLib.libModelUnion.saveUnionParam(System.Double,System.String,System.Int32,System.String,System.Double,System.Double,System.Int32,System.String,System.Double,System.Double)] Missing &lt;param name=&quot;sampling_method&quot;/&gt; documentation [C:\Users\ABC\Documents\PicknPlaceHLib\Docu\Help\Working\BuildTopics.proj]
-BuildAssembler : warning : ShowMissingComponent: [M:PicknPlaceHLib.libModelUnion.saveUnionParam(System.Double,System.String,System.Int32,System.String,System.Double,System.Double,System.Int32,System.String,System.Double,System.Double)] Missing &lt;param name=&quot;sampling_distance&quot;/&gt; documentation [C:\Users\ABC\Documents\PicknPlaceHLib\Docu\Help\Working\BuildTopics.proj]
-BuildAssembler : warning : ShowMissingComponent: [M:PicknPlaceHLib.libModelUnion.saveUnionParam(System.Double,System.String,System.Int32,System.String,System.Double,System.Double,System.Int32,System.String,System.Double,System.Double)] Missing &lt;param name=&quot;create_sfm_RelSampleDistance&quot;/&gt; documentation [C:\Users\ABC\Documents\PicknPlaceHLib\Docu\Help\Working\BuildTopics.proj]
 BuildAssembler : warning : ResolveReferenceLinksComponent: [M:PicknPlaceHLib.libSurfaceMatching.getResult2DDisp(HalconDotNet.HWindow)] Unknown reference link target &#39;T:HalconDotNet.HWindow&#39;. [C:\Users\ABC\Documents\PicknPlaceHLib\Docu\Help\Working\BuildTopics.proj]
 BuildAssembler : warning : ResolveReferenceLinksComponent: [M:PicknPlaceHLib.libSurfaceMatching.getResult3DDisp(System.Int32,HalconDotNet.HWindow)] Unknown reference link target &#39;T:HalconDotNet.HWindow&#39;. [C:\Users\ABC\Documents\PicknPlaceHLib\Docu\Help\Working\BuildTopics.proj]
   Processed 61 topic(s)
-  29 warning(s)
+  19 warning(s)
   CopyFromIndexComponent: &quot;reflection&quot; in-memory cache entries used: 2 of 15.
   CopyFromIndexComponent: &quot;comments&quot; in-memory cache entries used: 2 of 30.
 &quot;C:\Users\ABC\Documents\PicknPlaceHLib\Docu\Help\Working\BuildTopics.proj&quot; 프로젝트를 빌드했습니다(기본 대상).
 
 빌드했습니다.
 
-경과 시간: 00:00:04.09
-    Last step completed in 00:00:04.2231
+경과 시간: 00:00:04.70
+    Last step completed in 00:00:04.8593
 </buildStep>
 <buildStep step="CombiningIntermediateTocFiles">
 Combining conceptual and API intermediate TOC files...
@@ -203,7 +193,7 @@ Processed 61 HTML files
 Sorting keywords and generating See Also indices
 Saving HTML Help 1 keyword index to C:\Users\ABC\Documents\PicknPlaceHLib\Docu\Help\Working\Documentation.hhk
 Saving HTML Help 1 table of contents to C:\Users\ABC\Documents\PicknPlaceHLib\Docu\Help\Working\Documentation.hhc
-    Last step completed in 00:00:00.3291
+    Last step completed in 00:00:00.3770
 </buildStep>
 <buildStep step="CopyStandardHelpContent">
 Copying standard help content...
@@ -269,7 +259,7 @@ C:\Program Files (x86)\EWSoftware\Sandcastle Help File Builder\PresentationStyle
 C:\Program Files (x86)\EWSoftware\Sandcastle Help File Builder\PresentationStyles\VS2013\styles\branding-zh-CN.css -&gt; C:\Users\ABC\Documents\PicknPlaceHLib\Docu\Help\Working\Output\HtmlHelp1\styles\branding-zh-CN.css
 C:\Program Files (x86)\EWSoftware\Sandcastle Help File Builder\PresentationStyles\VS2013\styles\branding-zh-TW.css -&gt; C:\Users\ABC\Documents\PicknPlaceHLib\Docu\Help\Working\Output\HtmlHelp1\styles\branding-zh-TW.css
 C:\Program Files (x86)\EWSoftware\Sandcastle Help File Builder\PresentationStyles\VS2013\styles\branding.css -&gt; C:\Users\ABC\Documents\PicknPlaceHLib\Docu\Help\Working\Output\HtmlHelp1\styles\branding.css
-    Last step completed in 00:00:00.0419
+    Last step completed in 00:00:00.2872
 </buildStep>
 <buildStep step="GenerateHelpFormatTableOfContents">
 Generating HTML Help 1 table of contents file...
@@ -281,7 +271,7 @@ Generating HTML Help 1 index file...
 </buildStep>
 <buildStep step="GenerateHelpProject">
 Generating HTML Help 1 project file...
-    Last step completed in 00:00:00.0030
+    Last step completed in 00:00:00.0080
 </buildStep>
 <buildStep step="CompilingHelpFile">
 Compiling HTML Help 1 file...
@@ -296,11 +286,11 @@ Compiling HTML Help 1 file...
   
   
   
-  Compile time: 0 minutes, 1 second
+  Compile time: 0 minutes, 0 seconds
   
   63	Topics
   
-  593	Local links
+  595	Local links
   
   0	Internet links
   
@@ -310,19 +300,19 @@ Compiling HTML Help 1 file...
   
   
   
-  Created c:\Users\ABC\Documents\PicknPlaceHLib\Docu\Help\Working\Output\HtmlHelp1\Documentation.chm, 127,003 bytes
+  Created c:\Users\ABC\Documents\PicknPlaceHLib\Docu\Help\Working\Output\HtmlHelp1\Documentation.chm, 130,451 bytes
   
-  Compression decreased file by 401,447 bytes.
+  Compression decreased file by 398,561 bytes.
   
-    Last step completed in 00:00:01.3917
+    Last step completed in 00:00:01.1048
 </buildStep>
 <buildStep step="CleanIntermediates">
 Removing intermediate files...
-    Last step completed in 00:00:00.0189
+    Last step completed in 00:00:00.0199
 </buildStep>
 <buildStep step="Completed">
 
-Build completed successfully at 2021-04-19 오후 1:29:43.  Total time: 00:00:08.2018
+Build completed successfully at 2021-07-01 오전 10:48:43.  Total time: 00:00:09.5640
 
 </buildStep>
 </shfbBuild>

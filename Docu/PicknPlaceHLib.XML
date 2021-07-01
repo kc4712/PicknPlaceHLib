@@ -63,15 +63,19 @@
             libModelCreate Class 생성자
             </summary>
         </member>
-        <member name="M:PicknPlaceHLib.libModelCreate.saveImageCreateModelParam(System.String,System.Double,System.Double,System.Int32,System.Int32,System.Int32,System.String,System.Double,System.Int32,System.String,System.Double,System.Double,System.Int32,System.String,System.Double,System.Int32,System.Double,System.Double)">
+        <member name="P:PicknPlaceHLib.libModelCreate.GetInstance">
+            <summary>
+            libModelCreate libModelCreate Class Singleton Instance
+            </summary>
+        </member>
+        <member name="M:PicknPlaceHLib.libModelCreate.saveImageCreateModelParam(System.String,System.Double,System.Double,System.Int32,System.Int32,System.String,System.Double,System.Int32,System.String,System.Double,System.Double,System.Int32,System.Int32,System.Double,System.Double,System.Double,System.Int32,System.Int32)">
             <summary>
             saveImageCreateModelParam 3DImage(Scene)에서 피사체를 추출하여 모델을 생성하는 파라메터를 정의하는 메서드 
             </summary>
             <param name="plyfileName">경로 포함한 .ply file명 </param>
             <param name="minDepth">배경 분리 셋팅 값: 지면 기준은 0.0이며, 0이상부터는 지면보다 높은데서 PCL형성(default:0.0) -N ~ N (카메라 센서 위치) </param>
             <param name="maxDepth">배경 분리 셋팅 값: 피사체의 PCL이 형성될 높이이며, 0.0 ~ N(카메라 센서 위치) </param>
-            <param name="Background_Feature">(v0.04 default:0) *사용안하는 편이 나을듯...* 배경 분리에 관계적 알고리즘 사용(스무싱 필수) = 1, 지면을 기준으로 피사체까지의 z depth min과 max를 사용 = 0 (default:0) 0, 1</param>
-            <param name="Smooth_Feature">(default:0),1 SurfaceModel 생성 전 Smoothing하여 PointCloud를 평준화한 모델링 생성</param>
+            <param name="ObjectModel3DCrop">3DImage 편집 기능 (무편집 : 0, 자동지면제거: 1, 미세 조정: 2) </param>
             <param name="ModelForm"><para>PointModel = 0, EdgeModel = 1, Trianglulate(Polygon)Model = 2 (defalut:0) </para>
             <para>PointModel은 Point요소만을 가지고 매칭하며, 피사체가 복잡할 수록 매칭 성공률이 증가</para>
             <para>EdgeModel은 편평하고 단순한 형상의 피사체에 유리(시편, 자, 판 조각 등)</para>
@@ -88,15 +92,17 @@
             <para>값이 작을 경우 복잡한 triangulate를 갖게되는 피사체가 모델링</para></param>
             <param name="triangulate_smallsurfaceremoveValue">3D Model의 작은 surface 제거 값 (default:0.0) 0.0 ~ 1000.0</param>
             <param name="triangulate_greedy_mesh_dilationValue">3D Model의 surface 팽창 값 (default:0) 0 ~ 3</param>
-            <param name="connection_obj3d_Param">(v0.04 BackgroundFeature연동 값으로 미사용 default:"") 배경분리 피쳐 (default:"distance_3d") "distance_3d", "mesh"</param>
-            <param name="connection_obj3d_value">(v0.04 v0.04 BackgroundFeature연동 값으로 미사용 default:"0")배경분리 값 (default:"10") 0.0 ~ 100.0</param>
             <param name="create_sfm_useInvertNormals">SurfaceModel의 KeyPoint normals방향 반전(default:0)0: 방향처리 안함, 1: 방향 반전</param>
             <param name="create_sfm_RelSampleDistance"><para>3D Model을 Surface Model로 변환할 때 Surface Model의 Point간 배치거리에 대한 퍼센테이지 (모델 직경(mm) * 값 = 점간 배치거리) (default:"0.03") 0.0 ~ 1.0</para>
             <para>값이 클 경우 SurfaceModel의 Point간의 배치 거리가 넓어져 정교함이 낮은 피사체 모델이 생성</para>
             <para>값이 작을 경우 SurfaceModel의 Point간의 배치 거리가 좁아져 정교함이 높은 피사체 모델이 생성</para></param>
             <param name="CreateSurfModelTimeoutSec">Surface Model 변환 타임아웃 시간 단위 "초"</param>
+            <param name="AutoRoiNOWPointN_BeforePointNDIFF"><para>자동 지면 제거 사용(ObjectModel3DCrop=1)- XYZ PointCloud 중 Z를 1단위로 잘라 이전, 현재 X,Y상에 존재하는 Point갯수에 대한 차 값</para> 
+            <para> 작을 수록 지면을 정교하게 제거, 클수록 피사체와 지면이 포함</para></param>
+            <param name="create_sfm_train_self_similar_poses">피사체를 나타내는 ObjectModel3D이 대칭형상을 갖고 있을 경우 자동 최적화</param>
+            <param name="create_sfm_train_view_based">카메라의 시점으로 피사체를 바라보는 Surface형태 점수 활성화(단순한 형상이 아닐 경우 비활성화 권장)</param>
         </member>
-        <member name="M:PicknPlaceHLib.libModelCreate.saveSimpleCreateModelParam(System.Int32,System.Double,System.Double,System.Double,System.Double,System.Double,System.Double,System.Double,System.Int32,System.String,System.Double,System.Int32,System.String,System.Double,System.Double,System.Int32,System.Int32,System.Double,System.Double,System.Int32)">
+        <member name="M:PicknPlaceHLib.libModelCreate.saveSimpleCreateModelParam(System.Int32,System.Double,System.Double,System.Double,System.Double,System.Double,System.Double,System.Double,System.Int32,System.String,System.Double,System.Int32,System.String,System.Double,System.Double,System.Int32,System.Int32,System.Double,System.Double,System.Int32,System.Double,System.Int32,System.Int32)">
             <summary>
             saveSimpleCreateModelParam SimpleObject 3D Model을 생성하는 메서드
             </summary>
@@ -129,6 +135,10 @@
             <para>값이 작을 경우 SurfaceModel의 Point간의 배치 거리가 좁아져 정교함이 높은 피사체 모델이 생성</para></param>
             <param name="CreateSurfModelTimeoutSec">Surface Model 변환 타임아웃 시간 단위 "초"</param>
             <param name="Simple_HalfCut">Surface Model 생성전 SIMPLE OBJ3D의 탑뷰를 기준으로 Z축 중앙부터 뒷편의 포인트 제거</param>
+            <param name="AutoRoiNOWPointN_BeforePointNDIFF"><para>자동 지면 제거 사용(ObjectModel3DCrop=1)- XYZ PointCloud 중 Z를 1단위로 잘라 이전, 현재 X,Y상에 존재하는 Point갯수에 대한 차 값</para> 
+            <para> 작을 수록 지면을 정교하게 제거, 클수록 피사체와 지면이 포함</para></param>
+            <param name="create_sfm_train_self_similar_poses">피사체를 나타내는 ObjectModel3D이 대칭형상을 갖고 있을 경우 자동 최적화</param>
+            <param name="create_sfm_train_view_based">카메라의 시점으로 피사체를 바라보는 Surface형태 점수 활성화(단순한 형상이 아닐 경우 비활성화 권장)</param>
         </member>
         <member name="M:PicknPlaceHLib.libModelCreate.ModelCreate(HalconDotNet.HWindow)">
             <summary>
@@ -193,7 +203,26 @@
             </summary>
             <param name="filesName">경로를 포함한 om3파일명 </param>
         </member>
-        <!-- Badly formed XML comment ignored for member "M:PicknPlaceHLib.libModelUnion.saveUnionParam(System.Double,System.String,System.Int32,System.String,System.Double,System.Double,System.Int32,System.String,System.Double,System.Double)" -->
+        <member name="M:PicknPlaceHLib.libModelUnion.saveUnionParam(System.Double,System.String,System.Int32,System.String,System.Double,System.Double,System.Int32,System.String,System.Double,System.Double)">
+            <summary>
+            saveUnionParam 합성용 파라메터 설정 메서드
+            </summary>
+            <param name="smooth_mls_knncnt">smoothing mls knn 갯수 (default:60) 0.1 ~ 60.0 </param>
+            <param name="register_obj3d_Param">연속성을 가진 obj3d모델 등록 방법(default:"robust") "accurate", "robust"</param>
+            <param name="triangulate_greedyKnnCnt"><para>피사체 3D Model을 구성하는 Point를 몇개를 이어 triangulate를 생성할 것인지에 대한 Knn 갯수 (default:40) int 0 ~ 100</para>
+            <para>값이 클 경우 단순한 triangulate를 갖는 피사체가 모델링</para>
+            <para>값이 작을 경우 복잡한 triangulate를 갖게되는 피사체가 모델링</para> </param>
+            <param name="triangulate_greedyKnnRadiusParam">fixed: greedyKnnRadius를 고정하여 point 반경 산출, z_factor: z좌표에 greedyKnnRadiusValue를 곱하여 반경 산출(default:"z_factor") "auto", "fixed", "z_factor"</param>
+            <param name="triangulate_greedyKnnRadiusValue"><para>피사체 3D Model을 구성하는 중심Point의 반경값(default:0.5) 0.15 ~ 5.0</para>
+            <para>값이 클 경우 단순한 triangulate를 갖는 피사체가 모델링</para>
+            <para>값이 작을 경우 복잡한 triangulate를 갖게되는 피사체가 모델링</para></param>
+            <param name="triangulate_smallsurfaceremoveValue">3D Model의 작은 surface 제거 값 (default:0.0) 0.0 ~ 1000.0</param>
+            <param name="triangulate_greedy_mesh_dilationValue">3D Model의 surface 팽창 값 (default:0) 0 ~ 3</param>
+            <param name="sampling_method"><para>3D Image(Scene)를 샘플링하는 방법 (default:"fast_compute_normals") "accurate", "accurate_use_normals", "fast", "fast_compute_normals" </para>
+            <para>normals가 추가된 옵션은 씬의 Point에 법선을 추가하여 씬을 구성하는 각 point들이 방향을 지니게 된다 법선이 추가되면 매칭 성공율이 증가.</para></param>
+            <param name="sampling_distance">3D Image(Scene)를 샘플링하는 값 (default:0.5) 0.1 ~ 0.9</param>
+            <param name="create_sfm_RelSampleDistance"><para>3D Model을 Surface Model로 변환할 때 Surface Model의 Point간 배치거리에 대한 퍼센테이지 (모델 직경(mm) * 값 = 점간 배치거리) (default:"0.03") 0.0 ~ 1.0</para></param>
+        </member>
         <member name="M:PicknPlaceHLib.libModelUnion.ModelUnion(HalconDotNet.HWindow)">
             <summary>
             ModelUnion 모델 생성 메서드
@@ -252,7 +281,7 @@
             libSurfaceMatching 생성자
             </summary>
         </member>
-        <member name="M:PicknPlaceHLib.libSurfaceMatching.saveSceneParam(System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Double,System.Double,System.String,System.Double)">
+        <member name="M:PicknPlaceHLib.libSurfaceMatching.saveSceneParam(System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Double,System.Double,System.String,System.Double,System.Double)">
             <summary>
             saveSceneParam 
             매칭 전, 씬에 대한 처리 방법과 연산 속도와 정확도를 위해 어느 정도로 샘플링 할지 셋팅하는 메서드
@@ -269,8 +298,10 @@
             <param name="ROIZPlaneMaxDepth">(ROI_USE = 1 또는 2일 경우, ROI 사용시)ZPlaneMinDepth를 기준으로 Z축 ROI 최대 범위값</param>
             <param name="sampling_method">샘플링 도구 (default:"fast") "accurate", "accurate_use_normals", "fast", "fast_compute_normals" </param>
             <param name="sampling_distance">샘플 값 (default:0.5) 0.1 ~ 0.9</param>
+            <param name="AutoRoiNOWPointN_BeforePointNDIFF"><para>Auto ROI사용(RoiForm=3)- XYZ PointCloud 중 Z를 1단위로 잘라 이전, 현재 X,Y상에 존재하는 Point갯수에 대한 차 값</para> 
+            <para> 작을 수록 지면을 정교하게 제거, 클수록 피사체와 지면이 포함</para></param>
         </member>
-        <member name="M:PicknPlaceHLib.libSurfaceMatching.saveSurfmatchParam(System.Double,System.Double,System.Double,System.Int32,System.String,System.String,System.Double,System.Int32,System.String,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32)">
+        <member name="M:PicknPlaceHLib.libSurfaceMatching.saveSurfmatchParam(System.Double[],System.Double[],System.Double[],System.Int32[],System.String,System.String,System.Double,System.Int32,System.String,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Double)">
             <summary>
             saveSurfmatchParam 
             3d surface matching에 있어 찾는 방법, 점수 산정 등에 대한 설정 메서드
@@ -310,12 +341,12 @@
             <para>값을 높이면 사용되는 point는 줄어들고 연산시간, 정확도 낮아짐(default:2) 1 ~ n </para></param>
             <param name="PickLimitDegree">Picking 각도 제한값</param>
             <param name="FindSurfModelTimeoutSec">FindSurfaceModel Operator 수행 제한시간</param>
-            <param name="RZAlignOrder"><para> Rz정렬 기능(default:0)</para>
-            <para>0: 사용안함, 1:우측상단, 2: 우측하단, 3: 좌측하단, 4: 좌측상단</para></param>
-            <param name="PickArea"> 1: Rz 정렬 후 피사체의 넓이가 넓은 쪽으로 잡기, 2: Rz 정렬 후 피사체의 넓이가 좁은 쪽으로 잡기, (default :0 무동작)</param>
-            <param name="RotateZero"> 1: Rx 로테이션 무시, 2: Ry 로테이션 무시, 3: Rx,RY 로테이션 무시(default :0 무동작)</param>
+            <param name="MultiModelOverlapMatchingMode"><para>0: 멀티모델에서 중복 매칭 허용</para>
+            <para>1: 멀티모델에서 중복 매칭 발생시 결과들의 중심점 거리가 MultiModelOverlapMargin 값 보다 작으면 스코어가 높은 매칭만을 남김</para>
+            <para>2: 멀티모델에서 중복 매칭 발생시 결과들의 바운드박스 거리가 MultiModelOverlapMargin 값 보다 작으면 스코어가 높은 매칭만을 남김</para></param>
+            <param name="MultiModelOverlapMargin">MultiModelOverlapMatchingMode을 사용할 경우 중심점/바운드박스 간 거리 마진값</param>
         </member>
-        <member name="M:PicknPlaceHLib.libSurfaceMatching.findSurFaceMatching(System.String,System.String,System.String)">
+        <member name="M:PicknPlaceHLib.libSurfaceMatching.findSurFaceMatching(System.String,System.String[],System.String[])">
             <summary>
             findSurFaceMatching 3d surface matching 수행 메서드
             </summary>
