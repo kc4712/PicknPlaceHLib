@@ -160,7 +160,7 @@ namespace PicknPlaceHLib
         /// <param name="sampling_method"><para>3D Image(Scene)를 샘플링하는 방법 (default:"fast_compute_normals") "accurate", "accurate_use_normals", "fast", "fast_compute_normals" </para>
         /// <para>normals가 추가된 옵션은 씬의 Point에 법선을 추가하여 씬을 구성하는 각 point들이 방향을 지니게 된다 법선이 추가되면 매칭 성공율이 증가.</para></param>
         /// <param name="sampling_distance">3D Image(Scene)를 샘플링하는 값 (default:0.5) 0.1 ~ 0.9</param>
-        /// <param name="create_sfm_RelSampleDistance"><para>3D Model을 Surface Model로 변환할 때 Surface Model의 Point간 배치거리에 대한 퍼센테이지 (모델 직경(mm) * 값 = 점간 배치거리) (default:"0.03") 0.0 ~ 1.0</para>
+        /// <param name="create_sfm_RelSampleDistance"><para>3D Model을 Surface Model로 변환할 때 Surface Model의 Point간 배치거리에 대한 퍼센테이지 (모델 직경(mm) * 값 = 점간 배치거리) (default:"0.03") 0.0 ~ 1.0</para></param>
         public void saveUnionParam(double smooth_mls_knncnt, string register_obj3d_Param, int triangulate_greedyKnnCnt, string triangulate_greedyKnnRadiusParam, double triangulate_greedyKnnRadiusValue, double triangulate_smallsurfaceremoveValue, int triangulate_greedy_mesh_dilationValue, string sampling_method, double sampling_distance, double create_sfm_RelSampleDistance)
         {
             var st = new StackTrace();
