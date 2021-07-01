@@ -28,8 +28,8 @@ namespace PicknPlaceHLib {
         private HDevProcedure Procedure;
         private HDevOpMultiWindowImpl HDevWin;
         private string plyfileName;
-        private string sfmfileName;
-        private string om3fileName;
+        private string[] sfmfileName;
+        private string[] om3fileName;
         //private string ProcedurePath = "./";
         //private string ProcedurePath = "./";
 
@@ -56,10 +56,10 @@ namespace PicknPlaceHLib {
         private string sampling_method = "fast";
         private double sampling_distance = 0.5;
 
-        private double find_sfm_RelSamplingDistance = 0.1;
-        private double find_sfm_KeyPointFraction = 0.2;
-        private double find_sfm_MinScore = 0.35;
-        private int find_sfm_NumMatch = 1;
+        private double[] find_sfm_RelSamplingDistance;// = 0.1;
+        private double[] find_sfm_KeyPointFraction;// = 0.2;
+        private double[] find_sfm_MinScore;// = 0.35;
+        private int[] find_sfm_NumMatch;// = 1;
         private string find_sfm_FindMethod = "mls";
         private string find_sfm_ScoreType = "model_point_fraction";
         private double find_sfm_max_overlap_dist_value = 0.5;
@@ -70,19 +70,22 @@ namespace PicknPlaceHLib {
         private int find_sfm_pose_ref_sub_sampling_value = 2;
         private int PickLimitDegree = 40;
         private int FindSurfModelTimeoutSec = 60;
-        private int RZAlignOrder = 0;
-        private int PickArea = 0;
-        private int RotateZero = 0;
+        private double AutoRoiNOWPointN_BeforePointNDIFF = 11;
+        private int MultiModelOverlapMatchingMode = 0;
+        private double MultiModelOverlapMargin = 11;
 
         private Thread thread;
 
         private const string PATH_NAME = "./halconDev";
-        private const string SURF_RESOURCE_NAME = "PicknPlaceHLib.Resource.SurfMatch_FileHandle_0_1_3.hdvp";
-        private const string SURF_PROCEDURE_NAME = "./halconDev/SurfMatch_FileHandle_0_1_3.hdvp";
-        private const string SURF_PROCEDURE_STR = "SurfMatch_FileHandle_0_1_3";
+        private const string SURF_RESOURCE_NAME = "PicknPlaceHLib.Resource.SurfMatch_FileHandle_0_1_6.hdvp";
+        private const string SURF_PROCEDURE_NAME = "./halconDev/SurfMatch_FileHandle_0_1_6.hdvp";
+        private const string SURF_PROCEDURE_STR = "SurfMatch_FileHandle_0_1_6";
         private const string VIS3D_RESOURCE_NAME = "PicknPlaceHLib.Resource.Halcon3DVis_0_0_3.hdvp";
         private const string VIS3D_PROCEDURE_NAME = "./halconDev/Halcon3DVis_0_0_3.hdvp";
         private const string VIS3D_PROCEDURE_STR = "Halcon3DVis_0_0_3";
+        private const string ROTSTATE_RESOURCE_NAME = "PicknPlaceHLib.Resource.RotateState_0_0_1.hdvp";
+        private const string ROTSTATE_PROCEDURE_NAME = "./halconDev/RotateState_0_0_1.hdvp";
+        private const string ROTSTATE_PROCEDURE_STR = "RotateState_0_0_1";
         private const string HCAMPAR_RESOURCE_NAME = "PicknPlaceHLib.Resource.HCamParam.dat";
         private const string HCAMPAR_FILE_NAME = "./halconDev/HCamParam.dat";
         private const string HCAMPAR_FILE_STR = "HCamParam";
@@ -154,6 +157,23 @@ namespace PicknPlaceHLib {
                 }
             }
 
+            if (File.Exists(ROTSTATE_PROCEDURE_NAME))
+            {
+                File.Delete(ROTSTATE_PROCEDURE_NAME);
+            }
+            if (!File.Exists(ROTSTATE_PROCEDURE_NAME))
+            {
+                var assembly = Assembly.GetExecutingAssembly();
+                var resourceName = ROTSTATE_RESOURCE_NAME;
+
+                using (Stream stream = assembly.GetManifestResourceStream(resourceName))
+                using (StreamReader reader = new StreamReader(stream))
+                {
+                    string result = reader.ReadToEnd();
+                    File.WriteAllText(ROTSTATE_PROCEDURE_NAME, result);
+                }
+            }
+
             if (File.Exists(HCAMPAR_FILE_NAME))
             {
                 File.Delete(HCAMPAR_FILE_NAME);
@@ -204,7 +224,9 @@ namespace PicknPlaceHLib {
         /// <param name="ROIZPlaneMaxDepth">(ROI_USE = 1 또는 2일 경우, ROI 사용시)ZPlaneMinDepth를 기준으로 Z축 ROI 최대 범위값</param>
         /// <param name="sampling_method">샘플링 도구 (default:"fast") "accurate", "accurate_use_normals", "fast", "fast_compute_normals" </param>
         /// <param name="sampling_distance">샘플 값 (default:0.5) 0.1 ~ 0.9</param>
-        public void saveSceneParam(int RoiForm, int MatchForm, int ScanXArea, int ScanXOverwrap, int ROIXAreaMin, int ROIXAreaMax, int ROIYAreaMin, int ROIYAreaMax, double ROIZPlaneMinDepth, double ROIZPlaneMaxDepth, string sampling_method, double sampling_distance)
+        /// <param name="AutoRoiNOWPointN_BeforePointNDIFF"><para>Auto ROI사용(RoiForm=3)- XYZ PointCloud 중 Z를 1단위로 잘라 이전, 현재 X,Y상에 존재하는 Point갯수에 대한 차 값</para> 
+        /// <para> 작을 수록 지면을 정교하게 제거, 클수록 피사체와 지면이 포함</para></param>
+        public void saveSceneParam(int RoiForm, int MatchForm, int ScanXArea, int ScanXOverwrap, int ROIXAreaMin, int ROIXAreaMax, int ROIYAreaMin, int ROIYAreaMax, double ROIZPlaneMinDepth, double ROIZPlaneMaxDepth, string sampling_method, double sampling_distance, double AutoRoiNOWPointN_BeforePointNDIFF)
         {
             var st = new StackTrace();
             var sf = st.GetFrame(0);
@@ -247,6 +269,7 @@ namespace PicknPlaceHLib {
                 this.ROIYAreaMax = 0;
                 this.ROIZPlaneMinDepth = ROIZPlaneMinDepth;
                 this.ROIZPlaneMaxDepth = ROIZPlaneMaxDepth;
+                this.AutoRoiNOWPointN_BeforePointNDIFF = 0;
             }
             //Static ROI Param
             if (RoiForm == 2)
@@ -259,8 +282,20 @@ namespace PicknPlaceHLib {
                 this.ROIYAreaMax = ROIYAreaMax;
                 this.ROIZPlaneMinDepth = ROIZPlaneMinDepth;
                 this.ROIZPlaneMaxDepth = ROIZPlaneMaxDepth;
+                this.AutoRoiNOWPointN_BeforePointNDIFF = 0;
             }
-
+            if(RoiForm == 3)
+            {
+                this.ScanXArea = 0;
+                this.ScanXOverwrap = 0;
+                this.ROIXAreaMin = ROIXAreaMin;
+                this.ROIXAreaMax = ROIXAreaMax;
+                this.ROIYAreaMin = ROIYAreaMin;
+                this.ROIYAreaMax = ROIYAreaMax;
+                this.ROIZPlaneMinDepth = ROIZPlaneMinDepth;
+                this.ROIZPlaneMaxDepth = ROIZPlaneMaxDepth;
+                this.AutoRoiNOWPointN_BeforePointNDIFF = AutoRoiNOWPointN_BeforePointNDIFF;
+            }
             //원본 이미지 샘플링
             if (sampling_method == "accurate" || sampling_method == "accurate_use_normals" ||
                 sampling_method == "fast" || sampling_method == "fast_compute_normals")
@@ -271,11 +306,11 @@ namespace PicknPlaceHLib {
             {
                 this.sampling_distance = sampling_distance;
             }
-            
+
             HLog.LogStr(ClassName, currentMethodName.ToString() + '\n' +
                 "RoiForm " + RoiForm + '\n' +
-                "MatchForm " + MatchForm + '\n' + 
-                "ScanXArea " + ScanXArea + '\n' + 
+                "MatchForm " + MatchForm + '\n' +
+                "ScanXArea " + ScanXArea + '\n' +
                 "ScanXOverwrap " + ScanXOverwrap + '\n' +
                 "ROIXAreaMin " + ROIXAreaMin + '\n' +
                 "ROIXAreaMax " + ROIXAreaMax + '\n' +
@@ -284,7 +319,8 @@ namespace PicknPlaceHLib {
                 "ROIZPlaneMinDepth " + ROIZPlaneMinDepth + '\n' +
                 "ROIZPlaneMaxDepth " + ROIZPlaneMaxDepth + '\n' +
                 "sampling_method " + sampling_method + '\n' +
-                "sampling_distance " + sampling_distance + '\n');
+                "sampling_distance " + sampling_distance + '\n' +
+                "AutoRoiNOWPointN_BeforePointNDIFF " + AutoRoiNOWPointN_BeforePointNDIFF + '\n' );
             HLog.LogStr(ClassName, currentMethodName.ToString() + '\n' + "END");
         }
 
@@ -327,11 +363,11 @@ namespace PicknPlaceHLib {
         /// <para>값을 높이면 사용되는 point는 줄어들고 연산시간, 정확도 낮아짐(default:2) 1 ~ n </para></param>
         /// <param name="PickLimitDegree">Picking 각도 제한값</param>
         /// <param name="FindSurfModelTimeoutSec">FindSurfaceModel Operator 수행 제한시간</param>
-        /// <param name="RZAlignOrder"><para> Rz정렬 기능(default:0)</para>
-        /// <para>0: 사용안함, 1:우측상단, 2: 우측하단, 3: 좌측하단, 4: 좌측상단</para></param>
-        /// <param name="PickArea"> 1: Rz 정렬 후 피사체의 넓이가 넓은 쪽으로 잡기, 2: Rz 정렬 후 피사체의 넓이가 좁은 쪽으로 잡기, (default :0 무동작)</param>
-        /// <param name="RotateZero"> 1: Rx 로테이션 무시, 2: Ry 로테이션 무시, 3: Rx,RY 로테이션 무시(default :0 무동작)</param>
-        public void saveSurfmatchParam(double find_sfm_RelSamplingDistance, double find_sfm_KeyPointFraction, double find_sfm_MinScore, int find_sfm_NumMatch, string find_sfm_FindMethod, string find_sfm_ScoreType, double find_sfm_max_overlap_dist_value, int AxisAlign, string find_sfm_max_overlap_dist_type, int find_sfm_pose_ref_use_scene_normals_value, int find_sfm_pose_ref_num_steps_value, int find_sfm_pose_ref_sub_sampling_value, int PickLimitDegree, int FindSurfModelTimeoutSec, int RZAlignOrder, int PickArea, int RotateZero)
+        /// <param name="MultiModelOverlapMatchingMode"><para>0: 멀티모델에서 중복 매칭 허용</para>
+        /// <para>1: 멀티모델에서 중복 매칭 발생시 결과들의 중심점 거리가 MultiModelOverlapMargin 값 보다 작으면 스코어가 높은 매칭만을 남김</para>
+        /// <para>2: 멀티모델에서 중복 매칭 발생시 결과들의 바운드박스 거리가 MultiModelOverlapMargin 값 보다 작으면 스코어가 높은 매칭만을 남김</para></param>
+        /// <param name="MultiModelOverlapMargin">MultiModelOverlapMatchingMode을 사용할 경우 중심점/바운드박스 간 거리 마진값</param>
+        public void saveSurfmatchParam(double[] find_sfm_RelSamplingDistance, double[] find_sfm_KeyPointFraction, double[] find_sfm_MinScore, int[] find_sfm_NumMatch, string find_sfm_FindMethod, string find_sfm_ScoreType, double find_sfm_max_overlap_dist_value, int AxisAlign, string find_sfm_max_overlap_dist_type, int find_sfm_pose_ref_use_scene_normals_value, int find_sfm_pose_ref_num_steps_value, int find_sfm_pose_ref_sub_sampling_value, int PickLimitDegree, int FindSurfModelTimeoutSec, int MultiModelOverlapMatchingMode, double MultiModelOverlapMargin)
         {
             var st = new StackTrace();
             var sf = st.GetFrame(0);
@@ -374,7 +410,6 @@ namespace PicknPlaceHLib {
             {
                 this.find_sfm_pose_ref_use_scene_normals_value = "false";
             }
-
             if (find_sfm_pose_ref_num_steps_value > 0 && find_sfm_pose_ref_num_steps_value < 100)
             {
                 this.find_sfm_pose_ref_num_steps_value = find_sfm_pose_ref_num_steps_value;
@@ -390,18 +425,11 @@ namespace PicknPlaceHLib {
             {
                 this.FindSurfModelTimeoutSec = FindSurfModelTimeoutSec;
             }
-            if (RZAlignOrder == 0 || RZAlignOrder == 1 || RZAlignOrder == 2 || RZAlignOrder == 3 || RZAlignOrder == 4)
+            if (MultiModelOverlapMatchingMode == 0 || MultiModelOverlapMatchingMode == 1 || MultiModelOverlapMatchingMode == 2)
             {
-                this.RZAlignOrder = RZAlignOrder;
+                this.MultiModelOverlapMatchingMode = MultiModelOverlapMatchingMode;
             }
-            if (PickArea == 0 || PickArea == 1 || PickArea == 2)
-            {
-                this.PickArea = PickArea;
-            }
-            if (RotateZero == 0 || RotateZero == 1 || RotateZero == 2 || RotateZero == 3)
-            {
-                this.RotateZero = RotateZero;
-            }
+            this.MultiModelOverlapMargin = MultiModelOverlapMargin;
 
             HLog.LogStr(ClassName, currentMethodName.ToString() + '\n' +
                 "find_sfm_RelSamplingDistance " + find_sfm_RelSamplingDistance + '\n' +
@@ -418,9 +446,8 @@ namespace PicknPlaceHLib {
                 "find_sfm_pose_ref_sub_sampling_value " + find_sfm_pose_ref_sub_sampling_value + '\n' +
                 "PickLimitDegree " + PickLimitDegree + '\n' +
                 "FindSurfModelTimeoutSec " + FindSurfModelTimeoutSec + '\n' +
-                "RZAlignOrder " + RZAlignOrder + '\n' +
-                "PickArea " + PickArea + '\n' +
-                "RotateZero " + RotateZero + '\n');
+                "MultiModelOverlapMatchingMode " + MultiModelOverlapMatchingMode + '\n' +
+                "MultiModelOverlapMargin " + MultiModelOverlapMargin + '\n');
             HLog.LogStr(ClassName, currentMethodName.ToString() + '\n' + "END");
         }
 
@@ -431,7 +458,7 @@ namespace PicknPlaceHLib {
         /// <param name="sfmfileName">피사체의 surface model 파일(경로를 포함한 sfm파일명)</param>
         /// <param name="om3fileName">피사체의 object3 d model 파일(경로를 포함한 om3파일명)</param>
         /// <returns> 피사체의 로봇 6축 Base 좌표 (형식 Array[matchingid, score, tx, ty, tz, rx, ry, rz], ex:)[0, 0.7, 200.23, 150.5, 52.1, 0.1, 0.5, 0.1]) </returns>
-        public string[] findSurFaceMatching(string plyfileName, string sfmfileName, string om3fileName)
+        public string[] findSurFaceMatching(string plyfileName, string[] sfmfileName, string[] om3fileName)
         {
             var st = new StackTrace();
             var sf = st.GetFrame(0);
@@ -472,7 +499,7 @@ namespace PicknPlaceHLib {
             
             //double[] DArr = new double[6] { 0, 0, 0, 0, 0, 0 };
             //List<string> result;// = new List<string>();
-            string[] retval = new string[100];
+            string[] retval = new string[1000];
             try
             {
                 MyEngine = new HDevEngine();
@@ -508,9 +535,9 @@ namespace PicknPlaceHLib {
                 ProcCall.SetInputCtrlParamTuple(27, find_sfm_pose_ref_sub_sampling_value);
                 ProcCall.SetInputCtrlParamTuple(28, PickLimitDegree);
                 ProcCall.SetInputCtrlParamTuple(29, FindSurfModelTimeoutSec);
-                ProcCall.SetInputCtrlParamTuple(30, RZAlignOrder);
-                ProcCall.SetInputCtrlParamTuple(31, PickArea);
-                ProcCall.SetInputCtrlParamTuple(32, RotateZero);
+                ProcCall.SetInputCtrlParamTuple(30, AutoRoiNOWPointN_BeforePointNDIFF);
+                ProcCall.SetInputCtrlParamTuple(31, MultiModelOverlapMatchingMode);
+                ProcCall.SetInputCtrlParamTuple(32, MultiModelOverlapMargin);
                 //ProcCall.SetInputCtrlParamTuple(12, ExtWin);
 
                 HLog.LogStr(ClassName, currentMethodName.ToString() + '\n' +
@@ -545,9 +572,9 @@ namespace PicknPlaceHLib {
                     "find_sfm_pose_ref_sub_sampling_value " + find_sfm_pose_ref_sub_sampling_value + '\n' +
                     "PickLimitDegree " + PickLimitDegree + '\n' +
                     "FindSurfModelTimeoutSec " + FindSurfModelTimeoutSec + '\n' +
-                    "RZAlignOrder " + RZAlignOrder + '\n' +
-                    "PickArea " + PickArea + '\n' +
-                    "RotateZero " + RotateZero + '\n');
+                    "AutoRoiNOWPointN_BeforePointNDIFF " + AutoRoiNOWPointN_BeforePointNDIFF + '\n' +
+                    "MultiModelOverlapMatchingMode " + MultiModelOverlapMatchingMode + '\n' +
+                    "MultiModelOverlapMargin " + MultiModelOverlapMargin + '\n');
                 HPROCEDURE_STATE = (int)ENUM_HPROCEDURESTATE.PROCEDUREREADY;
                 ProcCall.Execute();
                 HPROCEDURE_STATE = (int)ENUM_HPROCEDURESTATE.PROCEDUREDONE;
@@ -769,6 +796,10 @@ namespace PicknPlaceHLib {
                     {
                         File.Delete(SURF_PROCEDURE_NAME);
                     }
+                    if (File.Exists(ROTSTATE_PROCEDURE_NAME))
+                    {
+                        File.Delete(ROTSTATE_PROCEDURE_NAME);
+                    }
                     if (File.Exists(HCAMPAR_FILE_NAME))
                     {
                         File.Delete(HCAMPAR_FILE_NAME);
@@ -793,6 +824,10 @@ namespace PicknPlaceHLib {
                 if (File.Exists(SURF_PROCEDURE_NAME))
                 {
                     File.Delete(SURF_PROCEDURE_NAME);
+                }
+                if (File.Exists(ROTSTATE_PROCEDURE_NAME))
+                {
+                    File.Delete(ROTSTATE_PROCEDURE_NAME);
                 }
                 if (File.Exists(HCAMPAR_FILE_NAME))
                 {
