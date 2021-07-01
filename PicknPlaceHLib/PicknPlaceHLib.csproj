@@ -82,8 +82,9 @@
     <EmbeddedResource Include="Resource\Halcon3DVis_0_0_3.hdvp" />
     <EmbeddedResource Include="Resource\HalconVis_0_0_1.hdvp" />
     <EmbeddedResource Include="Resource\HCamParam.dat" />
-    <EmbeddedResource Include="Resource\CreateSurfModel_0_0_8.hdvp" />
-    <EmbeddedResource Include="Resource\SurfMatch_FileHandle_0_1_3.hdvp" />
+    <EmbeddedResource Include="Resource\CreateSurfModel_0_1_0.hdvp" />
+    <EmbeddedResource Include="Resource\RotateState_0_0_1.hdvp" />
+    <EmbeddedResource Include="Resource\SurfMatch_FileHandle_0_1_6.hdvp" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resource\DummyDisp.png" />

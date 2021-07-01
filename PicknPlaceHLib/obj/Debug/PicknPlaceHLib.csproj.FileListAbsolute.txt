@@ -9,3 +9,14 @@ C:\Users\ABC\Documents\Visual Studio 2015\Projects\PicknPlaceHLib\PicknPlaceHLib
 C:\Users\ABC\Documents\Visual Studio 2015\Projects\PicknPlaceHLib\PicknPlaceHLib\obj\Debug\PicknPlaceHLib.csproj.GenerateResource.Cache
 C:\Users\ABC\Documents\Visual Studio 2015\Projects\PicknPlaceHLib\PicknPlaceHLib\obj\Debug\PicknPlaceHLib.dll
 C:\Users\ABC\Documents\Visual Studio 2015\Projects\PicknPlaceHLib\PicknPlaceHLib\obj\Debug\PicknPlaceHLib.pdb
+C:\Users\ABC\Documents\PicknPlaceHLib\PicknPlaceHLib\bin\Debug\PicknPlaceHLib.XML
+C:\Users\ABC\Documents\PicknPlaceHLib\PicknPlaceHLib\bin\Debug\PicknPlaceHLib.dll
+C:\Users\ABC\Documents\PicknPlaceHLib\PicknPlaceHLib\bin\Debug\PicknPlaceHLib.pdb
+C:\Users\ABC\Documents\PicknPlaceHLib\PicknPlaceHLib\bin\Debug\halcondotnet.dll
+C:\Users\ABC\Documents\PicknPlaceHLib\PicknPlaceHLib\bin\Debug\hdevenginedotnet.dll
+C:\Users\ABC\Documents\PicknPlaceHLib\PicknPlaceHLib\bin\Debug\halcondotnet.xml
+C:\Users\ABC\Documents\PicknPlaceHLib\PicknPlaceHLib\bin\Debug\hdevenginedotnet.xml
+C:\Users\ABC\Documents\PicknPlaceHLib\PicknPlaceHLib\obj\Debug\PicknPlaceHLib.Properties.Resources.resources
+C:\Users\ABC\Documents\PicknPlaceHLib\PicknPlaceHLib\obj\Debug\PicknPlaceHLib.csproj.GenerateResource.Cache
+C:\Users\ABC\Documents\PicknPlaceHLib\PicknPlaceHLib\obj\Debug\PicknPlaceHLib.dll
+C:\Users\ABC\Documents\PicknPlaceHLib\PicknPlaceHLib\obj\Debug\PicknPlaceHLib.pdb
