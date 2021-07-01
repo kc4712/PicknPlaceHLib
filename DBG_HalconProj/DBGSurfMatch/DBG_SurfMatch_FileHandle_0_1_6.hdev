@@ -881,31 +881,20 @@
 <l>        triangulate_object_model_3d (ObjectModel_SceneSampled, 'greedy', [], [], ObjectModel_SceneSampled, Information)    </l>
 <l>    endif</l>
 <l>else</l>
-<l>    if (MatchForm == 1)</l>
-<l>        RGB_Scene := RGBA</l>
-<l>        ObjectModel_Scene := ObjectModel_Scene</l>
-<l>        ObjectModel3D_Result := ObjectModel_Scene</l>
-<l>        xyz_to_object_model_3d (X, Y, Z, ObjectModel_Scene)</l>
-<l>        smooth_object_model_3d (ObjectModel_Scene, 'mls', ['mls_kNN'], [60], ObjectModel_Scene)</l>
-<l>        sample_object_model_3d (ObjectModel_Scene, sampling_method, sampling_distance, [], [], ObjectModel_Scene)</l>
+<l>    RGB_Scene := RGBA</l>
+<l>    ObjectModel_Scene := ObjectModel_Scene</l>
+<l>    ObjectModel3D_Result := ObjectModel_Scene</l>
+<l>    xyz_to_object_model_3d (X, Y, Z, ObjectModel_Scene)</l>
+<l>    sample_object_model_3d (ObjectModel_Scene, sampling_method, sampling_distance, [], [], ObjectModel_Scene)</l>
+<l>    if(MatchForm == 1)</l>
 <l>        triangulate_object_model_3d (ObjectModel_Scene, 'xyz_mapping', [], [], TriangulatedObjectModel3D1, Information)</l>
 <l>        ObjectModel_SceneSampled := TriangulatedObjectModel3D1</l>
 <l>    elseif(MatchForm == 2)</l>
-<l>        RGB_Scene := RGBA</l>
-<l>        ObjectModel_Scene := ObjectModel_Scene</l>
-<l>        ObjectModel3D_Result := ObjectModel_Scene</l>
-<l>        xyz_to_object_model_3d (X, Y, Z, ObjectModel_Scene)</l>
-<l>        sample_object_model_3d (ObjectModel_Scene, sampling_method, sampling_distance, [], [], ObjectModel_Scene)</l>
 <l>        triangulate_object_model_3d (ObjectModel_Scene, 'greedy', [], [], TriangulatedObjectModel3D1, Information)</l>
 <l>        ObjectModel_SceneSampled := TriangulatedObjectModel3D1</l>
 <l>    else</l>
-<l>        RGB_Scene := RGBA</l>
-<l>        ObjectModel_Scene := ObjectModel_Scene</l>
-<l>        ObjectModel3D_Result := ObjectModel_Scene</l>
-<l>        xyz_to_object_model_3d (X, Y, Z, ObjectModel_Scene)</l>
-<l>        sample_object_model_3d (ObjectModel_Scene, sampling_method, sampling_distance, [], [], ObjectModel_Scene)</l>
-<l>        ObjectModel_SceneSampled := ObjectModel_Scene</l>
-<l>    endif</l>
+<l>        ObjectModel_SceneSampled := ObjectModel_Scene    </l>
+<l>    endif    </l>
 <l>endif</l>
 <c></c>
 <l>if(RoiForm != 1)</l>
