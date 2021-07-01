@@ -1,0 +1,625 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hdevelop file_version="1.2" halcon_version="20.11.1.2">
+<procedure name="CreateSurfModel_0_1_0">
+<interface>
+<ic>
+<par name="Window3D" base_type="ctrl" dimension="0"/>
+<par name="ExtWinOnOff" base_type="ctrl" dimension="0"/>
+<par name="plyfileName" base_type="ctrl" dimension="0"/>
+<par name="SimpleObj" base_type="ctrl" dimension="0"/>
+<par name="BOXLengthX" base_type="ctrl" dimension="0"/>
+<par name="BOXLengthY" base_type="ctrl" dimension="0"/>
+<par name="BOXLengthZ" base_type="ctrl" dimension="0"/>
+<par name="SphereRadius" base_type="ctrl" dimension="0"/>
+<par name="CylinderRadius" base_type="ctrl" dimension="0"/>
+<par name="CylinderZMinExt" base_type="ctrl" dimension="0"/>
+<par name="CylinderZMaxExt" base_type="ctrl" dimension="0"/>
+<par name="minDepth" base_type="ctrl" dimension="0"/>
+<par name="maxDepth" base_type="ctrl" dimension="0"/>
+<par name="ObjectModel3DCrop" base_type="ctrl" dimension="0"/>
+<par name="ModelForm" base_type="ctrl" dimension="0"/>
+<par name="sampling_method" base_type="ctrl" dimension="0"/>
+<par name="sampling_distance" base_type="ctrl" dimension="0"/>
+<par name="triangulate_greedyKnnCnt" base_type="ctrl" dimension="0"/>
+<par name="triangulate_greedyKnnRadiusParam" base_type="ctrl" dimension="0"/>
+<par name="triangulate_greedyKnnRadiusValue" base_type="ctrl" dimension="0"/>
+<par name="triangulate_smallsurfaceremoveValue" base_type="ctrl" dimension="0"/>
+<par name="triangulate_greedy_mesh_dilationValue" base_type="ctrl" dimension="0"/>
+<par name="create_sfm_useInvertNormals" base_type="ctrl" dimension="0"/>
+<par name="create_sfm_RelSampleDistance" base_type="ctrl" dimension="0"/>
+<par name="CreateSurfModelTimeoutSec" base_type="ctrl" dimension="0"/>
+<par name="Simple_HalfCut" base_type="ctrl" dimension="0"/>
+<par name="AutoRoiNOWPointN_BeforePointNDIFF" base_type="ctrl" dimension="0"/>
+<par name="create_sfm_train_self_similar_poses" base_type="ctrl" dimension="0"/>
+<par name="create_sfm_train_view_based" base_type="ctrl" dimension="0"/>
+</ic>
+<oc>
+<par name="RetOM3" base_type="ctrl" dimension="0"/>
+<par name="RetSFM" base_type="ctrl" dimension="0"/>
+<par name="CreateResult" base_type="ctrl" dimension="0"/>
+</oc>
+</interface>
+<body>
+<l>dev_update_off()</l>
+<l>if(ExtWinOnOff == 1)</l>
+<l>    dev_clear_window()    </l>
+<l>endif</l>
+<c></c>
+<l>*dev_open_window(0,0, 960, 600, 'black', Window3D)</l>
+<l>if(ExtWinOnOff == 1)</l>
+<l>    read_image(RGBA,'./halconDev/DummyDisp')</l>
+<l>    dev_set_window(Window3D)</l>
+<l>    dev_display(RGBA)</l>
+<l>endif</l>
+<c></c>
+<l>tuple_strlen(plyfileName, plyfileNameLength)</l>
+<c></c>
+<l>if (triangulate_greedyKnnCnt == 0)</l>
+<l>    greed_Knn_Param := []</l>
+<l>    triangulate_greedyKnnCnt := []</l>
+<l>else</l>
+<l>    greed_Knn_Param := 'greedy_kNN'</l>
+<l>endif</l>
+<c></c>
+<l>if (triangulate_greedyKnnRadiusParam == [] or triangulate_greedyKnnRadiusParam == '')</l>
+<l>    greedy_radius_type_Param := []</l>
+<l>    triangulate_greedyKnnRadiusParam := []</l>
+<l>else</l>
+<l>    greedy_radius_type_Param := 'greedy_radius_type'</l>
+<l>endif</l>
+<c></c>
+<l>if (triangulate_greedyKnnRadiusValue == 0)</l>
+<l>    greedy_radius_value_Param := []</l>
+<l>    triangulate_greedyKnnRadiusValue := []</l>
+<l>else</l>
+<l>    greedy_radius_value_Param := 'greedy_radius_value'</l>
+<l>endif</l>
+<l>if (triangulate_smallsurfaceremoveValue == 0)</l>
+<l>    greedy_remove_small_surfaces_Param := []</l>
+<l>    triangulate_smallsurfaceremoveValue := []</l>
+<l>else</l>
+<l>    greedy_remove_small_surfaces_Param := 'greedy_remove_small_surfaces'</l>
+<l>endif</l>
+<l>if (triangulate_greedy_mesh_dilationValue == 0 or triangulate_greedy_mesh_dilationValue == 0.0)</l>
+<l>    greedy_mesh_dilation_Param := []</l>
+<l>    triangulate_greedy_mesh_dilationValue := []</l>
+<l>else</l>
+<l>    greedy_mesh_dilation_Param := 'greedy_mesh_dilation'</l>
+<l>endif</l>
+<c></c>
+<l>if (create_sfm_useInvertNormals == 0)</l>
+<l>    use_model_invert_normals := 'false'</l>
+<l>else</l>
+<l>    use_model_invert_normals := 'true'</l>
+<l>endif</l>
+<l>if(create_sfm_train_self_similar_poses == 0)</l>
+<l>    use_create_sfm_train_self_similar_poses := 'false'</l>
+<l>else</l>
+<l>    use_create_sfm_train_self_similar_poses := 'true'</l>
+<l>endif</l>
+<l>if(create_sfm_train_view_based == 0)</l>
+<l>    create_sfm_train_view_based := 'false'</l>
+<l>else</l>
+<l>    create_sfm_train_view_based := 'true'</l>
+<l>endif</l>
+<c></c>
+<l>if(plyfileNameLength &lt;= 1)</l>
+<l>    dev_set_window(Window3D)</l>
+<l>    dev_disp_text('모델 생성 연산중...','window',  'center',  'center', 'black', [], [])</l>
+<l>    if(SimpleObj == 0)</l>
+<l>        gen_box_object_model_3d ([0,0,0,0,0,0,0], BOXLengthX, BOXLengthY, BOXLengthZ, ObjectModel3D)</l>
+<l>    elseif (SimpleObj == 1)</l>
+<l>        gen_sphere_object_model_3d ([0,0,0,0,0,0,0], SphereRadius, ObjectModel3D)</l>
+<l>    elseif (SimpleObj == 2)</l>
+<l>        gen_cylinder_object_model_3d ([0,0,0,0,0,0,0], CylinderRadius, CylinderZMinExt, CylinderZMaxExt, ObjectModel3D)</l>
+<l>    endif</l>
+<c>    </c>
+<l>    sample_object_model_3d(ObjectModel3D, sampling_method, sampling_distance, [], [], SampleObjectModel3D)</l>
+<l>    ResultObj3D := SampleObjectModel3D</l>
+<l>    if(ModelForm == 1 or ModelForm == 2)</l>
+<l>        triangulate_object_model_3d (SampleObjectModel3D, 'greedy', [greed_Knn_Param,  greedy_radius_type_Param, greedy_radius_value_Param, greedy_remove_small_surfaces_Param, greedy_mesh_dilation_Param], [triangulate_greedyKnnCnt, triangulate_greedyKnnRadiusParam, triangulate_greedyKnnRadiusValue, triangulate_smallsurfaceremoveValue, triangulate_greedy_mesh_dilationValue], TriangleObj3D, Information)</l>
+<l>        ResultObj3D := TriangleObj3D</l>
+<l>    endif</l>
+<l>else</l>
+<l>    tuple_add(plyfileName,'', SceneFilename)</l>
+<l>    read_object_model_3d (SceneFilename, 'm', ['xyz_map_width'], [1920], ObjectModel3D, Status)</l>
+<l>    tuple_split(SceneFilename, '.', FileFormat)</l>
+<l>    STLTYPE := 0</l>
+<c>    </c>
+<l>    if(FileFormat[1] == 'ply' or FileFormat[1] == 'PLY')</l>
+<l>        STLTYPE := 0</l>
+<l>        get_object_model_3d_params (ObjectModel3D, 'red', red)</l>
+<l>        get_object_model_3d_params (ObjectModel3D, 'green', green)</l>
+<l>        get_object_model_3d_params (ObjectModel3D, 'blue', blue)</l>
+<l>        set_object_model_3d_attrib (ObjectModel3D, '&amp;red', 'points', red, ObjectModel3D)</l>
+<l>        set_object_model_3d_attrib (ObjectModel3D, '&amp;green', 'points', green, ObjectModel3D)</l>
+<l>        set_object_model_3d_attrib (ObjectModel3D, '&amp;blue', 'points', blue, ObjectModel3D)</l>
+<c>        </c>
+<l>        object_model_3d_to_xyz( X, Y, Z, ObjectModel3D, 'from_xyz_map', [], [])  </l>
+<l>        get_image_size (X, Width, Height)</l>
+<l>        gen_image_const (R, 'real', Width, Height)</l>
+<l>        gen_image_const (G, 'real', Width, Height)</l>
+<l>        gen_image_const (B, 'real', Width, Height)</l>
+<l>        get_domain (R, Domain)</l>
+<l>        get_region_points (Domain, Rows, Columns)</l>
+<l>        set_grayval (R, Rows, Columns, red)</l>
+<l>        set_grayval (G, Rows, Columns, green)</l>
+<l>        set_grayval (B, Rows, Columns, blue)</l>
+<l>        compose3 (R, G, B, RGBA)</l>
+<c>    </c>
+<l>        if(ExtWinOnOff == 1)</l>
+<l>            Answer := 0</l>
+<l>            while(Answer == 0)    </l>
+<c>                * Displaying the RGB image</c>
+<l>                dev_set_window (Window3D)</l>
+<c>                </c>
+<l>                dev_display(RGBA)</l>
+<c>                * Using the mouse cursor to draw a region around the object</c>
+<l>                set_display_font (Window3D, 9, 'mono', 'false', 'false')</l>
+<l>                dev_disp_text (['마우스 왼쪽 버튼을 누른 상태에서 피사체의 경계를 그려주세요', '마우스 왼쪽 버튼을 떼면 그리기가 완료됩니다', '그리기 완료 후 마우스 오른쪽 버튼을 누르면 모델 생성이 진행됩니다'], 'window', 'bottom', 'left', 'black', [], [])</l>
+<l>                draw_rectangle1 (Window3D, Row1, Column1, Row2, Column2)</l>
+<l>                gen_rectangle1 (Rectangle, Row1, Column1, Row2, Column2)</l>
+<l>                reduce_domain (Z, Rectangle, Z)</l>
+<l>                *draw_region (RegionDraw, Window3D)</l>
+<l>                *reduce_domain (Z, RegionDraw, Z)</l>
+<l>* if (ObjectModel3DCrop == 0)</l>
+<l>                *    threshold (Z, RegionDraw, minDepth, maxDepth)</l>
+<l>                *    reduce_domain (Z, RegionDraw, Z)</l>
+<l>                *endif</l>
+<l>                set_display_font (Window3D, 14, 'mono', 'false', 'false')</l>
+<l>                dev_clear_window ()</l>
+<l>                set_color (Window3D, 'blue')</l>
+<c>                * Request user input for pose parameters.</c>
+<l>                Width := 1920</l>
+<l>                Height := 1200</l>
+<l>                set_part(Window3D, 0, 0, 1200, 1920)</l>
+<l>                get_part(Window3D, Row1, Column1, Height, Width)</l>
+<l>                gen_rectangle1 (Rectangle, [Height/2,Height/2], [(Width/4),(Width/2)+100], [(Height/2)+200,(Height/2)+200], [(Width/4)+400,(Width/2)+500])</l>
+<l>                Colors := ['orange','orange']</l>
+<l>                HighlightColors := Colors</l>
+<l>                set_window_param (Window3D, 'flush', 'false')</l>
+<l>                Selected := 0</l>
+<l>                Button := 0</l>
+<l>                Text := ['YES','NO']</l>
+<l>                while (Selected == 0 or Button != 1)</l>
+<l>                    try</l>
+<l>                        clear_window (Window3D)</l>
+<l>                        disp_text (Window3D, '이 경계를 사용하시겠습니까?', 'window', 'top', 'left', 'white', 'box', 'false')</l>
+<l>                        set_color (Window3D, HighlightColors)</l>
+<l>                        disp_obj (Rectangle, Window3D)</l>
+<l>                        disp_text (Window3D, Text, 'image', [(Height/2)+70,(Height/2)+70], [(Width/4)+170,(Width/2)+280], 'black', 'box', 'false')</l>
+<l>                        flush_buffer (Window3D)</l>
+<l>                        get_mposition (Window3D, Row, Column, Button)</l>
+<l>                        Selected := 0</l>
+<l>                        for I := 1 to 2 by 1</l>
+<l>                            select_obj (Rectangle, ObjectSelected, I)</l>
+<l>                            test_region_point (ObjectSelected, Row, Column, IsInside)</l>
+<l>                            if (IsInside)</l>
+<l>                                Selected := I</l>
+<l>                                break</l>
+<l>                            endif</l>
+<l>                        endfor</l>
+<l>                        if (Selected &gt; 0)</l>
+<l>                            tuple_insert (Colors, Selected - 1, 'yellow', HighlightColors)</l>
+<l>                        else</l>
+<l>                            HighlightColors := Colors</l>
+<l>                        endif</l>
+<l>                    catch (Exception)</l>
+<l>                    endtry</l>
+<l>                endwhile</l>
+<l>                set_window_param (Window3D, 'flush', 'true')</l>
+<l>                Answer := Selected == 1</l>
+<l>            endwhile</l>
+<l>        *elseif(ExtWinOnOff == 0)</l>
+<l>        *    threshold (Z, RegionDraw, minDepth, maxDepth)</l>
+<l>        *    reduce_domain (Z, RegionDraw, Z)</l>
+<l>        *    gen_rectangle1 (RegionDraw, leftTopPX_Y, leftTopPX_X,  rightBottomPX_Y,rightBottomPX_X)</l>
+<l>        *    reduce_domain (Z, RegionDraw, Z)</l>
+<l>        endif</l>
+<c>    </c>
+<l>        dev_set_window(Window3D)</l>
+<l>        dev_disp_text('모델 생성 연산중...','window',  'center',  'center', 'black', [], [])</l>
+<c>        * Transforming 3D points from X, Y, Z images to a HALCON 3D object model</c>
+<l>        xyz_to_object_model_3d (X, Y, Z, ObjectModel3D)</l>
+<l>        sample_object_model_3d (ObjectModel3D, sampling_method, sampling_distance, [], [], SampleObjectModel3D)</l>
+<l>        ResultObj3D := SampleObjectModel3D</l>
+<l>        if(ObjectModel3DCrop == 0 or ExtWinOnOff == 0)</l>
+<l>            fit_primitives_object_model_3d (SampleObjectModel3D, 'primitive_type', 'plane', ObjectModel3DOut)</l>
+<c>            </c>
+<l>            get_object_model_3d_params (ObjectModel3DOut, 'primitive_parameter_pose', Pose_primitive_plane)</l>
+<c>            </c>
+<l>            pose_invert (Pose_primitive_plane, PoseInvert_primitive_plane)</l>
+<l>            pose_to_hom_mat3d (PoseInvert_primitive_plane, HomMat3D_invert)</l>
+<l>            affine_trans_object_model_3d (SampleObjectModel3D, HomMat3D_invert, SampleObjectModel3D)</l>
+<l>            select_points_object_model_3d (SampleObjectModel3D, 'point_coord_z', minDepth, maxDepth, ObjectModel3DThresholded2)</l>
+<l>            pose_to_hom_mat3d (Pose_primitive_plane, HomMat3D)</l>
+<l>            affine_trans_object_model_3d (ObjectModel3DThresholded2, HomMat3D, SampleObjectModel3D)</l>
+<l>            ResultObj3D := SampleObjectModel3D</l>
+<l>        elseif(ObjectModel3DCrop == 1)</l>
+<l>            fit_primitives_object_model_3d (SampleObjectModel3D, 'primitive_type', 'plane', ObjectModel3DOut)</l>
+<c>    </c>
+<l>            get_object_model_3d_params (ObjectModel3DOut, 'primitive_parameter_pose', Pose_primitive_plane)</l>
+<l>            pose_invert (Pose_primitive_plane, PoseInvert_primitive_plane)</l>
+<l>            SampleSceneCenterZ := PoseInvert_primitive_plane </l>
+<l>            pose_to_hom_mat3d (PoseInvert_primitive_plane, HomMat3D_invert)</l>
+<l>            affine_trans_object_model_3d (SampleObjectModel3D, HomMat3D_invert, SampleObjectModel3D)</l>
+<c>    </c>
+<l>            get_object_model_3d_params (SampleObjectModel3D, 'bounding_box1', Scene_BndBox)</l>
+<l>            PointZNumArr := []</l>
+<l>            PointZMin_Target := 0</l>
+<l>            tuple_int(Scene_BndBox[2], Scene_BndBox_Int_2)</l>
+<l>            forcounting := 0</l>
+<l>            for index := Scene_BndBox_Int_2 to Scene_BndBox[5] by 1</l>
+<l>                if(index == Scene_BndBox_Int_2)</l>
+<l>                    select_points_object_model_3d (SampleObjectModel3D, 'point_coord_z', Scene_BndBox_Int_2, index+1, ObjectModel_SceneSampled_Thres)    </l>
+<l>                    get_object_model_3d_params (ObjectModel_SceneSampled_Thres, 'num_points', Scene_PointNum)</l>
+<l>                    PointZNumArr := Scene_PointNum</l>
+<l>                    forcounting := forcounting + 1</l>
+<l>                else</l>
+<l>                    select_points_object_model_3d (SampleObjectModel3D, 'point_coord_z', index, index+1, ObjectModel_SceneSampled_Thres)</l>
+<l>                    get_object_model_3d_params (ObjectModel_SceneSampled_Thres, 'num_points', Scene_PointNum)</l>
+<l>                    PointZNumArr := [PointZNumArr,Scene_PointNum]</l>
+<l>                    diffbeforeNow := PointZNumArr[forcounting] - PointZNumArr[forcounting-1]</l>
+<l>                    tuple_abs(diffbeforeNow, diffbeforeNow)</l>
+<l>                    if(diffbeforeNow &lt; AutoRoiNOWPointN_BeforePointNDIFF and Scene_PointNum &gt; 100)</l>
+<l>                        PointZMin_Target := Scene_BndBox_Int_2+forcounting - 1 </l>
+<l>                        break</l>
+<l>                    endif</l>
+<l>                    forcounting := forcounting + 1</l>
+<l>                    if(Scene_PointNum == 0)</l>
+<l>                        break</l>
+<l>                    endif</l>
+<l>                endif</l>
+<l>            endfor</l>
+<l>            select_points_object_model_3d (SampleObjectModel3D, 'point_coord_z', PointZMin_Target, Scene_BndBox[5], ObjectModel3DThresholded2)</l>
+<l>            pose_to_hom_mat3d (Pose_primitive_plane, HomMat3D)</l>
+<l>            affine_trans_object_model_3d (ObjectModel3DThresholded2, HomMat3D, SampleObjectModel3D)</l>
+<l>            ResultObj3D := SampleObjectModel3D</l>
+<l>        elseif(ObjectModel3DCrop == 2)</l>
+<l>            CROP_END := 0</l>
+<l>            FirstCreate := 0</l>
+<l>            while (CROP_END == 0)</l>
+<l>                copy_object_model_3d(SampleObjectModel3D, 'all', ObjectModel3DCopy)</l>
+<l>                fit_primitives_object_model_3d (ObjectModel3DCopy, 'primitive_type', 'plane', ObjectModel3DCopyOut)</l>
+<l>                get_object_model_3d_params (ObjectModel3DCopyOut, 'primitive_parameter_pose', Pose_primitive_plane)</l>
+<l>                pose_invert (Pose_primitive_plane, PoseInvert_primitive_plane)</l>
+<l>                pose_to_hom_mat3d (PoseInvert_primitive_plane, HomMat3D_invert)</l>
+<l>                affine_trans_object_model_3d (ObjectModel3DCopy, HomMat3D_invert, ObjectModel3DCopy_Target)</l>
+<l>                get_object_model_3d_params(ObjectModel3DCopy_Target, 'bounding_box1', Target_BndBox)</l>
+<c>                </c>
+<l>                Interactive_Img_Crop_Params := 'Img_CropXYZ.ini'</l>
+<l>                if(FirstCreate == 0)</l>
+<l>                    open_file(Interactive_Img_Crop_Params, 'output', FileHandleOut)</l>
+<l>                    MinXStr := 'MIN_X ' + Target_BndBox[0]                    </l>
+<l>                    MinYStr := 'MIN_Y ' + Target_BndBox[1]</l>
+<l>                    MinZStr := 'MIN_Z ' + Target_BndBox[2]</l>
+<l>                    MaxXStr := 'MAX_X ' + Target_BndBox[3]</l>
+<l>                    MaxYStr := 'MAX_Y ' + Target_BndBox[4]</l>
+<l>                    MaxZStr := 'MAX_Z ' + Target_BndBox[5]</l>
+<l>                    CROP_ENDStr := 'CROP_END ' + 0</l>
+<l>                    fwrite_string(FileHandleOut, MinXStr)</l>
+<l>                    fnew_line(FileHandleOut)</l>
+<l>                    fwrite_string(FileHandleOut, MaxXStr)</l>
+<l>                    fnew_line(FileHandleOut)</l>
+<l>                    fwrite_string(FileHandleOut, MinYStr)</l>
+<l>                    fnew_line(FileHandleOut)</l>
+<l>                    fwrite_string(FileHandleOut, MaxYStr)</l>
+<l>                    fnew_line(FileHandleOut)</l>
+<l>                    fwrite_string(FileHandleOut, MinZStr)</l>
+<l>                    fnew_line(FileHandleOut)</l>
+<l>                    fwrite_string(FileHandleOut, MaxZStr)</l>
+<l>                    fnew_line(FileHandleOut)</l>
+<l>                    fwrite_string(FileHandleOut, CROP_ENDStr)</l>
+<l>                    fnew_line(FileHandleOut)</l>
+<l>                    close_file(FileHandleOut)</l>
+<l>                    FirstCreate := 1</l>
+<l>                endif</l>
+<c>                </c>
+<l>                open_file(Interactive_Img_Crop_Params, 'input', FileHandleIn)</l>
+<l>                *fread_string(FileHandleIn, String, IsEOF)</l>
+<l>                IsEOF1 := 0</l>
+<c>                </c>
+<l>                while (IsEOF1 != 1)</l>
+<l>                  fread_line (FileHandleIn, OutLine, IsEOF1)</l>
+<l>                  tuple_strstr(OutLine, 'MIN_X', Position)</l>
+<l>                  if(Position == 0)</l>
+<l>                      tuple_split(OutLine, ' ', strSplit)</l>
+<l>                      tuple_length(strSplit, strSplitLength)</l>
+<l>                      MIN_X_buf := strSplit[strSplitLength-1]</l>
+<l>                      tuple_strlen(MIN_X_buf, strLength)</l>
+<l>                      tuple_str_first_n(MIN_X_buf, strLength-2, MIN_X)</l>
+<l>                      tuple_number(MIN_X, MIN_X)</l>
+<l>                      Postion := -1</l>
+<l>                  endif</l>
+<l>                  tuple_strstr(OutLine, 'MAX_X', Position)</l>
+<l>                  if(Position == 0)</l>
+<l>                      tuple_split(OutLine, ' ', strSplit)</l>
+<l>                      tuple_length(strSplit, strSplitLength)</l>
+<l>                      MAX_X_buf := strSplit[strSplitLength-1]</l>
+<l>                      tuple_strlen(MAX_X_buf, strLength)</l>
+<l>                      tuple_str_first_n(MAX_X_buf, strLength-2, MAX_X)</l>
+<l>                      tuple_number(MAX_X, MAX_X)</l>
+<l>                      Postion := -1</l>
+<l>                  endif</l>
+<l>                  tuple_strstr(OutLine, 'MIN_Y', Position)</l>
+<l>                  if(Position == 0)</l>
+<l>                      tuple_split(OutLine, ' ', strSplit)</l>
+<l>                      tuple_length(strSplit, strSplitLength)</l>
+<l>                      MIN_Y_buf := strSplit[strSplitLength-1]</l>
+<l>                      tuple_strlen(MIN_Y_buf, strLength)</l>
+<l>                      tuple_str_first_n(MIN_Y_buf, strLength-2, MIN_Y)</l>
+<l>                      tuple_number(MIN_Y, MIN_Y)</l>
+<l>                      Postion := -1</l>
+<l>                  endif</l>
+<l>                  tuple_strstr(OutLine, 'MAX_Y', Position)</l>
+<l>                  if(Position == 0)</l>
+<l>                      tuple_split(OutLine, ' ', strSplit)</l>
+<l>                      tuple_length(strSplit, strSplitLength)</l>
+<l>                      MAX_Y_buf := strSplit[strSplitLength-1]</l>
+<l>                      tuple_strlen(MAX_Y_buf, strLength)</l>
+<l>                      tuple_str_first_n(MAX_Y_buf, strLength-2, MAX_Y)</l>
+<l>                      tuple_number(MAX_Y, MAX_Y)</l>
+<l>                      Postion := -1</l>
+<l>                  endif</l>
+<l>                  tuple_strstr(OutLine, 'MIN_Z', Position)</l>
+<l>                  if(Position == 0)</l>
+<l>                      tuple_split(OutLine, ' ', strSplit)</l>
+<l>                      tuple_length(strSplit, strSplitLength)</l>
+<l>                      MIN_Z_buf := strSplit[strSplitLength-1]</l>
+<l>                      tuple_strlen(MIN_Z_buf, strLength)</l>
+<l>                      tuple_str_first_n(MIN_Z_buf, strLength-2, MIN_Z)</l>
+<l>                      tuple_number(MIN_Z, MIN_Z)</l>
+<l>                      Postion := -1</l>
+<l>                  endif</l>
+<l>                  tuple_strstr(OutLine, 'MAX_Z', Position)</l>
+<l>                  if(Position == 0)</l>
+<l>                      tuple_split(OutLine, ' ', strSplit)</l>
+<l>                      tuple_length(strSplit, strSplitLength)</l>
+<l>                      MAX_Z_buf := strSplit[strSplitLength-1]</l>
+<l>                      tuple_strlen(MAX_Z_buf, strLength)</l>
+<l>                      tuple_str_first_n(MAX_Z_buf, strLength-2, MAX_Z)</l>
+<l>                      tuple_number(MAX_Z, MAX_Z)</l>
+<l>                      Postion := -1</l>
+<l>                  endif</l>
+<l>                  tuple_strstr(OutLine, 'CROP_END', Position)</l>
+<l>                  if(Position == 0)</l>
+<l>                      tuple_split(OutLine, ' ', strSplit)</l>
+<l>                      tuple_length(strSplit, strSplitLength)</l>
+<l>                      CROP_END_buf := strSplit[strSplitLength-1]</l>
+<l>                      tuple_strlen(CROP_END_buf, strLength)</l>
+<l>                      tuple_str_first_n(CROP_END_buf, strLength-2, CROP_END)</l>
+<l>                      tuple_number(CROP_END, CROP_END)</l>
+<l>                      Postion := -1</l>
+<l>                  endif</l>
+<l>                endwhile</l>
+<l>                close_file(FileHandleIn)</l>
+<c>                </c>
+<l>                select_points_object_model_3d (ObjectModel3DCopy_Target, 'point_coord_z', MIN_Z, MAX_Z, ObjectModel3DCopy_Target)</l>
+<l>                select_points_object_model_3d (ObjectModel3DCopy_Target, 'point_coord_x', MIN_X, MAX_X, ObjectModel3DCopy_Target)</l>
+<l>                select_points_object_model_3d (ObjectModel3DCopy_Target, 'point_coord_y', MIN_Y, MAX_Y, ObjectModel3DCopy_Target)</l>
+<l>                pose_to_hom_mat3d (Pose_primitive_plane, HomMat3D)</l>
+<l>                affine_trans_object_model_3d (ObjectModel3DCopy_Target, HomMat3D, Affine_ObjectModel3DCopy_Target)</l>
+<l>                if(CROP_END == 1)</l>
+<l>                    ObjectModel3D := Affine_ObjectModel3DCopy_Target</l>
+<l>                    SampleObjectModel3D := Affine_ObjectModel3DCopy_Target</l>
+<l>                    ResultObj3D := Affine_ObjectModel3DCopy_Target</l>
+<l>                    break</l>
+<l>                else</l>
+<l>                    Title := '생성된 ./Img_Crop.ini 파일 내에서 Min, Max, X, Y, Z를 조작하여 Object3D를 세부 조정'</l>
+<l>                    smallest_bounding_box_object_model_3d(Affine_ObjectModel3DCopy_Target, 'oriented', Pose, Length1, Length2, Length3)</l>
+<l>                    gen_box_object_model_3d(Pose, Length1, Length2, Length3, ObjBox)</l>
+<l>                    visualize_object_model_3d (Window3D, [Affine_ObjectModel3DCopy_Target,ObjBox], [], [], ['alpha_0', 'alpha_1', 'color_0', 'color_1'], [1.0, 0.2, 'gray',  'green'], Title, [], [], PoseOut)                </l>
+<l>                endif</l>
+<l>            endwhile</l>
+<l>        endif</l>
+<c>        </c>
+<l>        if (ModelForm == 1 or ModelForm == 2)</l>
+<c>            ** smooth cad, simple에서 단면 제거용으로 만들어둔건데... 다른 모델 만들때 모델에 왜곡 발생...</c>
+<l>            *smooth_object_model_3d (SampleObjectModel3D, 'mls', ['mls_kNN', 'mls_force_inwards'], [60, 'false'], SampleObjectModel3D)</l>
+<l>            *segment_object_model_3d (SampleObjectModel3D, [], [], SampleObjectModel3DS)</l>
+<l>            *triangulate_object_model_3d (SampleObjectModel3D, 'xyz_mapping', ['xyz_mapping_output_all_points'], ['true'], Surface3D, Information)</l>
+<c>            </c>
+<l>            triangulate_object_model_3d (SampleObjectModel3D, 'greedy', \
+                                         [greed_Knn_Param,  greedy_radius_type_Param, greedy_radius_value_Param, greedy_remove_small_surfaces_Param, greedy_mesh_dilation_Param],\
+                                         [triangulate_greedyKnnCnt, triangulate_greedyKnnRadiusParam, triangulate_greedyKnnRadiusValue, triangulate_smallsurfaceremoveValue, triangulate_greedy_mesh_dilationValue], \
+                                         TriangleObj3D, Information)</l>
+<l>            ResultObj3D := TriangleObj3D</l>
+<l>        endif</l>
+<l>    else</l>
+<l>        STLTYPE := 1</l>
+<l>        dev_set_window(Window3D)</l>
+<l>        dev_disp_text('모델 생성 연산중...','window',  'center',  'center', 'black', [], [])</l>
+<l>        *Title[0] := 'CAD Model'</l>
+<l>        *visualize_object_model_3d (Window3D, ObjectModel3D, [], [], [], [], Title, [], [], PoseOut)</l>
+<l>         sample_object_model_3d (ObjectModel3D, sampling_method, sampling_distance, [], [], SampleObjectModel3D)</l>
+<l>         ResultObj3D := SampleObjectModel3D</l>
+<l>        if (ModelForm == 1 or ModelForm == 2)</l>
+<l>            triangulate_object_model_3d (SampleObjectModel3D, 'greedy', [greed_Knn_Param,  greedy_radius_type_Param, greedy_radius_value_Param, greedy_remove_small_surfaces_Param, greedy_mesh_dilation_Param],\
+                                         [triangulate_greedyKnnCnt, triangulate_greedyKnnRadiusParam, triangulate_greedyKnnRadiusValue, triangulate_smallsurfaceremoveValue, triangulate_greedy_mesh_dilationValue], \
+                                         TriangleObj3D, Information)</l>
+<l>            ResultObj3D := TriangleObj3D</l>
+<l>        endif</l>
+<l>    endif</l>
+<l>endif</l>
+<l>ObjectModel3D := ResultObj3D </l>
+<l>dev_clear_window()</l>
+<l>dev_set_window(Window3D)</l>
+<l>get_object_model_3d_params(ObjectModel3D, 'num_points', pointNum)</l>
+<l>get_object_model_3d_params(ObjectModel3D, 'num_triangles', triangleNum)</l>
+<l>dev_disp_text(pointNum,'window',  'center',  'center', 'black', [], [])</l>
+<l>if(pointNum &lt; 2)</l>
+<l>    set_display_font (Window3D, 16, 'mono', 'false', 'false')</l>
+<l>    dev_disp_text('모델을 생성할 point 3D 정보가 없습니다 ' + pointNum,'window',  'center',  'center', 'black', [], [])</l>
+<l>    CreateResult := 'Failed'</l>
+<l>    return()</l>
+<l>endif</l>
+<c></c>
+<l>if ((ModelForm == 1 or ModelForm == 2) and triangleNum &lt; 2)</l>
+<l>    set_display_font (Window3D, 16, 'mono', 'false', 'false')</l>
+<l>    dev_disp_text('모델을 생성할 triangle 3D 정보가 없습니다2 ' + triangleNum,'window',  'center',  'center', 'black', [], [])</l>
+<l>    CreateResult := 'Failed'</l>
+<l>    return()</l>
+<l>endif</l>
+<c></c>
+<l>if(ExtWinOnOff == 1)</l>
+<l>    Title[0] := '최종 모델 생성 전 피사체 방향 입력.(Viewer로 보이는 지점이 모델의 상단)'</l>
+<l>    Title[1] := '모델의 방향을 마우스 클릭으로 선정하고 Continue버튼 클릭'</l>
+<l>    visualize_object_model_3d (Window3D, ObjectModel3D, [], [], [], [], Title, [], [], PoseOut)</l>
+<l>    *par_start&lt;HID_1&gt; : visualize_object_model_3d (Window3D, ObjectModel3D, [], [], [], [], Title, [], [], PoseOut)</l>
+<l>    *par_join(HID_1)</l>
+<l>    rigid_trans_object_model_3d (ObjectModel3D, PoseOut, ObjectModel3D)</l>
+<l>endif</l>
+<c></c>
+<c></c>
+<l>Answer := 0</l>
+<l>set_display_font (Window3D, 14, 'mono', 'false', 'false')</l>
+<l>dev_clear_window ()</l>
+<l>set_color (Window3D, 'blue')</l>
+<c>* Request user input for pose parameters.</c>
+<l>Width := 1920</l>
+<l>Height := 1200</l>
+<c></c>
+<l>set_part(Window3D, 0, 0, 1200, 1920)</l>
+<l>get_part(Window3D, Row1, Column1, Height, Width)</l>
+<l>gen_rectangle1 (Rectangle, [Height/2,Height/2], [(Width/4),(Width/2)+100], [(Height/2)+200,(Height/2)+200], [(Width/4)+400,(Width/2)+500])</l>
+<l>Colors := ['orange','orange']</l>
+<l>HighlightColors := Colors</l>
+<l>set_window_param (Window3D, 'flush', 'false')</l>
+<l>Selected := 0</l>
+<l>Button := 0</l>
+<l>Text := ['YES','NO']</l>
+<l>while (Selected == 0 or Button != 1)</l>
+<l>    try</l>
+<l>        clear_window (Window3D)</l>
+<l>        disp_text (Window3D, '생성된 모델을 사용하시겠습니까?', 'window', 'top', 'left', 'white', 'box', 'false')</l>
+<l>        set_color (Window3D, HighlightColors)</l>
+<l>        disp_obj (Rectangle, Window3D)</l>
+<l>        disp_text (Window3D, Text, 'image', [(Height/2)+70,(Height/2)+70], [(Width/4)+170,(Width/2)+280], 'black', 'box', 'false')</l>
+<l>        flush_buffer (Window3D)</l>
+<l>        get_mposition (Window3D, Row, Column, Button)</l>
+<l>        Selected := 0</l>
+<l>        for I := 1 to 2 by 1</l>
+<l>            select_obj (Rectangle, ObjectSelected, I)</l>
+<l>            test_region_point (ObjectSelected, Row, Column, IsInside)</l>
+<l>            if (IsInside)</l>
+<l>                Selected := I</l>
+<l>                break</l>
+<l>            endif</l>
+<l>        endfor</l>
+<l>        if (Selected &gt; 0)</l>
+<l>            tuple_insert (Colors, Selected - 1, 'yellow', HighlightColors)</l>
+<l>        else</l>
+<l>            HighlightColors := Colors</l>
+<l>        endif</l>
+<l>    catch (Exception)</l>
+<l>    endtry</l>
+<l>endwhile</l>
+<l>set_window_param (Window3D, 'flush', 'true')</l>
+<l>Answer := Selected == 1</l>
+<l>if(Answer == 0)</l>
+<l>    CreateResult := 'Failed'</l>
+<l>    return()</l>
+<l>endif</l>
+<c></c>
+<l>if(plyfileNameLength &lt; 3 and SimpleObj &gt;= 0 and Simple_HalfCut == 1)</l>
+<l>    get_object_model_3d_params(ObjectModel3D, 'point_coord_z', PointZ)</l>
+<l>    get_object_model_3d_params(ObjectModel3D, 'center', CenterPoint)</l>
+<l>    tuple_max(PointZ, PointMaxZ)</l>
+<l>    tuple_min(PointZ, PointMinZ)</l>
+<c>    </c>
+<l>    select_points_object_model_3d (ObjectModel3D, 'point_coord_z', PointMinZ, CenterPoint[2], ObjectModel3D)</l>
+<l>endif</l>
+<c></c>
+<l>* if(Smooth_Feature == 1)</l>
+<l>*     triangulate_object_model_3d(ObjectModel3D, 'greedy', [], [], TriangulatedObjectModel3D, Information)</l>
+<l>*     smooth_object_model_3d(TriangulatedObjectModel3D, 'mls', [], [], SmoothObjectModel3D)</l>
+<l>*     surface_normals_object_model_3d(SmoothObjectModel3D,'triangles', [], [], ObjectModel3D)</l>
+<l>* endif</l>
+<l>if (ModelForm == 1)</l>
+<l>    try</l>
+<l>        set_operator_timeout ('create_surface_model', CreateSurfModelTimeoutSec, 'cancel')</l>
+<l>        create_surface_model (ObjectModel3D, create_sfm_RelSampleDistance, \
+                              ['train_3d_edges', 'model_invert_normals','train_self_similar_poses', 'train_view_based' ], \
+                              ['true', use_model_invert_normals, use_create_sfm_train_self_similar_poses, create_sfm_train_view_based], \
+                              SFM)</l>
+<l>    catch (Exception)</l>
+<l>        CreateResult := 'Failed'</l>
+<l>        return()</l>
+<l>    endtry</l>
+<l>elseif((FileFormat[1] == 'stl' or FileFormat[1] == 'STL') and sampling_distance &gt; 0.9)</l>
+<l>    smooth_object_model_3d(ObjectModel3D, 'mls', ['mls_force_inwards'], [use_model_invert_normals], ObjectModel3D)</l>
+<l>    try</l>
+<l>        set_operator_timeout ('create_surface_model', CreateSurfModelTimeoutSec, 'cancel')</l>
+<l>        create_surface_model (ObjectModel3D, create_sfm_RelSampleDistance, [], [], SFM)</l>
+<l>    catch (Exception)</l>
+<l>        CreateResult := 'Failed'</l>
+<l>        return()</l>
+<l>    endtry</l>
+<c>    ** Trainviewbased Triangle활성화 시에 가능한 것으로 봤었는데... 확인 필요</c>
+<l>else</l>
+<l>    try</l>
+<l>        set_operator_timeout ('create_surface_model', CreateSurfModelTimeoutSec, 'cancel')</l>
+<l>        create_surface_model (ObjectModel3D, create_sfm_RelSampleDistance, \
+                              ['model_invert_normals','train_self_similar_poses', 'train_view_based'], \
+                              [use_model_invert_normals, use_create_sfm_train_self_similar_poses, create_sfm_train_view_based],\
+                              SFM)</l>
+<l>    catch (Exception)</l>
+<l>        CreateResult := 'Failed'</l>
+<l>        return()</l>
+<l>    endtry</l>
+<l>endif</l>
+<c></c>
+<l>if(ExtWinOnOff == 1)</l>
+<l>    Title := '최종 모델'</l>
+<l>    Instructions := []</l>
+<l>    Instructions[0] := 'Rotate: Left button'</l>
+<l>    Instructions[1] := 'Zoom:   Shift + left button'</l>
+<l>    Instructions[2] := 'Move:   Ctrl  + left button'</l>
+<l>    get_surface_model_param(SFM, 'sampled_model' , SFMVIEW)</l>
+<l>    visualize_object_model_3d (Window3D, SFMVIEW, [], [], ['disp_normals'], ['true'], Title, [], Instructions, PoseOut)</l>
+<l>endif</l>
+<c></c>
+<l>RetOM3 := ObjectModel3D</l>
+<l>RetSFM := SFM</l>
+<l>CreateResult := 'Done'</l>
+<c></c>
+<l>return ()</l>
+</body>
+<docu id="CreateSurfModel_0_1_0">
+<parameters>
+<parameter id="AutoRoiNOWPointN_BeforePointNDIFF"/>
+<parameter id="BOXLengthX"/>
+<parameter id="BOXLengthY"/>
+<parameter id="BOXLengthZ"/>
+<parameter id="CreateResult"/>
+<parameter id="CreateSurfModelTimeoutSec"/>
+<parameter id="CylinderRadius"/>
+<parameter id="CylinderZMaxExt"/>
+<parameter id="CylinderZMinExt"/>
+<parameter id="ExtWinOnOff"/>
+<parameter id="ModelForm"/>
+<parameter id="ObjectModel3DCrop"/>
+<parameter id="RetOM3"/>
+<parameter id="RetSFM"/>
+<parameter id="SimpleObj"/>
+<parameter id="Simple_HalfCut"/>
+<parameter id="SphereRadius"/>
+<parameter id="Window3D"/>
+<parameter id="create_sfm_RelSampleDistance"/>
+<parameter id="create_sfm_train_self_similar_poses"/>
+<parameter id="create_sfm_train_view_based"/>
+<parameter id="create_sfm_useInvertNormals"/>
+<parameter id="maxDepth"/>
+<parameter id="minDepth"/>
+<parameter id="plyfileName"/>
+<parameter id="sampling_distance"/>
+<parameter id="sampling_method"/>
+<parameter id="triangulate_greedyKnnCnt"/>
+<parameter id="triangulate_greedyKnnRadiusParam"/>
+<parameter id="triangulate_greedyKnnRadiusValue"/>
+<parameter id="triangulate_greedy_mesh_dilationValue"/>
+<parameter id="triangulate_smallsurfaceremoveValue"/>
+</parameters>
+</docu>
+</procedure>
+</hdevelop>
