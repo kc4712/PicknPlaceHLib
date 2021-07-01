@@ -18,8 +18,11 @@ namespace PicknPlaceHLib
     /// <summary>
     /// libModelCreate Surface매칭용 3D모델 생성 Class
     /// </summary>
-    public class libModelCreate
+    public sealed class libModelCreate
     {
+        private static libModelCreate instance = null;
+        private static readonly object padlock = new object();
+        
         private Thread thread;
         private HDevEngine MyEngine;
         private HDevProcedureCall ProcCall;
@@ -40,9 +43,9 @@ namespace PicknPlaceHLib
         private double CylinderZMaxExt = 0;
         private double minDepth = 0.0;
         private double maxDepth = 10.0;
-        private int Background_Feature = 0;
-        private int Smooth_Feature = 0;
-
+        //private int Background_Feature = 0;
+        //private int Smooth_Feature = 0;
+        private int ObjectModel3DCrop = 0;
         private int ModelForm = 0;
         
         private string sampling_method = "fast_compute_normals";
@@ -53,16 +56,17 @@ namespace PicknPlaceHLib
         private double triangulate_greedyKnnRadiusValue = 0.5;
         private double triangulate_smallsurfaceremoveValue = 0.0;
         private int triangulate_greedy_mesh_dilationValue = 0;
-
-        private string connection_obj3d_Param = "distance_3d";
-        private double connection_obj3d_value = 10;
-
+        
         private int create_sfm_useInvertNormals = 0;
         private double create_sfm_RelSampleDistance = 0.03;
 
         private double CreateSurfModelTimeoutSec = 120;
 
         private double Simple_HalfCut = 0;
+
+        private double AutoRoiNOWPointN_BeforePointNDIFF = 0;
+        private double create_sfm_train_self_similar_poses = 0;
+        private double create_sfm_train_view_based = 0;
 
         private HTuple RetOM3;
         private HTuple RetSFM;
@@ -75,9 +79,9 @@ namespace PicknPlaceHLib
         private const string DUMMY_PROCEDURE_NAME = "DummyDisp.png";
         
 
-        private const string CREATE_PROCEDURE_PATH_NAME = "./halconDev/CreateSurfModel_0_0_8.hdvp";
-        private const string CREATE_RESOURCE_PATH_NAME = "PicknPlaceHLib.Resource.CreateSurfModel_0_0_8.hdvp";
-        private const string CREATE_PROCEDURE_NAME = "CreateSurfModel_0_0_8";
+        private const string CREATE_PROCEDURE_PATH_NAME = "./halconDev/CreateSurfModel_0_1_0.hdvp";
+        private const string CREATE_RESOURCE_PATH_NAME = "PicknPlaceHLib.Resource.CreateSurfModel_0_1_0.hdvp";
+        private const string CREATE_PROCEDURE_NAME = "CreateSurfModel_0_1_0";
         private const string ClassName = "libModelCreate";
 
         /// <summary>
@@ -103,22 +107,11 @@ namespace PicknPlaceHLib
         /// <value> ENUM_HMODELSTATE값을 SET하게 되어있다</value>
         public int HMODEL_STATE { get; private set;} 
     
-        
-        /*private libModelCreate()
-        {
-            var currentMethodName = ClassName;
-            HLog.LogStr(ClassName, currentMethodName.ToString() + '\n' + "START");
-            MyEngine = new HDevEngine();
-            HPROCEDURE_STATE = (int)ENUM_HPROCEDURESTATE.PROCEDURENONE;
-            HMODEL_STATE = (int)ENUM_HMODELSTATE.MODELNONE;
-            HLog.LogStr(ClassName, currentMethodName.ToString() + '\n' + "END");
-
-        }*/
 
         /// <summary>
         /// libModelCreate Class 생성자
         /// </summary>
-        public libModelCreate()
+        private libModelCreate()
         {
             var currentMethodName = ClassName;
             HLog.LogStr(ClassName, currentMethodName.ToString() + '\n' + "START");
@@ -166,13 +159,30 @@ namespace PicknPlaceHLib
         }
 
         /// <summary>
+        /// libModelCreate libModelCreate Class Singleton Instance
+        /// </summary>
+        public static libModelCreate GetInstance
+        {
+            get
+            {
+                lock (padlock) { 
+                    if(instance == null)
+                    {
+                        instance = new libModelCreate();
+                    }
+                    return instance;
+                }
+            }
+        }
+
+
+        /// <summary>
         /// saveImageCreateModelParam 3DImage(Scene)에서 피사체를 추출하여 모델을 생성하는 파라메터를 정의하는 메서드 
         /// </summary>
         /// <param name="plyfileName">경로 포함한 .ply file명 </param>
         /// <param name="minDepth">배경 분리 셋팅 값: 지면 기준은 0.0이며, 0이상부터는 지면보다 높은데서 PCL형성(default:0.0) -N ~ N (카메라 센서 위치) </param>
         /// <param name="maxDepth">배경 분리 셋팅 값: 피사체의 PCL이 형성될 높이이며, 0.0 ~ N(카메라 센서 위치) </param>
-        /// <param name="Background_Feature">(v0.04 default:0) *사용안하는 편이 나을듯...* 배경 분리에 관계적 알고리즘 사용(스무싱 필수) = 1, 지면을 기준으로 피사체까지의 z depth min과 max를 사용 = 0 (default:0) 0, 1</param>
-        /// <param name="Smooth_Feature">(default:0),1 SurfaceModel 생성 전 Smoothing하여 PointCloud를 평준화한 모델링 생성</param>
+        /// <param name="ObjectModel3DCrop">3DImage 편집 기능 (무편집 : 0, 자동지면제거: 1, 미세 조정: 2) </param>
         /// <param name="ModelForm"><para>PointModel = 0, EdgeModel = 1, Trianglulate(Polygon)Model = 2 (defalut:0) </para>
         /// <para>PointModel은 Point요소만을 가지고 매칭하며, 피사체가 복잡할 수록 매칭 성공률이 증가</para>
         /// <para>EdgeModel은 편평하고 단순한 형상의 피사체에 유리(시편, 자, 판 조각 등)</para>
@@ -189,14 +199,18 @@ namespace PicknPlaceHLib
         /// <para>값이 작을 경우 복잡한 triangulate를 갖게되는 피사체가 모델링</para></param>
         /// <param name="triangulate_smallsurfaceremoveValue">3D Model의 작은 surface 제거 값 (default:0.0) 0.0 ~ 1000.0</param>
         /// <param name="triangulate_greedy_mesh_dilationValue">3D Model의 surface 팽창 값 (default:0) 0 ~ 3</param>
-        /// <param name="connection_obj3d_Param">(v0.04 BackgroundFeature연동 값으로 미사용 default:"") 배경분리 피쳐 (default:"distance_3d") "distance_3d", "mesh"</param>
-        /// <param name="connection_obj3d_value">(v0.04 v0.04 BackgroundFeature연동 값으로 미사용 default:"0")배경분리 값 (default:"10") 0.0 ~ 100.0</param>
         /// <param name="create_sfm_useInvertNormals">SurfaceModel의 KeyPoint normals방향 반전(default:0)0: 방향처리 안함, 1: 방향 반전</param>
         /// <param name="create_sfm_RelSampleDistance"><para>3D Model을 Surface Model로 변환할 때 Surface Model의 Point간 배치거리에 대한 퍼센테이지 (모델 직경(mm) * 값 = 점간 배치거리) (default:"0.03") 0.0 ~ 1.0</para>
         /// <para>값이 클 경우 SurfaceModel의 Point간의 배치 거리가 넓어져 정교함이 낮은 피사체 모델이 생성</para>
         /// <para>값이 작을 경우 SurfaceModel의 Point간의 배치 거리가 좁아져 정교함이 높은 피사체 모델이 생성</para></param>
         /// <param name="CreateSurfModelTimeoutSec">Surface Model 변환 타임아웃 시간 단위 "초"</param>
-        public void saveImageCreateModelParam(string plyfileName, double minDepth, double maxDepth, int Background_Feature, int Smooth_Feature,int ModelForm, string sampling_method, double sampling_distance, int triangulate_greedyKnnCnt, string triangulate_greedyKnnRadiusParam, double triangulate_greedyKnnRadiusValue, double triangulate_smallsurfaceremoveValue, int triangulate_greedy_mesh_dilationValue, string connection_obj3d_Param, double connection_obj3d_value, int create_sfm_useInvertNormals, double create_sfm_RelSampleDistance, double CreateSurfModelTimeoutSec)
+        /// <param name="AutoRoiNOWPointN_BeforePointNDIFF"><para>자동 지면 제거 사용(ObjectModel3DCrop=1)- XYZ PointCloud 중 Z를 1단위로 잘라 이전, 현재 X,Y상에 존재하는 Point갯수에 대한 차 값</para> 
+        /// <para> 작을 수록 지면을 정교하게 제거, 클수록 피사체와 지면이 포함</para></param>
+        /// <param name="create_sfm_train_self_similar_poses">피사체를 나타내는 ObjectModel3D이 대칭형상을 갖고 있을 경우 자동 최적화</param>
+        /// <param name="create_sfm_train_view_based">카메라의 시점으로 피사체를 바라보는 Surface형태 점수 활성화(단순한 형상이 아닐 경우 비활성화 권장)</param>
+        public void saveImageCreateModelParam(string plyfileName, double minDepth, double maxDepth, int ObjectModel3DCrop, int ModelForm, string sampling_method, double sampling_distance, 
+            int triangulate_greedyKnnCnt, string triangulate_greedyKnnRadiusParam, double triangulate_greedyKnnRadiusValue, double triangulate_smallsurfaceremoveValue, int triangulate_greedy_mesh_dilationValue, 
+            int create_sfm_useInvertNormals, double create_sfm_RelSampleDistance, double CreateSurfModelTimeoutSec, double AutoRoiNOWPointN_BeforePointNDIFF, int create_sfm_train_self_similar_poses, int create_sfm_train_view_based)
         {
             var st = new StackTrace();
             var sf = st.GetFrame(0);
@@ -208,12 +222,8 @@ namespace PicknPlaceHLib
 
             this.minDepth = minDepth;
             this.maxDepth = maxDepth;
-            if(Background_Feature == 0 || Background_Feature == 1) { 
-                this.Background_Feature = Background_Feature;
-            }
-            if(Smooth_Feature == 0 || Smooth_Feature == 1)
-            {
-                this.Smooth_Feature = Smooth_Feature;
+            if(ObjectModel3DCrop == 0 || ObjectModel3DCrop == 1 || ObjectModel3DCrop == 2) { 
+                this.ObjectModel3DCrop = ObjectModel3DCrop;
             }
             if (ModelForm == 0 || ModelForm == 1 || ModelForm == 2)
             {
@@ -253,16 +263,6 @@ namespace PicknPlaceHLib
             {
                 this.triangulate_smallsurfaceremoveValue = triangulate_smallsurfaceremoveValue;
             }
-
-            if(connection_obj3d_Param == "distance_3d" || connection_obj3d_Param == "mesh")
-            {
-                this.connection_obj3d_Param = connection_obj3d_Param;
-            }
-
-            if (connection_obj3d_value > 0.0 && connection_obj3d_value < 100.0)
-            {
-                this.connection_obj3d_value = connection_obj3d_value;
-            }
             if (create_sfm_useInvertNormals == 0 || create_sfm_useInvertNormals == 1)
             {
                 this.create_sfm_useInvertNormals = create_sfm_useInvertNormals;
@@ -276,13 +276,21 @@ namespace PicknPlaceHLib
                 this.CreateSurfModelTimeoutSec = CreateSurfModelTimeoutSec;
             }
             this.Simple_HalfCut = 0;
-
+            this.AutoRoiNOWPointN_BeforePointNDIFF = AutoRoiNOWPointN_BeforePointNDIFF;
+            if(create_sfm_train_self_similar_poses == 0|| create_sfm_train_self_similar_poses == 1)
+            {
+                this.create_sfm_train_self_similar_poses = create_sfm_train_self_similar_poses;
+            }
+            if(create_sfm_train_view_based == 0 || create_sfm_train_view_based == 1)
+            {
+                this.create_sfm_train_view_based = create_sfm_train_view_based;
+            }
 
             HLog.LogStr(ClassName, currentMethodName.ToString() + '\n' +
                 "plyfileName " + plyfileName + '\n' +
                 "minDepth " + minDepth + '\n' +
                 "maxDepth " + maxDepth + '\n' +
-                "Background_Feature " + Background_Feature + '\n' +
+                "ObjectModel3DCrop " + ObjectModel3DCrop + '\n' +
                 "ModelForm " + ModelForm + '\n' +
                 "sampling_method " + sampling_method + '\n' +
                 "sampling_distance " + sampling_distance + '\n' +
@@ -291,11 +299,13 @@ namespace PicknPlaceHLib
                 "triangulate_greedyKnnRadiusValue " + triangulate_greedyKnnRadiusValue + '\n' +
                 "triangulate_smallsurfaceremoveValue " + triangulate_smallsurfaceremoveValue + '\n' +
                 "triangulate_greedy_mesh_dilationValue " + triangulate_greedy_mesh_dilationValue + '\n' +
-                "connection_obj3d_Param " + connection_obj3d_Param + '\n' +
-                "connection_obj3d_value " + connection_obj3d_value + '\n' +
                 "create_sfm_useInvertNormals " + create_sfm_useInvertNormals + '\n' +
                 "create_sfm_RelSampleDistance " + create_sfm_RelSampleDistance + '\n' +
-                "CreateSurfModelTimeoutSec " + CreateSurfModelTimeoutSec + '\n');
+                "CreateSurfModelTimeoutSec " + CreateSurfModelTimeoutSec + '\n' +
+                "AutoRoiNOWPointN_BeforePointNDIFF " + AutoRoiNOWPointN_BeforePointNDIFF + '\n'+
+                "create_sfm_train_self_similar_poses " + create_sfm_train_self_similar_poses + '\n' +
+                "create_sfm_train_view_based " + create_sfm_train_view_based + '\n'
+                );
             HLog.LogStr(ClassName, currentMethodName.ToString() + '\n' + "END");
         }
 
@@ -331,7 +341,14 @@ namespace PicknPlaceHLib
         /// <para>값이 작을 경우 SurfaceModel의 Point간의 배치 거리가 좁아져 정교함이 높은 피사체 모델이 생성</para></param>
         /// <param name="CreateSurfModelTimeoutSec">Surface Model 변환 타임아웃 시간 단위 "초"</param>
         /// <param name="Simple_HalfCut">Surface Model 생성전 SIMPLE OBJ3D의 탑뷰를 기준으로 Z축 중앙부터 뒷편의 포인트 제거</param>
-        public void saveSimpleCreateModelParam(int SimpleObj, double BOXLengthX, double BOXLengthY, double BOXLengthZ, double SphereRadius, double CylinderRadius, double CylinderZMinExt, double CylinderZMaxExt, int ModelForm, string sampling_method, double sampling_distance, int triangulate_greedyKnnCnt, string triangulate_greedyKnnRadiusParam, double triangulate_greedyKnnRadiusValue, double triangulate_smallsurfaceremoveValue, int triangulate_greedy_mesh_dilationValue, int create_sfm_useInvertNormals, double create_sfm_RelSampleDistance, double CreateSurfModelTimeoutSec, int Simple_HalfCut)
+        /// <param name="AutoRoiNOWPointN_BeforePointNDIFF"><para>자동 지면 제거 사용(ObjectModel3DCrop=1)- XYZ PointCloud 중 Z를 1단위로 잘라 이전, 현재 X,Y상에 존재하는 Point갯수에 대한 차 값</para> 
+        /// <para> 작을 수록 지면을 정교하게 제거, 클수록 피사체와 지면이 포함</para></param>
+        /// <param name="create_sfm_train_self_similar_poses">피사체를 나타내는 ObjectModel3D이 대칭형상을 갖고 있을 경우 자동 최적화</param>
+        /// <param name="create_sfm_train_view_based">카메라의 시점으로 피사체를 바라보는 Surface형태 점수 활성화(단순한 형상이 아닐 경우 비활성화 권장)</param>
+        public void saveSimpleCreateModelParam(int SimpleObj, double BOXLengthX, double BOXLengthY, double BOXLengthZ, double SphereRadius, double CylinderRadius, double CylinderZMinExt, double CylinderZMaxExt, 
+            int ModelForm, string sampling_method, double sampling_distance, 
+            int triangulate_greedyKnnCnt, string triangulate_greedyKnnRadiusParam, double triangulate_greedyKnnRadiusValue, double triangulate_smallsurfaceremoveValue, int triangulate_greedy_mesh_dilationValue, 
+            int create_sfm_useInvertNormals, double create_sfm_RelSampleDistance, double CreateSurfModelTimeoutSec, int Simple_HalfCut, double AutoRoiNOWPointN_BeforePointNDIFF, int create_sfm_train_self_similar_poses, int create_sfm_train_view_based)
         {
             var st = new StackTrace();
             var sf = st.GetFrame(0);
@@ -376,7 +393,7 @@ namespace PicknPlaceHLib
             
             this.minDepth = 0;
             this.maxDepth = 0;
-            
+            this.ObjectModel3DCrop = 0;
 
             if (ModelForm == 0 || ModelForm == 1 || ModelForm == 2)
             {
@@ -433,7 +450,15 @@ namespace PicknPlaceHLib
             {
                 this.Simple_HalfCut = Simple_HalfCut;
             }
-
+            this.AutoRoiNOWPointN_BeforePointNDIFF = AutoRoiNOWPointN_BeforePointNDIFF;
+            if (create_sfm_train_self_similar_poses == 0 || create_sfm_train_self_similar_poses == 1)
+            {
+                this.create_sfm_train_self_similar_poses = create_sfm_train_self_similar_poses;
+            }
+            if (create_sfm_train_view_based == 0 || create_sfm_train_view_based == 1)
+            {
+                this.create_sfm_train_view_based = create_sfm_train_view_based;
+            }
             HLog.LogStr(ClassName, currentMethodName.ToString() + '\n' +
                 "SimpleObj " + SimpleObj + '\n' +
                 "BOXLengthX " + BOXLengthX + '\n' +
@@ -454,7 +479,11 @@ namespace PicknPlaceHLib
                 "create_sfm_useInvertNormals " + create_sfm_useInvertNormals + '\n' +
                 "create_sfm_RelSampleDistance " + create_sfm_RelSampleDistance + '\n' +
                 "CreateSurfModelTimeoutSec " + CreateSurfModelTimeoutSec + '\n' +
-                "Simple_HalfCut " + Simple_HalfCut + '\n');
+                "Simple_HalfCut " + Simple_HalfCut + '\n' +
+                "AutoRoiNOWPointN_BeforePointNDIFF " + AutoRoiNOWPointN_BeforePointNDIFF + '\n' +
+                "create_sfm_train_self_similar_poses " + create_sfm_train_self_similar_poses + '\n' +
+                "create_sfm_train_view_based " + create_sfm_train_view_based + '\n'
+                );
             HLog.LogStr(ClassName, currentMethodName.ToString() + '\n' + "END");
         }
 
@@ -542,22 +571,22 @@ namespace PicknPlaceHLib
                     }
                     ProcCall.SetInputCtrlParamTuple(12, minDepth);
                     ProcCall.SetInputCtrlParamTuple(13, maxDepth);
-                    ProcCall.SetInputCtrlParamTuple(14, Background_Feature);
-                    ProcCall.SetInputCtrlParamTuple(15, Smooth_Feature);
-                    ProcCall.SetInputCtrlParamTuple(16, ModelForm);
-                    ProcCall.SetInputCtrlParamTuple(17, sampling_method);
-                    ProcCall.SetInputCtrlParamTuple(18, sampling_distance);
-                    ProcCall.SetInputCtrlParamTuple(19, triangulate_greedyKnnCnt);
-                    ProcCall.SetInputCtrlParamTuple(20, triangulate_greedyKnnRadiusParam);
-                    ProcCall.SetInputCtrlParamTuple(21, triangulate_greedyKnnRadiusValue);
-                    ProcCall.SetInputCtrlParamTuple(22, triangulate_smallsurfaceremoveValue);
-                    ProcCall.SetInputCtrlParamTuple(23, triangulate_greedy_mesh_dilationValue);
-                    ProcCall.SetInputCtrlParamTuple(24, connection_obj3d_Param);
-                    ProcCall.SetInputCtrlParamTuple(25, connection_obj3d_value);
-                    ProcCall.SetInputCtrlParamTuple(26, create_sfm_useInvertNormals);
-                    ProcCall.SetInputCtrlParamTuple(27, create_sfm_RelSampleDistance);
-                    ProcCall.SetInputCtrlParamTuple(28, CreateSurfModelTimeoutSec);
-                    ProcCall.SetInputCtrlParamTuple(29, Simple_HalfCut);
+                    ProcCall.SetInputCtrlParamTuple(14, ObjectModel3DCrop);
+                    ProcCall.SetInputCtrlParamTuple(15, ModelForm);
+                    ProcCall.SetInputCtrlParamTuple(16, sampling_method);
+                    ProcCall.SetInputCtrlParamTuple(17, sampling_distance);
+                    ProcCall.SetInputCtrlParamTuple(18, triangulate_greedyKnnCnt);
+                    ProcCall.SetInputCtrlParamTuple(19, triangulate_greedyKnnRadiusParam);
+                    ProcCall.SetInputCtrlParamTuple(20, triangulate_greedyKnnRadiusValue);
+                    ProcCall.SetInputCtrlParamTuple(21, triangulate_smallsurfaceremoveValue);
+                    ProcCall.SetInputCtrlParamTuple(22, triangulate_greedy_mesh_dilationValue);
+                    ProcCall.SetInputCtrlParamTuple(23, create_sfm_useInvertNormals);
+                    ProcCall.SetInputCtrlParamTuple(24, create_sfm_RelSampleDistance);
+                    ProcCall.SetInputCtrlParamTuple(25, CreateSurfModelTimeoutSec);
+                    ProcCall.SetInputCtrlParamTuple(26, Simple_HalfCut);
+                    ProcCall.SetInputCtrlParamTuple(27, AutoRoiNOWPointN_BeforePointNDIFF);
+                    ProcCall.SetInputCtrlParamTuple(28, create_sfm_train_self_similar_poses);
+                    ProcCall.SetInputCtrlParamTuple(29, create_sfm_train_view_based);
 
                     HLog.LogStr(ClassName, currentMethodName.ToString() + '\n' +
                         "PATH_NAME " + PATH_NAME + '\n' +
@@ -573,8 +602,7 @@ namespace PicknPlaceHLib
                         "CylinderZMaxExt " + CylinderZMaxExt + '\n' +
                         "minDepth " + minDepth + '\n' +
                         "maxDepth " + maxDepth + '\n' +
-                        "Background_Feature " + Background_Feature + '\n' +
-                        "Smooth_Feature " + Smooth_Feature + '\n' +
+                        "ObjectModel3DCrop " + ObjectModel3DCrop + '\n' +
                         "ModelForm " + ModelForm + '\n' +
                         "sampling_method " + sampling_method + '\n' +
                         "sampling_distance " + sampling_distance + '\n' +
@@ -583,12 +611,14 @@ namespace PicknPlaceHLib
                         "triangulate_greedyKnnRadiusValue " + triangulate_greedyKnnRadiusValue + '\n' +
                         "triangulate_smallsurfaceremoveValue " + triangulate_smallsurfaceremoveValue + '\n' +
                         "triangulate_greedy_mesh_dilationValue " + triangulate_greedy_mesh_dilationValue + '\n' +
-                        "connection_obj3d_Param " + connection_obj3d_Param + '\n' +
-                        "connection_obj3d_value " + connection_obj3d_value + '\n' +
                         "create_sfm_useInvertNormals " + create_sfm_useInvertNormals + '\n' +
                         "create_sfm_RelSampleDistance " + create_sfm_RelSampleDistance + '\n' +
                         "CreateSurfModelTimeoutSec " + CreateSurfModelTimeoutSec + '\n' +
-                        "Simple_HalfCut " + Simple_HalfCut + '\n');
+                        "Simple_HalfCut " + Simple_HalfCut + '\n'+
+                        "AutoRoiNOWPointN_BeforePointNDIFF " + AutoRoiNOWPointN_BeforePointNDIFF + '\n' +
+                        "create_sfm_train_self_similar_poses " + create_sfm_train_self_similar_poses + '\n' +
+                        "create_sfm_train_view_based " + create_sfm_train_view_based + '\n'
+                        );
                     
 
 
